@@ -1,0 +1,18 @@
+package prd.organisation.domain
+
+import grails.testing.gorm.DomainUnitTest
+import spock.lang.Specification
+
+class PBAMappingSpec extends Specification implements DomainUnitTest<PBAMapping> {
+
+    def setup() {
+    }
+
+    def cleanup() {
+    }
+
+    void "test something"() {
+        expect:"fix me"
+            true == false
+    }
+}
