@@ -91,17 +91,17 @@ environments:
             url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     production:
         server:
-            port: 9000    
+            port: ${SERVER_PORT}
         dataSource:
             dbCreate: none
-            url: jdbc:postgresql://localhost:5432/prd_org_db
+            url: ${SPRING_DATASOURCE_URL}
             driverClassName: org.postgresql.Driver
-            username: prd_org_user
-            password: letmein
+            username: ${SPRING_DATASOURCE_USERNAME}
+            password: ${SPRING_DATASOURCE_PASSWORD}
             properties:
                 jmxEnabled: true
                 initialSize: 5
-                maxActive: 50
+                maxActive: ${MAX_ACTIVE_DB_CONNECTIONS}
                 minIdle: 5
                 maxIdle: 25
                 maxWait: 10000

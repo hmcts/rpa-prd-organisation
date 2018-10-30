@@ -34,4 +34,4 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
     logger('prd.organisation', DEBUG)
 }
-root(WARN, ['STDOUT'])
+root(INFO, ['STDOUT'])
