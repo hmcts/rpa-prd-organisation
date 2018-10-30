@@ -16,8 +16,8 @@ plugins {
 //    id 'org.springframework.boot' version '2.0.2.RELEASE'
     id 'org.owasp.dependencycheck' version '3.1.2'
 //    id 'com.github.ben-manes.versions' version '0.17.0'
-//    id 'org.sonarqube' version '2.6.2'
-//    id 'jacoco'
+    id 'org.sonarqube' version '2.6.2'
+    id 'jacoco'
 //    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.0.11"
 }
 
@@ -30,7 +30,10 @@ apply plugin:"war"
 apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.plugins.views-json"
 
+// CNP pipeline required plugins
 apply plugin: 'org.owasp.dependencycheck'
+
+
 
 repositories {
     maven { url "https://dl.bintray.com/hmcts/hmcts-maven" }
@@ -91,6 +94,39 @@ tasks.withType(Test) {
     systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
     systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
     systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
+}
+
+//(jacocoTestReport | jacocoTestCoverageVerification)
+jacoco {
+    toolVersion = '0.7.9' // jacocoMavenPluginVersion
+    reportsDir = file("$buildDir/reports/jacoco")
+}
+
+def coverageExclusionList = [
+    '**prd/organisation/**'
+]
+
+jacocoTestReport {
+    executionData(test)
+
+    reports {
+        xml.enabled = true
+        csv.enabled = true
+    }
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: coverageExclusionList)
+        })
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "${rootProject.name}"
+        property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+        property "sonar.exclusions", coverageExclusionList.join(", ")
+    }
 }
 
 war.archiveName='rpa-prd-organisation.war'
