@@ -35,7 +35,7 @@ def channel = '#rpa-prd-builds'
 
 withPipeline(type , product, component) {
     enableSlackNotifications(channel)
-    enableDbMigration()
+    //enableDbMigration()
     //loadVaultSecrets(secrets)
 
     before('buildinfra:prod') {
