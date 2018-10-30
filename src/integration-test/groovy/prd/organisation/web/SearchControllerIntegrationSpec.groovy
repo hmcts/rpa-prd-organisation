@@ -7,7 +7,7 @@ import spock.lang.*
 
 @Integration
 @Rollback
-class SearchControllerSpec extends Specification {
+class SearchControllerIntegrationSpec extends Specification {
 
     def setup() {
     }
