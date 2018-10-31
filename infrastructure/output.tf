@@ -4,9 +4,9 @@ output "microserviceName" {
 }
 
 // used for db migrations
-//output "vaultName" {
-//  value = "${module.local_key_vault.key_vault_name}"
-//}
+output "vaultName" {
+  value = "${module.local_key_vault.key_vault_name}"
+}
 
 // used for grabing shared secrects (shown in the jenkins file)
 //output "vaultUri" {

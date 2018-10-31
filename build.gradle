@@ -33,7 +33,7 @@ apply plugin:"org.grails.plugins.views-json"
 // CNP pipeline required plugins
 apply plugin: 'org.owasp.dependencycheck'
 
-
+apply from: 'liquibase.gradle'
 
 repositories {
     maven { url "https://dl.bintray.com/hmcts/hmcts-maven" }
