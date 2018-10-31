@@ -11,7 +11,7 @@ grails:
     plugin:
         databasemigration:
             updateOnStart: true
-            updateOnStartFileNames: changelog.groovy
+            updateOnStartFileNames: changelog.yml
 info:
     app:
         name: '@info.app.name@'
