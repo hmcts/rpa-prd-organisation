@@ -8,6 +8,10 @@ grails:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+    plugin:
+        databasemigration:
+            updateOnStart: true
+            updateOnStartFileNames: changelog.groovy
 info:
     app:
         name: '@info.app.name@'

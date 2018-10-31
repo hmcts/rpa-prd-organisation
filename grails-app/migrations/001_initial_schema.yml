@@ -1,0 +1,229 @@
+databaseChangeLog:
+- changeSet:
+    id: 1540990103270-1
+    author: matthewspeake (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: address_mappingPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: version
+            type: BIGINT
+        tableName: address_mapping
+- changeSet:
+    id: 1540990103270-2
+    author: matthewspeake (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: contact_informationPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: version
+            type: BIGINT
+        tableName: contact_information
+- changeSet:
+    id: 1540990103270-3
+    author: matthewspeake (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: organisationPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: version
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: sra_regulated
+            type: BOOLEAN
+        - column:
+            name: sra_id
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: primary_contact_last_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: organisation_id
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: last_updated
+            type: timestamp
+        - column:
+            constraints:
+              nullable: false
+            name: primary_contact_first_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: primary_contact_email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: status
+            type: VARCHAR(255)
+        - column:
+            name: company_number
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: org_name
+            type: VARCHAR(255)
+        tableName: organisation
+- changeSet:
+    id: 1540990103270-4
+    author: matthewspeake (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: payment_accountPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: version
+            type: BIGINT
+        tableName: payment_account
+- changeSet:
+    id: 1540990103270-5
+    author: matthewspeake (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: pbamappingPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: version
+            type: BIGINT
+        tableName: pbamapping
+- changeSet:
+    id: 1540990103270-6
+    author: matthewspeake (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: professional_userPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: version
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: first_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: organisation_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: last_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: email_id
+            type: VARCHAR(255)
+        tableName: professional_user
+- changeSet:
+    id: 1540990103270-7
+    author: matthewspeake (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: valid_domainsPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: version
+            type: BIGINT
+        tableName: valid_domains
+- changeSet:
+    id: 1540990103270-8
+    author: matthewspeake (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: org_name
+        constraintName: UC_ORGANISATIONORG_NAME_COL
+        tableName: organisation
+- changeSet:
+    id: 1540990103270-9
+    author: matthewspeake (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: email_id
+        constraintName: UC_PROFESSIONAL_USEREMAIL_ID_COL
+        tableName: professional_user
+- changeSet:
+    id: 1540990103270-10
+    author: matthewspeake (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: organisation_id
+        baseTableName: professional_user
+        constraintName: FK9c85ohvq1lhm2bvs19vhfsnvs
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: organisation
+
