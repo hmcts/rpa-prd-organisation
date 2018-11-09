@@ -96,6 +96,7 @@ environments:
     production:
         server:
             port: ${SERVER_PORT}
+        prd_users_endpointurl: http://rpa-prd-users-aat.service.core-compute-aat.internal
         dataSource:
             dbCreate: none
             url: ${SPRING_DATASOURCE_URL}
