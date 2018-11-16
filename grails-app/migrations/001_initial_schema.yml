@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 1540990103270-1
+    id: 1542277323012-1
     author: matthewspeake (generated)
     changes:
     - createTable:
@@ -9,7 +9,7 @@ databaseChangeLog:
             autoIncrement: true
             constraints:
               primaryKey: true
-              primaryKeyName: address_mappingPK
+              primaryKeyName: addressPK
             name: id
             type: BIGINT
         - column:
@@ -17,9 +17,35 @@ databaseChangeLog:
               nullable: false
             name: version
             type: BIGINT
-        tableName: address_mapping
+        - column:
+            name: town_city
+            type: VARCHAR(255)
+        - column:
+            name: address_line2
+            type: VARCHAR(255)
+        - column:
+            name: postcode
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: organisation_id
+            type: BIGINT
+        - column:
+            name: address_line1
+            type: VARCHAR(255)
+        - column:
+            name: house_no_building_name
+            type: VARCHAR(255)
+        - column:
+            name: county
+            type: VARCHAR(255)
+        - column:
+            name: country
+            type: VARCHAR(255)
+        tableName: address
 - changeSet:
-    id: 1540990103270-2
+    id: 1542277323012-2
     author: matthewspeake (generated)
     changes:
     - createTable:
@@ -38,7 +64,36 @@ databaseChangeLog:
             type: BIGINT
         tableName: contact_information
 - changeSet:
-    id: 1540990103270-3
+    id: 1542277323012-3
+    author: matthewspeake (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: domainPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: version
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: host
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: organisation_id
+            type: BIGINT
+        tableName: domain
+- changeSet:
+    id: 1542277323012-4
     author: matthewspeake (generated)
     changes:
     - createTable:
@@ -66,11 +121,6 @@ databaseChangeLog:
         - column:
             constraints:
               nullable: false
-            name: primary_contact_last_name
-            type: VARCHAR(255)
-        - column:
-            constraints:
-              nullable: false
             name: organisation_id
             type: VARCHAR(255)
         - column:
@@ -79,14 +129,12 @@ databaseChangeLog:
             name: last_updated
             type: timestamp
         - column:
-            constraints:
-              nullable: false
-            name: primary_contact_first_name
+            name: url
             type: VARCHAR(255)
         - column:
             constraints:
               nullable: false
-            name: primary_contact_email
+            name: name
             type: VARCHAR(255)
         - column:
             constraints:
@@ -96,14 +144,9 @@ databaseChangeLog:
         - column:
             name: company_number
             type: VARCHAR(255)
-        - column:
-            constraints:
-              nullable: false
-            name: org_name
-            type: VARCHAR(255)
         tableName: organisation
 - changeSet:
-    id: 1540990103270-4
+    id: 1542277323012-5
     author: matthewspeake (generated)
     changes:
     - createTable:
@@ -120,28 +163,19 @@ databaseChangeLog:
               nullable: false
             name: version
             type: BIGINT
-        tableName: payment_account
-- changeSet:
-    id: 1540990103270-5
-    author: matthewspeake (generated)
-    changes:
-    - createTable:
-        columns:
-        - column:
-            autoIncrement: true
-            constraints:
-              primaryKey: true
-              primaryKeyName: pbamappingPK
-            name: id
-            type: BIGINT
         - column:
             constraints:
               nullable: false
-            name: version
+            name: pba_number
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: organisation_id
             type: BIGINT
-        tableName: pbamapping
+        tableName: payment_account
 - changeSet:
-    id: 1540990103270-6
+    id: 1542277323012-6
     author: matthewspeake (generated)
     changes:
     - createTable:
@@ -171,6 +205,11 @@ databaseChangeLog:
         - column:
             constraints:
               nullable: false
+            name: status
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
             name: last_name
             type: VARCHAR(255)
         - column:
@@ -180,34 +219,23 @@ databaseChangeLog:
             type: VARCHAR(255)
         tableName: professional_user
 - changeSet:
-    id: 1540990103270-7
-    author: matthewspeake (generated)
-    changes:
-    - createTable:
-        columns:
-        - column:
-            autoIncrement: true
-            constraints:
-              primaryKey: true
-              primaryKeyName: valid_domainsPK
-            name: id
-            type: BIGINT
-        - column:
-            constraints:
-              nullable: false
-            name: version
-            type: BIGINT
-        tableName: valid_domains
-- changeSet:
-    id: 1540990103270-8
+    id: 1542277323012-7
     author: matthewspeake (generated)
     changes:
     - addUniqueConstraint:
-        columnNames: org_name
-        constraintName: UC_ORGANISATIONORG_NAME_COL
+        columnNames: name
+        constraintName: UC_ORGANISATIONNAME_COL
         tableName: organisation
 - changeSet:
-    id: 1540990103270-9
+    id: 1542277323012-8
+    author: matthewspeake (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: pba_number
+        constraintName: UC_PAYMENT_ACCOUNTPBA_NUMBER_COL
+        tableName: payment_account
+- changeSet:
+    id: 1542277323012-9
     author: matthewspeake (generated)
     changes:
     - addUniqueConstraint:
@@ -215,13 +243,49 @@ databaseChangeLog:
         constraintName: UC_PROFESSIONAL_USEREMAIL_ID_COL
         tableName: professional_user
 - changeSet:
-    id: 1540990103270-10
+    id: 1542277323012-10
     author: matthewspeake (generated)
     changes:
     - addForeignKeyConstraint:
         baseColumnNames: organisation_id
         baseTableName: professional_user
         constraintName: FK9c85ohvq1lhm2bvs19vhfsnvs
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: organisation
+- changeSet:
+    id: 1542277323012-11
+    author: matthewspeake (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: organisation_id
+        baseTableName: payment_account
+        constraintName: FKdpltvob5nu5lj92rjiavt85w1
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: organisation
+- changeSet:
+    id: 1542277323012-12
+    author: matthewspeake (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: organisation_id
+        baseTableName: domain
+        constraintName: FKej7ita5swmd3dxnlvoo24d1p
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: organisation
+- changeSet:
+    id: 1542277323012-13
+    author: matthewspeake (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: organisation_id
+        baseTableName: address
+        constraintName: FKs4yqaw12p1whor7k45ngi6ggv
         deferrable: false
         initiallyDeferred: false
         referencedColumnNames: id

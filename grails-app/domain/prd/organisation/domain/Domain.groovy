@@ -3,8 +3,13 @@ package prd.organisation.domain
 import grails.rest.*
 
 @Resource(readOnly = false, formats = ['json'])
-class AddressMapping {
+class Domain {
+
+    String host
+
+    static belongsTo = [organisation: Organisation]
 
     static constraints = {
+        host nullable: false
     }
 }

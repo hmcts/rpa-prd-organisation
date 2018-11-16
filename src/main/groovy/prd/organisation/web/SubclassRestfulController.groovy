@@ -65,6 +65,21 @@ class SubclassRestfulController<T> extends RestfulController<T> {
             ProfessionalUser.where {
                 id == id && organisation.id == orgId
             }.find()            
+        } else if (this.resource == Address) {
+            def orgId = params.organisationId
+            Address.where {
+                id == id && organisation.id == orgId
+            }.find()
+        } else if (this.resource == PaymentAccount) {
+            def orgId = params.organisationId
+            PaymentAccount.where {
+                id == id && organisation.id == orgId
+            }.find()
+        } else if (this.resource == Domain) {
+            def orgId = params.organisationId
+            Domain.where {
+                id == id && organisation.id == orgId
+            }.find()
         } else {
             println "QFR - ${this.resource} - id = $id"
             super.queryForResource(id)

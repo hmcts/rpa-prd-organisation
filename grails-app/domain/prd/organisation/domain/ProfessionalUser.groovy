@@ -9,7 +9,7 @@ class ProfessionalUser {
     String emailId
     String firstName
     String lastName
-    //Status status = Status.APPROVED
+    Status status = Status.PENDING
 
     static belongsTo = [organisation: Organisation]
 

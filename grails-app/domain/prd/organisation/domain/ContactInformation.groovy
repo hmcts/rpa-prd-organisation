@@ -7,4 +7,5 @@ class ContactInformation {
 
     static constraints = {
     }
+
 }

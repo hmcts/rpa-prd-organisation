@@ -6,28 +6,27 @@ import prd.organisation.web.SubclassRestfulController
 @Resource(readOnly = false, formats = ['json'], superClass=SubclassRestfulController)
 class Organisation {
     String organisationId = UUID.randomUUID().toString()    
-    String orgName
-    boolean sraRegulated
+    String name
+    URL url
     String sraId
-    Date lastUpdated    
-    String primaryContactFirstName
-    String primaryContactLastName
-    String primaryContactEmail    
-    Status status = Status.PENDING
+    
+    boolean sraRegulated
     String companyNumber
 
-//    static mapping = {        
-//      id column: 'ORGANISATION_ID'
-//}
+    Date lastUpdated
+    Status status = Status.PENDING
 
-    static hasMany = [ users:ProfessionalUser ]
+    static hasMany = [
+        users: ProfessionalUser,
+        accounts: PaymentAccount,
+        domains: Domain,
+        addresses: Address
+    ]
 
     static constraints = {        
-        orgName nullable: false, unique: true
+        name nullable: false, unique: true
         sraId nullable: true
-        primaryContactFirstName nullable: false
-        primaryContactLastName nullable: false
-        primaryContactEmail nullable: false
+        url nullable: true
         companyNumber nullable: true
     }
 }

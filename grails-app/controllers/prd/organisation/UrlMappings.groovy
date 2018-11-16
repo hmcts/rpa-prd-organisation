@@ -16,11 +16,18 @@ class UrlMappings {
         // nested endpoints
         "/organisations"(resources:"organisation") {
             "/users"(resources:"professionalUser")
+            "/addresses"(resources:"address")
+            "/paymentAccounts"(resources:"account")
+            "/domains"(resources:"domain")
         }
+
+        '/organisations/register'(controller: 'registration', action: 'register')        
 
         // search endpoints
         '/search/organisations/approved'(controller: 'search', action: 'approvedOrganisations')
-        '/search/organisations/pending'(controller: 'search', action: 'pendingOrganisations')        
+        '/search/organisations/pending'(controller: 'search', action: 'pendingOrganisations')
+        '/search/accounts'(controller: 'search', action: 'accountsByEmail')
         "/search/users"(resources:"professionalUser")
+
     }
 }
