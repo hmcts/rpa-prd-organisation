@@ -1,3 +1,4 @@
+import com.microsoft.applicationinsights.logback.ApplicationInsightsAppender
 import grails.util.BuildSettings
 import grails.util.Environment
 import org.springframework.boot.logging.logback.ColorConverter
@@ -22,6 +23,8 @@ appender('STDOUT', ConsoleAppender) {
     }
 }
 
+appender('AZURE_APPINSIGHTS', ApplicationInsightsAppender)
+
 def targetDir = BuildSettings.TARGET_DIR
 if (Environment.isDevelopmentMode() && targetDir != null) {
     appender("FULL_STACKTRACE", FileAppender) {
@@ -36,4 +39,5 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 //    logger("org.hibernate.type.descriptor.sql.BasicBinder", TRACE, ["STDOUT"], false)
     logger('prd.organisation', DEBUG)
 }
+logger('AppInsights', TRACE, ['AZURE_APPINSIGHTS'])
 root(INFO, ['STDOUT'])
