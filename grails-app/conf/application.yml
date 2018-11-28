@@ -123,3 +123,13 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+azure:
+    app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
+    application-insights:
+        instrumentation-key: ${APPINSIGHTS_INSTRUMENTATIONKEY:a91b4819-920b-4828-8f16-3917838b2cd0}
+
+app-insights:
+    dev-mode: off
+    request-component: on
+    telemetry-component: on

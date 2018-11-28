@@ -72,6 +72,8 @@ dependencies {
     compile "org.grails:grails-datastore-rest-client"
     compile 'org.grails.plugins:database-migration:3.0.3'
     compile 'org.liquibase:liquibase-core:3.5.3'
+    compile 'uk.gov.hmcts.reform:java-logging-appinsights:2.2.1'
+    compile 'uk.gov.hmcts.reform:java-logging-spring:2.2.1'
     runtime "org.glassfish.web:el-impl:2.1.2-b03"
     runtime "com.h2database:h2"
     runtime "org.apache.tomcat:tomcat-jdbc"
