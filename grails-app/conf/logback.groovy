@@ -25,7 +25,7 @@ appender('STDOUT', ConsoleAppender) {
 
 appender('AZURE_APPINSIGHTS', ApplicationInsightsAppender)
 
-def targetDir = BuildSettings.TARGET_DIR
+def targetDir = "LogFiles"
 if (Environment.isDevelopmentMode() && targetDir != null) {
     appender("FULL_STACKTRACE", FileAppender) {
         file = "${targetDir}/stacktrace.log"
@@ -39,5 +39,20 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 //    logger("org.hibernate.type.descriptor.sql.BasicBinder", TRACE, ["STDOUT"], false)
     logger('prd.organisation', DEBUG)
 }
-logger('AppInsights', TRACE, ['AZURE_APPINSIGHTS'])
-root(INFO, ['STDOUT'])
+appender("AZURE_LOG", RollingFileAppender) {
+    rollingPolicy(TimeBasedRollingPolicy) {
+        fileNamePattern = "${targetDir}/%d/application.log"
+    }
+    append = true
+    encoder(PatternLayoutEncoder) {
+        charset = Charset.forName('UTF-8')
+
+        pattern =
+                '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} ' + // Date
+                        '%clr(%5p) ' + // Log level
+                        '%clr(---){faint} %clr([%15.15t]){faint} ' + // Thread
+                        '%clr(%-40.40logger{39}){cyan} %clr(:){faint} ' + // Logger
+                        '%m%n%wex' // Message
+    }
+}
+root(INFO, ['STDOUT','AZURE_LOG','AZURE_APPINSIGHTS'])
