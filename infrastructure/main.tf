@@ -61,6 +61,8 @@ module "app" {
     ROOT_APPENDER = "${var.root_appender}"
     JSON_CONSOLE_PRETTY_PRINT = "${var.json_console_pretty_print}"
     LOG_OUTPUT = "${var.log_output}"
+
+    APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.app_insights.instrumentation_key}"
   }
 }
 
@@ -131,4 +133,11 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name = "${local.app_full_name}-POSTGRES-DATABASE"
   value = "${module.db.postgresql_database}"
   vault_uri = "${module.local_key_vault.key_vault_uri}"
+}
+
+resource "azurerm_application_insights" "app_insights" {
+  name                = "${local.app_full_name}-appinsights-${local.local_env}"
+  location            = "West Europe" /* Need to ask MS to move it to UK South */
+  resource_group_name = "${module.app.resource_group_name}"
+  application_type    = "Java"
 }

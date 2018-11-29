@@ -125,9 +125,9 @@ environments:
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
 
 azure:
-    app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
+    app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY}
     application-insights:
-        instrumentation-key: ${APPINSIGHTS_INSTRUMENTATIONKEY:a91b4819-920b-4828-8f16-3917838b2cd0}
+        instrumentation-key: ${APPINSIGHTS_INSTRUMENTATIONKEY}
 
 app-insights:
     dev-mode: off
