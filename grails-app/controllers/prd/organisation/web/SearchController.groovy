@@ -18,6 +18,9 @@ class SearchController {
     }
 
     def approvableOrganisationsInStatus(Status status) {
+        /*
+         * REFACTOR: Move search logic to a Service?
+         */
         Organisation.where {
             status == status
         }.list().collect { Organisation org ->
@@ -32,12 +35,16 @@ class SearchController {
     }
 
     def accountsByEmail(String email) {
+        /*
+         * REFACTOR: Move search logic to a Service?
+         */
         def orgAccounts = Organisation.withCriteria {
             'users' {
                 eq('emailId', email)
             }
         }.accounts
 
+        // TODO: What if a user belongs to multiple organisations?
         if (orgAccounts && orgAccounts.size() == 1) {
             respond orgAccounts.get(0).pbaNumber
         } else {
