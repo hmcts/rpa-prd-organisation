@@ -1,6 +1,8 @@
 package prd.organisation.domain
 
-enum Status {
+import grails.validation.Validateable
+
+enum Status implements Validateable {
     PENDING,
     APPROVED
 }
