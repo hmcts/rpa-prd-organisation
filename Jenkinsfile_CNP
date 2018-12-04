@@ -38,7 +38,8 @@ withPipeline(type , product, component) {
     enableDbMigration()
     //loadVaultSecrets(secrets)
 
-    before('buildinfra:prod') {
-        error('Halting pipeline before prod stages')
+    before('smoketest:dev') {
+    //before('buildinfra:prod') {
+        error('Halting pipeline before smoke test stages')
     }
 }
