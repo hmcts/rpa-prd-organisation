@@ -1,37 +1,39 @@
 package prd.organisation.service
 
-import grails.gorm.transactions.Transactional
-import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
-import groovy.transform.CompileDynamic
-import groovy.transform.CompileStatic
+import groovyx.net.http.ChainedHttpConfig
+import groovyx.net.http.FromServer
+import groovyx.net.http.HttpBuilder
+import groovyx.net.http.NativeHandlers
+import prd.organisation.domain.User
 
+import static groovyx.net.http.HttpBuilder.configure
+import static groovyx.net.http.ContentTypes.JSON
+import static groovyx.net.http.NativeHandlers.Parsers.json
 
-@Transactional
 class UsersService {
 
+    private final HttpBuilder http
     def configurationService
 
-    def createUser(String firstName, String lastName, String email, String[] roles) {
-        println "IN USERS SERVICE"
-        RestBuilder rest = new RestBuilder()
-        String url = "${configurationService.getPrdUsersRestEndpointURL()}/user"
-        println "REST URL = $url"
-        
-        String jsonPayload = "{\"firstName\": \"$firstName\", \"lastName\": \"$lastName\", \"email\": \"$email\", \"roles\": \"$roles\"}"
-        println "JSON PAYLOAD = $jsonPayload"
-
-        RestResponse restResponse = rest.post(url) {
-            accept("application/json")
-            contentType("application/json")
-            body(jsonPayload)
-        }
-
-        println "RESPONSE = ${restResponse}"
-
-        if ( restResponse.statusCode.value() == 201 && restResponse.json ) {
-            return restResponse.json
+    UsersService() {
+        http = configure {
+            request.contentType = JSON[0]
+            request.encoder JSON, NativeHandlers.Encoders.&json
+            response.parser JSON, { ChainedHttpConfig config, FromServer fs ->
+                json(config, fs) as User
+            }
         }
     }
 
+    def createUser(String firstName, String lastName, String email, String[] roles) {
+        // TODO: Enforce presence of mandatory parameters and test
+        return http.post(User) {
+            request.uri = configurationService.getPrdUsersRestEndpointURL()
+            request.uri.path = '/user'
+            request.body = new User(firstName, lastName, email, roles)
+            request.contentType = 'application/json'
+            request.accept = 'application/json'
+        }
+    }
 }
