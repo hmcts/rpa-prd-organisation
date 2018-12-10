@@ -6,7 +6,7 @@ import prd.organisation.domain.*
 import prd.organisation.web.OrganisationRegistrationCommand
 import spock.lang.Specification
 
-class RegistrationServiceSpec extends Specification implements ServiceUnitTest<RegistrationService>, DataTest {
+class OrganisationServiceSpec extends Specification implements ServiceUnitTest<OrganisationService>, DataTest {
 
     def setup() {
         mockDomains Address, Organisation, PaymentAccount, ProfessionalUser, Domain

@@ -1,17 +1,18 @@
 package prd.organisation.web
 
-import prd.organisation.service.RegistrationService
 
-class RegistrationController {
+import prd.organisation.service.OrganisationService
+
+class OrganisationController {
     static responseFormats = ['json', 'xml']
 
-    RegistrationService registrationService
+    OrganisationService organisationService
 
-    def register(OrganisationRegistrationCommand cmd) {
+    def save(OrganisationRegistrationCommand cmd) {
         log.info "Creating organisation"
 
         try {
-            registrationService.registerOrganisation(cmd)
+            organisationService.registerOrganisation(cmd)
             response.status = 201
         } catch (Exception e) {
             response.status = 400

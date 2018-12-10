@@ -1,11 +1,11 @@
 package prd.organisation.web
 
 import grails.testing.web.controllers.ControllerUnitTest
-import prd.organisation.service.RegistrationService
+import prd.organisation.service.OrganisationService
 import spock.lang.Shared
 import spock.lang.Specification
 
-class RegistrationControllerSpec extends Specification implements ControllerUnitTest<RegistrationController> {
+class OrganisationControllerSpec extends Specification implements ControllerUnitTest<OrganisationController> {
 
     @Shared
     private cmd = new OrganisationRegistrationCommand(
@@ -16,15 +16,15 @@ class RegistrationControllerSpec extends Specification implements ControllerUnit
     )
 
     void "test exception from service causes 400 response"() {
-        given: "a mocked RegistrationService that will throw an exception"
-        def mockRegistrationService = Mock(RegistrationService)
-        mockRegistrationService.registerOrganisation(cmd) >> { c ->
+        given: "a mocked OrganisationService that will throw an exception"
+        def mockOrganisationService = Mock(OrganisationService)
+        mockOrganisationService.registerOrganisation(cmd) >> { c ->
             throw new RuntimeException("Someone set us up the bomb!")
         }
-        controller.registrationService = mockRegistrationService
+        controller.organisationService = mockOrganisationService
 
         when: "a company sends a registration request"
-        controller.register(cmd)
+        controller.save(cmd)
 
         then: "an error response is returned"
         response.status == 400
@@ -32,12 +32,12 @@ class RegistrationControllerSpec extends Specification implements ControllerUnit
     }
 
     void "test service gives 201 response"() {
-        given: "a mocked RegistrationService"
-        def mockRegistrationService = Stub(RegistrationService)
-        controller.registrationService = mockRegistrationService
+        given: "a mocked OrganisationService"
+        def mockOrganisationService = Stub(OrganisationService)
+        controller.organisationService = mockOrganisationService
 
         when: "a company sends a registration request"
-        controller.register(cmd)
+        controller.save(cmd)
 
         then: "a created response is returned"
         response.status == 201

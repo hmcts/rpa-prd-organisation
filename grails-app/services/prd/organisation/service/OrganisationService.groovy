@@ -7,7 +7,7 @@ import prd.organisation.domain.*
 import prd.organisation.web.OrganisationRegistrationCommand
 
 @Transactional
-class RegistrationService {
+class OrganisationService {
 
     MessageSource messageSource
 
