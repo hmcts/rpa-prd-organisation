@@ -1,14 +1,13 @@
 package prd.organisation.service
 
-import grails.plugins.rest.client.RestResponse
 import groovyx.net.http.ChainedHttpConfig
 import groovyx.net.http.FromServer
 import groovyx.net.http.HttpBuilder
 import groovyx.net.http.NativeHandlers
 import prd.organisation.domain.User
 
-import static groovyx.net.http.HttpBuilder.configure
 import static groovyx.net.http.ContentTypes.JSON
+import static groovyx.net.http.HttpBuilder.configure
 import static groovyx.net.http.NativeHandlers.Parsers.json
 
 class UsersService {
