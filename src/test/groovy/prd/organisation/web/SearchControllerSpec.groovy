@@ -2,11 +2,7 @@ package prd.organisation.web
 
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
-import prd.organisation.domain.Address
-import prd.organisation.domain.Organisation
-import prd.organisation.domain.PaymentAccount
-import prd.organisation.domain.ProfessionalUser
-import prd.organisation.domain.Status
+import prd.organisation.domain.*
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -33,6 +29,7 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         org.addToAccounts(account)
         org.save(flush: true)
     }
+
     private Organisation addOrganisation2() {
         def org = new Organisation(
                 name: "Aperture Science",

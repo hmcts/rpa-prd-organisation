@@ -40,4 +40,4 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     logger('prd.organisation', DEBUG)
 }
 
-root(INFO, ['STDOUT','AZURE_APPINSIGHTS'])
+root(INFO, ['STDOUT', 'AZURE_APPINSIGHTS'])

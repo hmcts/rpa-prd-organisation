@@ -2,11 +2,7 @@ package prd.organisation.service
 
 import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
-import prd.organisation.domain.Address
-import prd.organisation.domain.Domain
-import prd.organisation.domain.Organisation
-import prd.organisation.domain.PaymentAccount
-import prd.organisation.domain.ProfessionalUser
+import prd.organisation.domain.*
 import prd.organisation.web.OrganisationRegistrationCommand
 import spock.lang.Specification
 

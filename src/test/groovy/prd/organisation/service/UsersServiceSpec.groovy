@@ -1,10 +1,6 @@
 package prd.organisation.service
 
-import com.stehno.ersatz.ContentType
-import com.stehno.ersatz.Decoders
-import com.stehno.ersatz.DecodingContext
-import com.stehno.ersatz.Encoders
-import com.stehno.ersatz.ErsatzServer
+import com.stehno.ersatz.*
 import grails.testing.services.ServiceUnitTest
 import prd.organisation.domain.User
 import spock.lang.Specification

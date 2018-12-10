@@ -1,14 +1,10 @@
 package prd.organisation.web
 
-import prd.organisation.domain.Address
-import prd.organisation.domain.ApprovableOrganisationDetails
-import prd.organisation.domain.Organisation
-import prd.organisation.domain.ProfessionalUser
-import prd.organisation.domain.Status
+import prd.organisation.domain.*
 
 class SearchController {
-	static responseFormats = ['json']
-	
+    static responseFormats = ['json']
+
     def approvedOrganisations() {
         respond approvableOrganisationsInStatus(Status.APPROVED)
     }
@@ -27,9 +23,9 @@ class SearchController {
             ProfessionalUser initialSuperUser = org.users[0]
             Address address = org.addresses ? org.addresses[0] : null
             new ApprovableOrganisationDetails(
-                org.id, org.name, org.url, org.sraId, org.status,
-                initialSuperUser.firstName, initialSuperUser.lastName, initialSuperUser.emailId,
-                address?.houseNoBuildingName, address?.addressLine1, address?.addressLine2, address?.townCity, address?.county, address?.country, address?.postcode
+                    org.id, org.name, org.url, org.sraId, org.status,
+                    initialSuperUser.firstName, initialSuperUser.lastName, initialSuperUser.emailId,
+                    address?.houseNoBuildingName, address?.addressLine1, address?.addressLine2, address?.townCity, address?.county, address?.country, address?.postcode
             )
         }
     }

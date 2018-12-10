@@ -1,8 +1,5 @@
-import grails.rest.render.xml.*
-
+import grails.rest.render.xml.XmlRenderer
 import prd.organisation.domain.Organisation
-import prd.organisation.config.AppInsights
-import prd.organisation.service.UsersService
 
 beans = {
     organisationRenderer(XmlRenderer, Organisation) {

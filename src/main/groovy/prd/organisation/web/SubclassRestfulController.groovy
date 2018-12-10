@@ -1,7 +1,7 @@
 package prd.organisation.web
 
-import grails.rest.*
-import grails.gorm.transactions.Transactional
+
+import grails.rest.RestfulController
 import prd.organisation.domain.*
 
 class SubclassRestfulController<T> extends RestfulController<T> {
@@ -9,7 +9,7 @@ class SubclassRestfulController<T> extends RestfulController<T> {
         this(domainClass, false)
     }
 
-    SubclassRestfulController(Class<T> domainClass, boolean readOnly) {         
+    SubclassRestfulController(Class<T> domainClass, boolean readOnly) {
         super(domainClass, readOnly)
     }
 
@@ -53,7 +53,7 @@ class SubclassRestfulController<T> extends RestfulController<T> {
             def owningOrgId = params."$parentResourceLinkIdName"
 
             return unfiltered.findAll { it -> it.organisationId == Long.parseLong(owningOrgId) }
-        } 
+        }
 
         super.listAllResources(params)
     }
@@ -61,10 +61,10 @@ class SubclassRestfulController<T> extends RestfulController<T> {
     @Override
     protected Object queryForResource(Serializable id) {
         if (this.resource == ProfessionalUser) {
-            def orgId = params.organisationId            
+            def orgId = params.organisationId
             ProfessionalUser.where {
                 id == id && organisation.id == orgId
-            }.find()            
+            }.find()
         } else if (this.resource == Address) {
             def orgId = params.organisationId
             Address.where {
@@ -90,9 +90,9 @@ class SubclassRestfulController<T> extends RestfulController<T> {
         params.keySet().find { it -> it =~ /.*Id/ }
     }
 
-    String getParentResourceNameIfExists(Map params) {        
+    String getParentResourceNameIfExists(Map params) {
         def parentResourceLinkIdName = getParentResourceLinkIdNameIfExists(params)
-        parentResourceLinkIdName ? ((parentResourceLinkIdName =~ /(.*)Id/)[0][1]).capitalize() : null        
+        parentResourceLinkIdName ? ((parentResourceLinkIdName =~ /(.*)Id/)[0][1]).capitalize() : null
     }
 
 }

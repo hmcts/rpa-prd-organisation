@@ -5,7 +5,7 @@ import prd.organisation.service.RegistrationService
 import spock.lang.Shared
 import spock.lang.Specification
 
-class RegistrationControllerSpec extends Specification implements ControllerUnitTest<RegistrationController>{
+class RegistrationControllerSpec extends Specification implements ControllerUnitTest<RegistrationController> {
 
     @Shared
     private cmd = new OrganisationRegistrationCommand(

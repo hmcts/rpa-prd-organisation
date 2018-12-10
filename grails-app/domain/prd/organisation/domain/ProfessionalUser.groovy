@@ -1,9 +1,10 @@
 package prd.organisation.domain
 
-import grails.rest.*
+
+import grails.rest.Resource
 import prd.organisation.web.SubclassRestfulController
 
-@Resource(readOnly = false, formats = ['json'], superClass=SubclassRestfulController)
+@Resource(readOnly = false, formats = ['json'], superClass = SubclassRestfulController)
 class ProfessionalUser {
 
     String emailId

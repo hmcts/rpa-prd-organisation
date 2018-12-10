@@ -1,14 +1,14 @@
 package prd.organisation.web
 
-import groovy.transform.ToString
 import grails.validation.Validateable
+import groovy.transform.ToString
 
-@ToString(includeNames=true, includeFields=true)
+@ToString(includeNames = true, includeFields = true)
 class OrganisationRegistrationCommand implements Validateable {
     String name
     String url
     String sraId
-    
+
     String firstName
     String lastName
     String email

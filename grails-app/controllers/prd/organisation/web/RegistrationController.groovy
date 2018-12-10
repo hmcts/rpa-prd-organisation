@@ -1,14 +1,13 @@
 package prd.organisation.web
 
-import grails.validation.ValidationException
 import prd.organisation.service.RegistrationService
 
 class RegistrationController {
-	static responseFormats = ['json', 'xml']
+    static responseFormats = ['json', 'xml']
 
     RegistrationService registrationService
 
-    def register(OrganisationRegistrationCommand cmd) { 
+    def register(OrganisationRegistrationCommand cmd) {
         log.info "Creating organisation"
 
         try {
