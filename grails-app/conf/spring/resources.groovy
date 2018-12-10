@@ -1,5 +1,5 @@
 import grails.rest.render.xml.XmlRenderer
-import prd.organisation.domain.Organisation
+import rd.professional.domain.Organisation
 
 beans = {
     organisationRenderer(XmlRenderer, Organisation) {

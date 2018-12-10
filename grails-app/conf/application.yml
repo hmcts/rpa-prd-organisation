@@ -2,7 +2,7 @@
 grails:
   profile: rest-api
   codegen:
-    defaultPackage: prd.organisation
+    defaultPackage: rd.professional
   gorm:
     reactor:
       # Whether to translate GORM events into Reactor events
@@ -85,7 +85,7 @@ environments:
   development:
     dataSource:
       dbCreate: none
-      url: jdbc:h2:file:~/.moj/db-prd-organisation;AUTO_SERVER=TRUE
+      url: jdbc:h2:file:~/.moj/db-rd-professional;AUTO_SERVER=TRUE
       logSql: false
       formatSql: false
     server:
@@ -98,7 +98,7 @@ environments:
   production:
     server:
       port: ${SERVER_PORT}
-    prd_users_endpointurl: http://rpa-prd-users-aat.service.core-compute-aat.internal
+    prd_users_endpointurl: http://rd-user-profile-aat.service.core-compute-aat.internal
     dataSource:
       dbCreate: none
       url: ${SPRING_DATASOURCE_URL}

@@ -3,8 +3,8 @@
 properties([
     [
         $class: 'GithubProjectProperty',
-        displayName: 'RPA Professional Reference Data Organisation microservice',
-        projectUrlStr: 'https://github.com/hmcts/rpa-prd-organisation/'
+        displayName: 'RPA Reference Data Professional microservice',
+        projectUrlStr: 'https://github.com/hmcts/rd-professional/'
     ],
 //    parameters(),
     pipelineTriggers([
@@ -16,7 +16,7 @@ properties([
 
 def type = "java"
 def product = "rpa"
-def component = "prd-org"
+def component = "rd-professional"
 
 def channel = '#rpa-prd-builds'
 

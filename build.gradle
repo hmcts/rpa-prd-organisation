@@ -23,7 +23,7 @@ plugins {
 }
 
 version "0.1"
-group "prd.organisation"
+group "rd.professional"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
@@ -119,7 +119,7 @@ jacoco {
 }
 
 def coverageExclusionList = [
-    '**prd/organisation/**'
+    '**rd/professional/**'
 ]
 
 jacocoTestReport {
@@ -165,4 +165,4 @@ task smoke(type: Test) {
 //    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
-war.archiveName='rpa-prd-organisation.war'
+war.archiveName='rd-professional.war'
