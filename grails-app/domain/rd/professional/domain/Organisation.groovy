@@ -1,12 +1,11 @@
 package rd.professional.domain
 
-
 import grails.rest.Resource
 import rd.professional.web.SubclassRestfulController
 
 @Resource(readOnly = false, formats = ['json'], superClass = SubclassRestfulController)
 class Organisation {
-    String organisationId = UUID.randomUUID().toString()
+
     String name
     URL url
     String sraId
@@ -30,4 +29,5 @@ class Organisation {
         url nullable: true
         companyNumber nullable: true
     }
+
 }

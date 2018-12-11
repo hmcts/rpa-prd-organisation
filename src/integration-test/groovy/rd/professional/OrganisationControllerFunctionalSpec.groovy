@@ -11,9 +11,7 @@ import static org.springframework.http.HttpStatus.*
 
 @Integration
 @Rollback
-class OrganisationControllerSpec extends GebSpec {
-
-    static uuidPattern = "[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}"
+class OrganisationControllerFunctionalSpec extends GebSpec {
 
     RestBuilder restBuilder() {
         new RestBuilder()
@@ -87,11 +85,8 @@ class OrganisationControllerSpec extends GebSpec {
         json.size() == 2
         json[0].name == "ACME Inc."
         json[0].users.size() == 1
-        json[0].organisationId && json[0].organisationId ==~ uuidPattern
         json[1].name == "Aperture Science"
         json[1].users.size() == 1
         json[0].users[0].id != json[1].users[0].id
-        json[1].organisationId && json[1].organisationId ==~ uuidPattern
-        json[0].organisationId != json[1].organisationId
     }
 }

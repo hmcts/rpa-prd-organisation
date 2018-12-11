@@ -15,7 +15,7 @@ import static org.springframework.http.HttpStatus.OK
 
 @Integration
 @Rollback
-class SearchControllerSpec extends GebSpec {
+class SearchControllerFunctionalSpec extends GebSpec {
 
     @OnceBefore
     void setupOrg() {
