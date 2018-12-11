@@ -1,14 +1,17 @@
 package rd.professional.web
 
-
+import rd.professional.domain.Organisation
 import rd.professional.service.OrganisationService
 
-class OrganisationController {
+class OrganisationController extends SubclassRestfulController<Organisation> {
     static responseFormats = ['json', 'xml']
+    OrganisationController() {
+        super(Organisation)
+    }
 
     OrganisationService organisationService
 
-    def save(OrganisationRegistrationCommand cmd) {
+    def register(OrganisationRegistrationCommand cmd) {
         log.info "Creating organisation"
 
         try {

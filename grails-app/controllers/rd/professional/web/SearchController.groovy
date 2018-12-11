@@ -1,5 +1,6 @@
 package rd.professional.web
 
+import groovy.util.logging.Log
 import rd.professional.domain.Address
 import rd.professional.domain.ApprovableOrganisationDetails
 import rd.professional.domain.Organisation
@@ -38,15 +39,18 @@ class SearchController {
         /*
          * REFACTOR: Move search logic to a Service?
          */
+        log.info("accountsByEmail: called with $email")
         def orgAccounts = Organisation.withCriteria {
             'users' {
                 eq('emailId', email)
             }
         }.accounts
+        log.debug("Found accounts: $orgAccounts")
 
         // TODO: What if a user belongs to multiple organisations?
         if (orgAccounts && orgAccounts.size() == 1) {
-            respond orgAccounts.get(0).pbaNumber
+            def response = [payment_accounts: orgAccounts.get(0).pbaNumber]
+            respond response
         } else {
             response.status = 404
             render '[]'

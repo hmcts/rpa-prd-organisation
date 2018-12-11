@@ -14,17 +14,18 @@ class UrlMappings {
         "404"(view: '/notFound')
 
         // nested endpoints
-        "/organisations/$orgId?" (resources: "organisation") {
+        "/organisations" (resources: "organisation") {
             "/users"(resources: "professionalUser")
             "/addresses"(resources: "address")
             "/paymentAccounts"(resources: "account")
             "/domains"(resources: "domain")
         }
 
+        '/organisations/register'(controller: 'organisation', action: 'register')
         // search endpoints
         '/search/organisations/approved'(controller: 'search', action: 'approvedOrganisations')
         '/search/organisations/pending'(controller: 'search', action: 'pendingOrganisations')
-        '/search/accounts'(controller: 'search', action: 'accountsByEmail')
+        "/organisations/pba/$email"(controller: 'search', action: 'accountsByEmail')
         "/search/users"(resources: "professionalUser")
 
     }

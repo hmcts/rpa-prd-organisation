@@ -158,7 +158,7 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
 
         then:
         response.status == 200
-        response.json == [account.pbaNumber]
+        response.json.payment_accounts == [account.pbaNumber]
     }
 
     void "test get accounts by email multiple"() {
@@ -172,6 +172,6 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
 
         then:
         response.status == 200
-        response.json == [account.pbaNumber, account2.pbaNumber]
+        response.json.payment_accounts == [account.pbaNumber, account2.pbaNumber]
     }
 }

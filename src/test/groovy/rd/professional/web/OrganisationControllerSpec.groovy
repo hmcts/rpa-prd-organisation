@@ -24,7 +24,7 @@ class OrganisationControllerSpec extends Specification implements ControllerUnit
         controller.organisationService = mockOrganisationService
 
         when: "a company sends a registration request"
-        controller.save(cmd)
+        controller.register(cmd)
 
         then: "an error response is returned"
         response.status == 400
@@ -37,7 +37,7 @@ class OrganisationControllerSpec extends Specification implements ControllerUnit
         controller.organisationService = mockOrganisationService
 
         when: "a company sends a registration request"
-        controller.save(cmd)
+        controller.register(cmd)
 
         then: "a created response is returned"
         response.status == 201
