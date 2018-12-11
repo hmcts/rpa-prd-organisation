@@ -3,7 +3,9 @@ package rd.professional
 import geb.spock.GebSpec
 import grails.plugins.rest.client.RestBuilder
 import grails.testing.mixin.integration.Integration
-import grails.transaction.Rollback
+import grails.gorm.transactions.Rollback
+import org.junit.After
+import rd.professional.domain.Organisation
 
 import static org.springframework.http.HttpStatus.*
 
@@ -15,6 +17,11 @@ class OrganisationControllerSpec extends GebSpec {
 
     RestBuilder restBuilder() {
         new RestBuilder()
+    }
+
+    @After
+    void deleteData() {
+         Organisation.findAll()*.delete()
     }
 
     void "test exception from service causes 400 response"() {
@@ -47,7 +54,17 @@ class OrganisationControllerSpec extends GebSpec {
     }
 
     void "test GET organisations returns a list of all organisations"() {
-        given: "a second company is added to the database"
+        given: "two companies are added to the database"
+        restBuilder().post("${baseUrl}organisations/register", {
+            accept("application/json")
+            contentType("application/json")
+            json {
+                name = "ACME Inc."
+                firstName = "Foo"
+                lastName = "Barton"
+                email = "foo@bar.com"
+            }
+        })
         restBuilder().post("${baseUrl}/organisations/register", {
             accept("application/json")
             contentType("application/json")
@@ -70,11 +87,10 @@ class OrganisationControllerSpec extends GebSpec {
         json.size() == 2
         json[0].name == "ACME Inc."
         json[0].users.size() == 1
-        json[0].users[0].id == 1
         json[0].organisationId && json[0].organisationId ==~ uuidPattern
         json[1].name == "Aperture Science"
         json[1].users.size() == 1
-        json[1].users[0].id == 2
+        json[0].users[0].id != json[1].users[0].id
         json[1].organisationId && json[1].organisationId ==~ uuidPattern
         json[0].organisationId != json[1].organisationId
     }

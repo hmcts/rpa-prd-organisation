@@ -55,6 +55,7 @@ class OrganisationService {
             log.debug "Saving organisation"
             organisation.save(failOnError: true, flush: true)
         } else {
+            log.debug "Unable to validate organisation: " + organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }
             throw new RuntimeException(organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }.join('<p>'))
         }
     }
