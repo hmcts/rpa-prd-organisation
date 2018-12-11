@@ -38,6 +38,9 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 //    logger("org.hibernate.SQL", DEBUG, ["STDOUT"], false)
 //    logger("org.hibernate.type.descriptor.sql.BasicBinder", TRACE, ["STDOUT"], false)
     logger('rd.professional', DEBUG)
+    root(TRACE, ['STDOUT'])
 }
-
-root(INFO, ['STDOUT', 'AZURE_APPINSIGHTS'])
+else {
+    logger('rd.professional', TRACE)
+    root(INFO, ['STDOUT', 'AZURE_APPINSIGHTS'])
+}
