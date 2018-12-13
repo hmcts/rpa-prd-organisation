@@ -10,7 +10,7 @@ locals {
 # "${local.local_env}"
 
 module "app" {
-  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=test-new-api-version"
   product = "${local.app_full_name}"
   location = "${var.location}"
   env = "${var.env}"
