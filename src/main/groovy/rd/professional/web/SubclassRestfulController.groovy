@@ -3,7 +3,7 @@ package rd.professional.web
 
 import grails.rest.RestfulController
 import prd.organisation.domain.*
-import rd.professional.domain.Address
+import rd.professional.domain.ContactInformation
 import rd.professional.domain.Domain
 import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
@@ -70,9 +70,9 @@ class SubclassRestfulController<T> extends RestfulController<T> {
             ProfessionalUser.where {
                 id == id && organisation.id == orgId
             }.find()
-        } else if (this.resource == Address) {
+        } else if (this.resource == ContactInformation) {
             def orgId = params.organisationId
-            Address.where {
+            ContactInformation.where {
                 id == id && organisation.id == orgId
             }.find()
         } else if (this.resource == PaymentAccount) {

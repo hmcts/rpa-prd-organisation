@@ -2,7 +2,7 @@ package rd.professional.service
 
 import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
-import rd.professional.domain.Address
+import rd.professional.domain.ContactInformation
 import rd.professional.domain.Domain
 import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
@@ -13,7 +13,7 @@ import spock.lang.Specification
 class OrganisationServiceSpec extends Specification implements ServiceUnitTest<OrganisationService>, DataTest {
 
     def setup() {
-        mockDomains Address, Organisation, PaymentAccount, ProfessionalUser, Domain
+        mockDomains ContactInformation, Organisation, PaymentAccount, ProfessionalUser, Domain
     }
 
     void "test null registration command throws"() {
@@ -28,7 +28,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ProfessionalUser.count == 0
         PaymentAccount.count == 0
         Domain.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test empty registration command throws"() {
@@ -43,7 +43,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ProfessionalUser.count == 0
         PaymentAccount.count == 0
         Domain.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test reg command with missing name throws"() {
@@ -62,7 +62,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ProfessionalUser.count == 0
         PaymentAccount.count == 0
         Domain.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test reg command with missing first name throws"() {
@@ -81,7 +81,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ProfessionalUser.count == 0
         PaymentAccount.count == 0
         Domain.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test reg command with missing last name throws"() {
@@ -100,7 +100,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ProfessionalUser.count == 0
         PaymentAccount.count == 0
         Domain.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test reg command with missing email throws"() {
@@ -119,7 +119,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ProfessionalUser.count == 0
         PaymentAccount.count == 0
         Domain.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test reg command with only mandatory fields set stores org and a user"() {
@@ -152,7 +152,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         }
         PaymentAccount.count == 0
         Domain.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test reg command with mandatory and accounts fields set stores org, accounts and a user"() {
@@ -190,7 +190,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         PaymentAccount.count == 2
         PaymentAccount.findAll().pbaNumber == ["123", "321"]
         Domain.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test reg command with mandatory and domains fields set stores org, domains and a user"() {
@@ -228,7 +228,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         Domain.count == 2
         Domain.findAll().host == ["www.foo.com", "www.bar.com"]
         PaymentAccount.count == 0
-        Address.count == 0
+        ContactInformation.count == 0
     }
 
     void "test reg command with mandatory and address fields set stores org, address and a user"() {
@@ -237,12 +237,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def firstName = "Foo"
         def lastName = "Barton"
         def email = "foo@bar.com"
-        def houseNoBuildingName = "Flat 7"
-        def addressLine1 = "Baz Towers"
-        def addressLine2 = "Foo Street"
-        def townCity = "Bar upon Thames"
-        def county = "Surrey"
-        def postcode = "F00 BAR"
+        def address = '{"Flat 7", "Baz Towers", "Foo Street", "Bar upon Thames", "Surrey", "F00 BAR"}'
 
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
@@ -250,12 +245,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
-                houseNoBuildingName: houseNoBuildingName,
-                addressLine1: addressLine1,
-                addressLine2: addressLine2,
-                townCity: townCity,
-                county: county,
-                postcode: postcode
+                address: address
         ))
 
         then: "an exception is not thrown"
@@ -265,7 +255,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         Organisation.count == 1
         Organisation org = Organisation.findAll()[0]
         org.name == name
-        org.addresses.size() == 1
+        org.contacts.size() == 1
         ProfessionalUser.count == 1
         ProfessionalUser user = ProfessionalUser.findAll()[0]
         verifyAll {
@@ -273,16 +263,9 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
             user.lastName == lastName
             user.emailId == email
         }
-        Address.count == 1
-        Address address = Address.findAll()[0]
-        verifyAll {
-            address.houseNoBuildingName == houseNoBuildingName
-            address.addressLine1 == addressLine1
-            address.addressLine2 == addressLine2
-            address.townCity == townCity
-            address.county == county
-            address.postcode == postcode
-        }
+        ContactInformation.count == 1
+        ContactInformation contacts = ContactInformation.findAll()[0]
+        contacts.address == address
         PaymentAccount.count == 0
         Domain.count == 0
     }
@@ -293,12 +276,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def firstName = "Foo"
         def lastName = "Barton"
         def email = "foo@bar.com"
-        def houseNoBuildingName = "Flat 7"
-        def addressLine1 = "Baz Towers"
-        def addressLine2 = "Foo Street"
-        def townCity = "Bar upon Thames"
-        def county = "Surrey"
-        def postcode = "F00 BAR"
+        def address = '{"Flat 7", "Baz Towers", "Foo Street", "Bar upon Thames", "Surrey", "F00 BAR"}'
         def domains = "www.foo.com,www.bar.com"
         def pbaAccounts = "123,321"
 
@@ -310,12 +288,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
                 email: email,
                 domains: domains,
                 pbaAccounts: pbaAccounts,
-                houseNoBuildingName: houseNoBuildingName,
-                addressLine1: addressLine1,
-                addressLine2: addressLine2,
-                townCity: townCity,
-                county: county,
-                postcode: postcode
+                address: address
         ))
 
         then: "an exception is not thrown"
@@ -325,7 +298,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         Organisation.count == 1
         Organisation org = Organisation.findAll()[0]
         org.name == name
-        org.addresses.size() == 1
+        org.contacts.size() == 1
         org.accounts.size() == 2
         org.domains.size() == 2
         ProfessionalUser.count == 1
@@ -335,16 +308,9 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
             user.lastName == lastName
             user.emailId == email
         }
-        Address.count == 1
-        Address address = Address.findAll()[0]
-        verifyAll {
-            address.houseNoBuildingName == houseNoBuildingName
-            address.addressLine1 == addressLine1
-            address.addressLine2 == addressLine2
-            address.townCity == townCity
-            address.county == county
-            address.postcode == postcode
-        }
+        ContactInformation.count == 1
+        ContactInformation contacts = ContactInformation.findAll()[0]
+        contacts.address == address
         PaymentAccount.count == 2
         PaymentAccount.findAll().pbaNumber == ["123", "321"]
         Domain.count == 2

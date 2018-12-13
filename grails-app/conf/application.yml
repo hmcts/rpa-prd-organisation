@@ -11,7 +11,7 @@ grails:
   plugin:
     databasemigration:
       updateOnStart: true
-      updateOnStartFileName: changelog.yml
+      updateOnStartFileName: changelog.groovy
 info:
   app:
     name: '@info.app.name@'
@@ -85,7 +85,7 @@ environments:
   development:
     dataSource:
       dbCreate: none
-      url: jdbc:h2:file:~/.moj/db-rd-professional;AUTO_SERVER=TRUE
+      url: jdbc:h2:file:~/.moj/db-rd-professional;AUTO_SERVER=TRUE;INIT=create domain if not exists jsonb as other;
       logSql: false
       formatSql: false
     server:
@@ -94,7 +94,7 @@ environments:
   test:
     dataSource:
       dbCreate: none
-      url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+      url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE;INIT=create domain if not exists jsonb as other;
   production:
     server:
       port: ${SERVER_PORT}

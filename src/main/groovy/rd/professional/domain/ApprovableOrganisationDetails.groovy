@@ -13,12 +13,6 @@ class ApprovableOrganisationDetails {
     String initialSuperuserFirstName
     String initialSuperuserLastName
     String initialSuperuserEmail
-    String houseNoBuildingName
-    String addressLine1
-    String addressLine2
-    String townCity
-    String county
-    String country
-    String postcode
+    String address
 
 }

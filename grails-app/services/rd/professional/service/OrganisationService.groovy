@@ -3,7 +3,7 @@ package rd.professional.service
 import grails.gorm.transactions.Transactional
 import org.springframework.context.MessageSource
 import org.springframework.validation.FieldError
-import rd.professional.domain.Address
+import rd.professional.domain.ContactInformation
 import rd.professional.domain.Domain
 import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
@@ -37,17 +37,11 @@ class OrganisationService {
         }
 
         // address
-        if (cmd.houseNoBuildingName && cmd.addressLine1 && cmd.townCity) {
+        if (cmd.address) {
             log.debug "Registering address for organisation"
-            organisation.addToAddresses(
-                    new Address(
-                            houseNoBuildingName: cmd.houseNoBuildingName,
-                            addressLine1: cmd.addressLine1,
-                            addressLine2: cmd.addressLine2,
-                            townCity: cmd.townCity,
-                            county: cmd.county,
-                            country: cmd.country,
-                            postcode: cmd.postcode
+            organisation.addToContacts(
+                    new ContactInformation(
+                            address: cmd.address
                     ))
         }
 
@@ -55,7 +49,7 @@ class OrganisationService {
             log.debug "Saving organisation"
             organisation.save(failOnError: true, flush: true)
         } else {
-            log.debug "Unable to validate organisation: " + organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }
+            log.error "Unable to validate organisation: " + organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }
             throw new RuntimeException(organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }.join('<p>'))
         }
     }

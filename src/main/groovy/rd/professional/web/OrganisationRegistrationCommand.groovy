@@ -16,13 +16,7 @@ class OrganisationRegistrationCommand implements Validateable {
     String pbaAccounts
     String domains
 
-    String houseNoBuildingName
-    String addressLine1
-    String addressLine2
-    String townCity
-    String county
-    String country
-    String postcode
+    String address
 
     static constraints = {
         sraId nullable: true
@@ -36,12 +30,6 @@ class OrganisationRegistrationCommand implements Validateable {
         pbaAccounts nullable: true
         domains nullable: true
 
-        houseNoBuildingName nullable: true
-        addressLine1 nullable: true
-        addressLine2 nullable: true
-        townCity nullable: true
-        county nullable: true
-        country nullable: true
-        postcode nullable: true
+        address nullable: true
     }
 }

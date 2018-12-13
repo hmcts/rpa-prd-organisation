@@ -2,7 +2,7 @@ package rd.professional.web
 
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
-import rd.professional.domain.Address
+import rd.professional.domain.ContactInformation
 import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
@@ -26,12 +26,16 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
                 sraId: "sra",
                 sraRegulated: true,
                 companyNumber: "12345",
-                lastUpdated: new Date()
         )
-        org.addToAddresses(address)
+        org.addToContacts(address)
         org.addToUsers(user)
         org.addToAccounts(account)
-        org.save(flush: true)
+        if (!org.save(flush: true)) {
+                org.errors.allErrors.each {
+                    println it
+                }
+        }
+        return org
     }
 
     private Organisation addOrganisation2() {
@@ -41,9 +45,10 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
                 sraId: "srb",
                 sraRegulated: true,
                 companyNumber: "12346",
-                lastUpdated: new Date()
         )
-        org.addToAddresses(new Address())
+        org.addToContacts(new ContactInformation(
+                address: "{}"
+        ))
         org.addToUsers(new ProfessionalUser(
                 emailId: "foo@baz.com",
                 firstName: "Cave",
@@ -55,7 +60,7 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
     }
 
     void setupSpec() {
-        mockDomains Organisation, ProfessionalUser, Address
+        mockDomains Organisation, ProfessionalUser, ContactInformation, PaymentAccount
 
         user = new ProfessionalUser(
                 emailId: "foo@bar.com",
@@ -63,7 +68,9 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
                 lastName: "Barton",
                 status: Status.APPROVED
         )
-        address = new Address()
+        address = new ContactInformation(
+                address: "{}"
+        )
         account = new PaymentAccount(pbaNumber: "54321")
     }
 

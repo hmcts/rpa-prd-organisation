@@ -1,7 +1,6 @@
 package rd.professional.web
 
-import groovy.util.logging.Log
-import rd.professional.domain.Address
+
 import rd.professional.domain.ApprovableOrganisationDetails
 import rd.professional.domain.Organisation
 import rd.professional.domain.ProfessionalUser
@@ -26,11 +25,11 @@ class SearchController {
             status == status
         }.list().collect { Organisation org ->
             ProfessionalUser initialSuperUser = org.users[0]
-            Address address = org.addresses ? org.addresses[0] : null
+            String address = org.contacts ? org.contacts[0] : null
             new ApprovableOrganisationDetails(
                     org.id, org.name, org.url, org.sraId, org.status,
                     initialSuperUser.firstName, initialSuperUser.lastName, initialSuperUser.emailId,
-                    address?.houseNoBuildingName, address?.addressLine1, address?.addressLine2, address?.townCity, address?.county, address?.country, address?.postcode
+                    address
             )
         }
     }
