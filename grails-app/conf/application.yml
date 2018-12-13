@@ -133,3 +133,11 @@ app-insights:
   dev-mode: off
   request-component: on
   telemetry-component: on
+
+swagger:
+  info:
+    description: Reference Data (Professional) service
+    version: 0.0.1
+    title: API documentation
+  consumes:
+    - application/json

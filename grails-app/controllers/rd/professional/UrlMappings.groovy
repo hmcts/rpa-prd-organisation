@@ -28,5 +28,7 @@ class UrlMappings {
         "/organisations/pba/$email"(controller: 'search', action: 'accountsByEmail')
         "/search/users"(resources: "professionalUser")
 
+        // Swagger UI
+        "/apidoc/$action?/$id?"(controller: "apiDoc", action: "getDocuments")
     }
 }

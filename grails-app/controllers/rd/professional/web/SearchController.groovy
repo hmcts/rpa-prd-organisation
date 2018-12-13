@@ -1,11 +1,13 @@
 package rd.professional.web
 
-
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import rd.professional.domain.ApprovableOrganisationDetails
 import rd.professional.domain.Organisation
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.Status
 
+@Api(value = "organisations")
 class SearchController {
     static responseFormats = ['json']
 
@@ -34,6 +36,12 @@ class SearchController {
         }
     }
 
+    @ApiOperation(
+            value = "Search for payment accounts belonging to an email address",
+            nickname = "pba/{email}",
+            produces = "application/json",
+            httpMethod = "GET"
+    )
     def accountsByEmail(String email) {
         /*
          * REFACTOR: Move search logic to a Service?
