@@ -1,3 +1,8 @@
+# Temporary fix for template API version error on deployment
+provider "azurerm" {
+  version = "1.19.0"
+}
+
 locals {
   app_full_name = "${var.product}-${var.component}"
   ase_name = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
@@ -10,7 +15,7 @@ locals {
 # "${local.local_env}"
 
 module "app" {
-  source = "git@github.com:hmcts/cnp-module-webapp?ref=test-new-api-version"
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product = "${local.app_full_name}"
   location = "${var.location}"
   env = "${var.env}"
