@@ -19,6 +19,7 @@ class BootStrap {
                     lastUpdated:it.lastUpdated,
                     companyNumber:it.companyNumber,
                     status:it.status,
+                    users:it.users,
                     contacts:it.contacts,
                     accounts:it.accounts,
                     domains:it.domains,
@@ -31,7 +32,9 @@ class BootStrap {
                     emailId:it.emailId,
                     firstName:it.firstName,
                     lastName:it.lastName,
-                    status:it.status
+                    status:it.status,
+                    contacts:it.contacts,
+                    accounts:it.accounts
             ]
         })
         JSON.registerObjectMarshaller(ContactInformation, {
