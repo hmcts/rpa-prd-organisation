@@ -1,6 +1,5 @@
 package rd.professional.domain
 
-import grails.converters.JSON
 import grails.rest.Resource
 
 import java.time.LocalDateTime
@@ -12,17 +11,6 @@ class ContactInformation {
     LocalDateTime dateCreated
     LocalDateTime lastUpdated
     UUID contactId = UUID.randomUUID()
-
-    static {
-        JSON.registerObjectMarshaller(ContactInformation, {
-            return [
-                    address:it.address,
-                    dateCreated:it.dateCreated,
-                    lastUpdated:it.lastUpdated,
-                    contactId:it.contactId
-            ]
-        })
-    }
 
     static belongsTo = [
             organisation: Organisation,

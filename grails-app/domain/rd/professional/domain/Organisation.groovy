@@ -1,6 +1,5 @@
 package rd.professional.domain
 
-import grails.converters.JSON
 import grails.rest.Resource
 import rd.professional.web.SubclassRestfulController
 
@@ -19,24 +18,6 @@ class Organisation {
 
     LocalDateTime lastUpdated
     Status status = Status.PENDING
-
-    static {
-        JSON.registerObjectMarshaller(Organisation, {
-            return [
-                    name:it.name,
-                    url:it.url,
-                    sraId:it.sraId,
-                    organisationId:it.organisationId,
-                    lastUpdated:it.lastUpdated,
-                    companyNumber:it.companyNumber,
-                    status:it.status,
-                    contacts:it.contacts,
-                    accounts:it.accounts,
-                    domains:it.domains,
-                    contacts:it.contacts
-            ]
-        })
-    }
 
     static hasMany = [
             users    : ProfessionalUser,

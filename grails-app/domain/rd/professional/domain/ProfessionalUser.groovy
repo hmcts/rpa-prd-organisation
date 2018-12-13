@@ -1,6 +1,5 @@
 package rd.professional.domain
 
-import grails.converters.JSON
 import grails.rest.Resource
 import rd.professional.web.SubclassRestfulController
 
@@ -12,18 +11,6 @@ class ProfessionalUser {
     String firstName
     String lastName
     Status status = Status.PENDING
-
-    static {
-        JSON.registerObjectMarshaller(ProfessionalUser, {
-            return [
-                    userId:it.userId,
-                    emailId:it.emailId,
-                    firstName:it.firstName,
-                    lastName:it.lastName,
-                    status:it.status
-            ]
-        })
-    }
 
     static belongsTo = [organisation: Organisation]
 

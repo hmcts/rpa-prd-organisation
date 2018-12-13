@@ -1,6 +1,5 @@
 package rd.professional.domain
 
-import grails.converters.JSON
 import grails.rest.Resource
 
 @Resource(readOnly = false, formats = ['json'])
@@ -9,15 +8,6 @@ class PaymentAccount {
     UUID paymentAccountId = UUID.randomUUID()
 
     String pbaNumber
-
-    static {
-        JSON.registerObjectMarshaller(PaymentAccount, {
-            return [
-                    paymentAccountId:it.paymentAccountId,
-                    pbaNumber:it.pbaNumber
-            ]
-        })
-    }
 
     static belongsTo = [
             organisation: Organisation,
