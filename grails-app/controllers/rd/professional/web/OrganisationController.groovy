@@ -12,7 +12,6 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
 
     OrganisationService organisationService
 
-    @Override
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         def orgs = listAllResources(params)

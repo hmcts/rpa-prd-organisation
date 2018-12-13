@@ -29,7 +29,7 @@ class Organisation {
                     organisationId:it.organisationId,
                     lastUpdated:it.lastUpdated,
                     companyNumber:it.companyNumber,
-                    status:status,
+                    status:it.status,
                     contacts:it.contacts,
                     accounts:it.accounts,
                     domains:it.domains,

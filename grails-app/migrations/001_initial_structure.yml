@@ -1,0 +1,354 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1544720270950-1
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: contact_informationPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: version
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: address
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: date_created
+                  type: BINARY(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_updated
+                  type: BINARY(255)
+              - column:
+                  name: organisation_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: contact_id
+                  type: BINARY
+            tableName: contact_information
+  - changeSet:
+      id: 1544720270950-2
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: domainPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: version
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: host
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: organisation_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: domain_id
+                  type: BINARY
+            tableName: domain
+  - changeSet:
+      id: 1544720270950-3
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: organisationPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: version
+                  type: BIGINT
+              - column:
+                  name: sra_id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: organisation_id
+                  type: BINARY
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_updated
+                  type: BINARY(255)
+              - column:
+                  name: company_number
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sra_regulated
+                  type: BOOLEAN
+              - column:
+                  name: url
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+            tableName: organisation
+  - changeSet:
+      id: 1544720270950-4
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: payment_accountPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: version
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: payment_account_id
+                  type: BINARY
+              - column:
+                  constraints:
+                    nullable: false
+                  name: pba_number
+                  type: VARCHAR(255)
+              - column:
+                  name: organisation_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+            tableName: payment_account
+  - changeSet:
+      id: 1544720270950-5
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: professional_userPK
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: version
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BINARY
+              - column:
+                  constraints:
+                    nullable: false
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: organisation_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email_id
+                  type: VARCHAR(255)
+            tableName: professional_user
+  - changeSet:
+      id: 1544720270950-6
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: contact_id
+            constraintName: UC_CONTACT_INFORMATIONCONTACT_ID_COL
+            tableName: contact_information
+  - changeSet:
+      id: 1544720270950-7
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: domain_id
+            constraintName: UC_DOMAINDOMAIN_ID_COL
+            tableName: domain
+  - changeSet:
+      id: 1544720270950-8
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: UC_ORGANISATIONNAME_COL
+            tableName: organisation
+  - changeSet:
+      id: 1544720270950-9
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: organisation_id
+            constraintName: UC_ORGANISATIONORGANISATION_ID_COL
+            tableName: organisation
+  - changeSet:
+      id: 1544720270950-10
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: payment_account_id
+            constraintName: UC_PAYMENT_ACCOUNTPAYMENT_ACCOUNT_ID_COL
+            tableName: payment_account
+  - changeSet:
+      id: 1544720270950-11
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: pba_number
+            constraintName: UC_PAYMENT_ACCOUNTPBA_NUMBER_COL
+            tableName: payment_account
+  - changeSet:
+      id: 1544720270950-12
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: email_id
+            constraintName: UC_PROFESSIONAL_USEREMAIL_ID_COL
+            tableName: professional_user
+  - changeSet:
+      id: 1544720270950-13
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: user_id
+            constraintName: UC_PROFESSIONAL_USERUSER_ID_COL
+            tableName: professional_user
+  - changeSet:
+      id: 1544720270950-14
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organisation_id
+            baseTableName: contact_information
+            constraintName: FK9bl2tisoqqdsnq2aot0nog62q
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organisation
+  - changeSet:
+      id: 1544720270950-15
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organisation_id
+            baseTableName: professional_user
+            constraintName: FK9c85ohvq1lhm2bvs19vhfsnvs
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organisation
+  - changeSet:
+      id: 1544720270950-16
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organisation_id
+            baseTableName: payment_account
+            constraintName: FKdpltvob5nu5lj92rjiavt85w1
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organisation
+  - changeSet:
+      id: 1544720270950-17
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: organisation_id
+            baseTableName: domain
+            constraintName: FKej7ita5swmd3dxnlvoo24d1p
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: organisation
+  - changeSet:
+      id: 1544720270950-18
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: contact_information
+            constraintName: FKiauc1sacjfvacgx7gaoukrjld
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: professional_user
+  - changeSet:
+      id: 1544720270950-19
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: payment_account
+            constraintName: FKq7731bgvat2x2b1g45ncvg97p
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: professional_user
+
