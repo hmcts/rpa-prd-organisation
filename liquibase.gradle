@@ -37,7 +37,7 @@ task migratePostgresDatabase(type: JavaExec) {
     def user = project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : liquibaseProps.getProperty('username')
     def password = project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : liquibaseProps.getProperty('password')
 
-    args "--changeLogFile=./grails-app/migrations/changelog.yml"
+    args "--changeLogFile=./grails-app/migrations/changelog.groovy"
     args "--username=$user"
     args "--password=$password"
     args "--url=$urlString"
