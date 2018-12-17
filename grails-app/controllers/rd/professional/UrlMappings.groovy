@@ -23,8 +23,8 @@ class UrlMappings {
 
         '/organisations/register'(controller: 'organisation', action: 'register')
         // search endpoints
-        '/search/organisations/approved'(controller: 'search', action: 'approvedOrganisations')
-        '/search/organisations/pending'(controller: 'search', action: 'pendingOrganisations')
+        '/organisations/approved'(controller: 'search', action: 'approvedOrganisations')
+        '/organisations/pending'(controller: 'search', action: 'pendingOrganisations')
         "/organisations/pba/$email"(controller: 'search', action: 'accountsByEmail')
         "/search/users"(resources: "professionalUser")
 

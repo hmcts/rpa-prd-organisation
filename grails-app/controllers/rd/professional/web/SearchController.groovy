@@ -1,20 +1,51 @@
 package rd.professional.web
 
 import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
+import io.swagger.annotations.ApiImplicitParams
 import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import rd.professional.domain.ApprovableOrganisationDetails
 import rd.professional.domain.Organisation
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.Status
 
-@Api(value = "organisations")
+@Api(
+        value = "organisations/",
+        description = "Search related APIs"
+)
 class SearchController {
     static responseFormats = ['json']
 
+    @ApiOperation(
+            value = "Search for approved organisations",
+            nickname = "approved",
+            produces = "application/json",
+            httpMethod = "GET",
+            response = Organisation,
+            responseContainer = "Set"
+    )
+    @ApiResponses([
+            @ApiResponse(code = 404, message = "No approved organisations found"),
+            @ApiResponse(code = 405, message = "Only GET method is allowed")
+    ])
     def approvedOrganisations() {
         respond approvableOrganisationsInStatus(Status.APPROVED)
     }
 
+    @ApiOperation(
+            value = "Search for pending organisations",
+            nickname = "pending",
+            produces = "application/json",
+            httpMethod = "GET",
+            response = Organisation,
+            responseContainer = "Set"
+    )
+    @ApiResponses([
+            @ApiResponse(code = 404, message = "No pending organisations found"),
+            @ApiResponse(code = 405, message = "Only GET method is allowed")
+    ])
     def pendingOrganisations() {
         respond approvableOrganisationsInStatus(Status.PENDING)
     }
@@ -40,8 +71,21 @@ class SearchController {
             value = "Search for payment accounts belonging to an email address",
             nickname = "pba/{email}",
             produces = "application/json",
-            httpMethod = "GET"
+            httpMethod = "GET",
+            response = String,
+            responseContainer = "Set"
     )
+    @ApiResponses([
+            @ApiResponse(code = 404, message = "No accounts found"),
+            @ApiResponse(code = 405, message = "Only GET method is allowed")
+    ])
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "email",
+            paramType = "path",
+            required = true,
+            value = "Email address of the user whose accounts you wish to search for",
+            dataType = "string")
+    ])
     def accountsByEmail(String email) {
         /*
          * REFACTOR: Move search logic to a Service?
