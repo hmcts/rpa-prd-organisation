@@ -103,7 +103,7 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
                     paramType = "body",
                     required = true,
                     value = "Organisation registration details",
-                    dataType = "OrganisationRegistrationCommand"
+                    dataType = "rd.professional.web.OrganisationRegistrationCommand"
             )
     ])
     def register(OrganisationRegistrationCommand cmd) {
@@ -143,7 +143,7 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
                     paramType = "body",
                     required = true,
                     value = "Organisation update details",
-                    dataType = "OrganisationUpdateCommand"
+                    dataType = "rd.professional.web.OrganisationUpdateCommand"
             )
     ])
     def updateOrg(OrganisationUpdateCommand cmd) {

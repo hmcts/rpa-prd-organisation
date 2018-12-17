@@ -19,7 +19,7 @@ class OrganisationService {
         def organisation = new Organisation(name: cmd.name, url: cmd.url, sraId: cmd.sraId)
 
         log.debug "Creating superuser"
-        def superuser = new ProfessionalUser(emailId: cmd.email, firstName: cmd.firstName, lastName: cmd.lastName)
+        def superuser = new ProfessionalUser(emailId: cmd.superUser.email, firstName: cmd.superUser.firstName, lastName: cmd.superUser.lastName)
         organisation.addToUsers(superuser)
 
         if (cmd.pbaAccounts) {
@@ -41,7 +41,7 @@ class OrganisationService {
             log.debug "Registering address for organisation"
             organisation.addToContacts(
                     new ContactInformation(
-                            address: cmd.address
+                            address: cmd.address.address
                     ))
         }
 

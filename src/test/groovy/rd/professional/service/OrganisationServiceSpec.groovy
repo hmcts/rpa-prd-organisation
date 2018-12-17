@@ -7,7 +7,10 @@ import rd.professional.domain.Domain
 import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
+import rd.professional.web.AddAccountCommand
+import rd.professional.web.ContactInformationCommand
 import rd.professional.web.OrganisationRegistrationCommand
+import rd.professional.web.UserRegistrationCommand
 import spock.lang.Specification
 
 class OrganisationServiceSpec extends Specification implements ServiceUnitTest<OrganisationService>, DataTest {
@@ -69,8 +72,10 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
                 name: "ACME Inc.",
-                lastName: "Barton",
-                email: "foo@bar.com"
+                superUser: new UserRegistrationCommand(
+                    lastName: "Barton",
+                    email: "foo@bar.com"
+                )
         ))
 
         then: "an exception is thrown"
@@ -88,8 +93,10 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
                 name: "ACME Inc.",
-                firstName: "Foo",
-                email: "foo@bar.com"
+                superUser: new UserRegistrationCommand(
+                        firstName: "Foo",
+                        email: "foo@bar.com"
+                )
         ))
 
         then: "an exception is thrown"
@@ -107,8 +114,10 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
                 name: "ACME Inc.",
-                firstName: "Foo",
-                lastName: "Barton"
+                superUser: new UserRegistrationCommand(
+                        firstName: "Foo",
+                        lastName: "Barton"
+                )
         ))
 
         then: "an exception is thrown"
@@ -132,9 +141,11 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
                 name: name,
-                firstName: firstName,
-                lastName: lastName,
-                email: email
+                superUser: new UserRegistrationCommand(
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email
+                )
         ))
 
         then: "an exception is not thrown"
@@ -166,9 +177,11 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
                 name: name,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
+                superUser: new UserRegistrationCommand(
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email
+                ),
                 pbaAccounts: pbaAccounts
         ))
 
@@ -204,9 +217,11 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
                 name: name,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
+                superUser: new UserRegistrationCommand(
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email
+                ),
                 domains: domains
         ))
 
@@ -237,15 +252,17 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def firstName = "Foo"
         def lastName = "Barton"
         def email = "foo@bar.com"
-        def address = '{"Flat 7", "Baz Towers", "Foo Street", "Bar upon Thames", "Surrey", "F00 BAR"}'
+        String address = '{"Flat 7", "Baz Towers", "Foo Street", "Bar upon Thames", "Surrey", "F00 BAR"}'
 
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
                 name: name,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                address: address
+                superUser: new UserRegistrationCommand(
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email
+                ),
+                address: new ContactInformationCommand(address: address)
         ))
 
         then: "an exception is not thrown"
@@ -283,12 +300,14 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
                 name: name,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
+                superUser: new UserRegistrationCommand(
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email
+                ),
                 domains: domains,
                 pbaAccounts: pbaAccounts,
-                address: address
+                address: new ContactInformationCommand(address: address)
         ))
 
         then: "an exception is not thrown"

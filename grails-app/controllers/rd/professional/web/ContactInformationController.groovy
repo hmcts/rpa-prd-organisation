@@ -127,7 +127,7 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     paramType = "body",
                     required = true,
                     value = "Contact information details",
-                    dataType = "ContactInformationCommand"
+                    dataType = "rd.professional.web.ContactInformationCommand"
             )
     ])
     def addOrgContact(ContactInformationCommand cmd) {
@@ -166,7 +166,7 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     paramType = "body",
                     required = true,
                     value = "Contact information details",
-                    dataType = "ContactInformationCommand"
+                    dataType = "rd.professional.web.ContactInformationCommand"
             )
     ])
     def updateOrgContact(ContactInformationCommand cmd) {
@@ -311,7 +311,7 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     paramType = "body",
                     required = true,
                     value = "Contact information details",
-                    dataType = "ContactInformationCommand"
+                    dataType = "rd.professional.web.ContactInformationCommand"
             )
     ])
     def addUserContact(ContactInformationCommand cmd) {
@@ -357,7 +357,7 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     paramType = "body",
                     required = true,
                     value = "Contact information details",
-                    dataType = "ContactInformationCommand"
+                    dataType = "rd.professional.web.ContactInformationCommand"
             )
     ])
     def updateUserContact(ContactInformationCommand cmd) {

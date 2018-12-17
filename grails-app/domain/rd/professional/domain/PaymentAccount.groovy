@@ -1,13 +1,21 @@
 package rd.professional.domain
 
 import grails.rest.Resource
+import io.swagger.annotations.ApiModelProperty
 
 @Resource(readOnly = false, formats = ['json'])
 class PaymentAccount {
 
+    @ApiModelProperty(hidden = true)
+    Long id
     UUID paymentAccountId = UUID.randomUUID()
 
     String pbaNumber
+
+    @ApiModelProperty(hidden = true)
+    Organisation organisation
+    @ApiModelProperty(hidden = true)
+    ProfessionalUser user
 
     static belongsTo = [
             organisation: Organisation,

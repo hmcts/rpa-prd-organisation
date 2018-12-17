@@ -2,6 +2,8 @@ package rd.professional.web
 
 import grails.validation.Validateable
 import groovy.transform.ToString
+import io.swagger.annotations.ApiModelProperty
+import org.springframework.validation.Errors
 
 @ToString(includeNames = true, includeFields = true)
 class UserRegistrationCommand implements Validateable {
@@ -11,7 +13,10 @@ class UserRegistrationCommand implements Validateable {
 
     String pbaAccounts
 
-    String address
+    ContactInformationCommand address
+
+    @ApiModelProperty(hidden = true)
+    Errors errors
 
     static constraints = {
         firstName nullable: false

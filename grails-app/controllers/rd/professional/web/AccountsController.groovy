@@ -97,7 +97,7 @@ class AccountsController extends RestfulController<PaymentAccount> {
                     paramType = "body",
                     required = true,
                     value = "New account details",
-                    dataType = "AddAccountCommand"
+                    dataType = "rd.professional.web.AddAccountCommand"
             )
     ])
     def addOrgAccount(AddAccountCommand cmd) {
@@ -205,7 +205,7 @@ class AccountsController extends RestfulController<PaymentAccount> {
                     paramType = "body",
                     required = true,
                     value = "New account details",
-                    dataType = "AddAccountCommand"
+                    dataType = "rd.professional.web.AddAccountCommand"
             )
     ])
     def addUserAccount(AddAccountCommand cmd) {

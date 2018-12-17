@@ -131,7 +131,7 @@ class ProfessionalUserController extends RestfulController<ProfessionalUser> {
                     paramType = "body",
                     required = true,
                     value = "User registration details",
-                    dataType = "UserRegistrationCommand"
+                    dataType = "rd.professional.web.UserRegistrationCommand"
             )
     ])
     def register(UserRegistrationCommand cmd) {
@@ -170,7 +170,7 @@ class ProfessionalUserController extends RestfulController<ProfessionalUser> {
                     paramType = "body",
                     required = true,
                     value = "User update details",
-                    dataType = "UserUpdateCommand"
+                    dataType = "rd.professional.web.UserUpdateCommand"
             )
     ])
     def updateUser(UserUpdateCommand cmd) {

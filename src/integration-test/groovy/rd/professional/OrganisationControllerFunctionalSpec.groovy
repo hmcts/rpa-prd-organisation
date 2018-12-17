@@ -41,9 +41,11 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
             contentType("application/json")
             json {
                 name = "ACME Inc."
-                firstName = "Foo"
-                lastName = "Barton"
-                email = "foo@bar.com"
+                superUser = {
+                    firstName = "Foo"
+                    lastName = "Barton"
+                    email = "foo@bar.com"
+                }
             }
         })
 
@@ -58,9 +60,11 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
             contentType("application/json")
             json {
                 name = "ACME Inc."
-                firstName = "Foo"
-                lastName = "Barton"
-                email = "foo@bar.com"
+                superUser = {
+                    firstName = "Foo"
+                    lastName = "Barton"
+                    email = "foo@bar.com"
+                }
             }
         })
         restBuilder().post("${baseUrl}/organisations/register", {
@@ -68,9 +72,11 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
             contentType("application/json")
             json {
                 name = "Aperture Science"
-                firstName = "Cave"
-                lastName = "Johnson"
-                email = "cjohnson@aperturescience.com"
+                superUser = {
+                    firstName = "Cave"
+                    lastName = "Johnson"
+                    email = "cjohnson@aperturescience.com"
+                }
             }
         })
 

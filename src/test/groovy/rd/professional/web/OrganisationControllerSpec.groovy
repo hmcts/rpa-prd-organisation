@@ -10,9 +10,11 @@ class OrganisationControllerSpec extends Specification implements ControllerUnit
     @Shared
     private cmd = new OrganisationRegistrationCommand(
             name: "ACME Inc.",
-            firstName: "Foo",
-            lastName: "Barton",
-            email: "foo@bar.com"
+            superUser: new UserRegistrationCommand(
+                firstName: "Foo",
+                lastName: "Barton",
+                email: "foo@bar.com"
+            )
     )
 
     void "test exception from service causes 400 response"() {

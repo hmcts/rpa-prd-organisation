@@ -1,6 +1,7 @@
 package rd.professional.domain
 
 import grails.rest.Resource
+import io.swagger.annotations.ApiModelProperty
 import rd.professional.web.SubclassRestfulController
 
 import java.time.LocalDateTime
@@ -8,6 +9,8 @@ import java.time.LocalDateTime
 @Resource(readOnly = false, formats = ['json'], superClass = SubclassRestfulController)
 class Organisation {
 
+    @ApiModelProperty(hidden = true)
+    Long id
     String name
     URL url
     String sraId

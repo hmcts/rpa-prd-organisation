@@ -22,9 +22,11 @@ class SearchControllerFunctionalSpec extends GebSpec {
             contentType("application/json")
             json {
                 name = "ACME Inc."
-                firstName = "Foo"
-                lastName = "Barton"
-                email = "foo@bar.com"
+                superUser = {
+                    firstName = "Foo"
+                    lastName = "Barton"
+                    email = "foo@bar.com"
+                }
                 pbaAccounts = "123456,654321"
             }
         })

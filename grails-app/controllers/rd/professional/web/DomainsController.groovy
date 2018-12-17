@@ -95,7 +95,7 @@ class DomainsController extends RestfulController<Domain> {
                     paramType = "body",
                     required = true,
                     value = "New domain details",
-                    dataType = "AddDomainCommand"
+                    dataType = "rd.professional.web.AddDomainCommand"
             )
     ])
     def register(AddDomainCommand cmd) {
