@@ -6,6 +6,8 @@ class UrlMappings {
         "500"(view: '/error')
         "404"(view: '/notFound')
 
+        get "/health" (controller: 'health', action: 'index')
+
         // search endpoints
         get "/search/pba/$email"(controller: 'search', action: 'accountsByEmail')
         get '/search/organisations/approved'(controller: 'search', action: 'approvedOrganisations')
