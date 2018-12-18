@@ -2,13 +2,7 @@ package rd.professional.web
 
 import grails.gorm.transactions.Transactional
 import grails.rest.RestfulController
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
-import io.swagger.annotations.ApiImplicitParams
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
-import org.springframework.http.HttpStatus
+import io.swagger.annotations.*
 import rd.professional.domain.Organisation
 import rd.professional.service.OrganisationService
 
@@ -26,7 +20,7 @@ class OrganisationController extends RestfulController<Organisation> {
     OrganisationService organisationService
 
     @ApiOperation(
-            value="List all organisations",
+            value = "List all organisations",
             nickname = "/",
             produces = "application/json",
             httpMethod = "GET",
@@ -38,8 +32,7 @@ class OrganisationController extends RestfulController<Organisation> {
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Organisation.list(params), model: ["OrganisationCount": Organisation.count()]
+        super.index(max)
     }
 
     @ApiOperation(
@@ -63,7 +56,7 @@ class OrganisationController extends RestfulController<Organisation> {
             )
     ])
     Organisation show() {
-        respond organisationService.getForUuid(params.id)
+        super.show()
     }
 
     @ApiOperation(
@@ -87,13 +80,7 @@ class OrganisationController extends RestfulController<Organisation> {
     ])
     @Transactional
     def delete() {
-        def instance = organisationService.getForUuid(params.id)
-        if (instance) {
-            instance.delete(flush: true)
-            render status: HttpStatus.NO_CONTENT
-        } else {
-            notFound()
-        }
+        super.delete()
     }
 
     @ApiOperation(
@@ -122,7 +109,7 @@ class OrganisationController extends RestfulController<Organisation> {
         log.info "Creating organisation"
 
         try {
-            respond (organisationService.registerOrganisation(cmd), status: 201)
+            respond(organisationService.registerOrganisation(cmd), status: 201)
         } catch (Exception e) {
             response.status = 400
             response.outputStream << e.getMessage().bytes
@@ -158,12 +145,11 @@ class OrganisationController extends RestfulController<Organisation> {
             )
     ])
     @Transactional
-    def update(OrganisationUpdateCommand cmd) {
-        try {
-            respond(organisationService.updateOrganisation(params.id, cmd), status: 200)
-        } catch (Exception e) {
-            response.status = 400
-            response.outputStream << e.getMessage().bytes
-        }
+    def update() {
+        super.update()
+    }
+
+    protected Organisation queryForResource(Serializable id) {
+        organisationService.getForUuid(id)
     }
 }
