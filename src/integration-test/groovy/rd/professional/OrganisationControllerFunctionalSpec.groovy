@@ -24,7 +24,7 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
 
     void "test exception from service causes 400 response"() {
         when: "a company sends an invalid registration request"
-        def resp = restBuilder().post("${baseUrl}organisations/register", {
+        def resp = restBuilder().post("${baseUrl}organisations", {
             accept("application/json")
             contentType("application/json")
             json {}
@@ -36,7 +36,7 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
 
     void "test service gives 201 response"() {
         when: "a company sends a registration request"
-        def resp = restBuilder().post("${baseUrl}organisations/register", {
+        def resp = restBuilder().post("${baseUrl}organisations", {
             accept("application/json")
             contentType("application/json")
             json {
@@ -55,7 +55,7 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
 
     void "test GET organisations returns a list of all organisations"() {
         given: "two companies are added to the database"
-        restBuilder().post("${baseUrl}organisations/register", {
+        restBuilder().post("${baseUrl}organisations", {
             accept("application/json")
             contentType("application/json")
             json {
@@ -67,7 +67,7 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
                 }
             }
         })
-        restBuilder().post("${baseUrl}/organisations/register", {
+        restBuilder().post("${baseUrl}/organisations", {
             accept("application/json")
             contentType("application/json")
             json {

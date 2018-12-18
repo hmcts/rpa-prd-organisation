@@ -10,6 +10,7 @@ import rd.professional.domain.ApprovableOrganisationDetails
 import rd.professional.domain.Organisation
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.Status
+import rd.professional.service.AccountsService
 
 @Api(
         value = "organisations/",
@@ -17,6 +18,8 @@ import rd.professional.domain.Status
 )
 class SearchController {
     static responseFormats = ['json']
+
+    AccountsService accountsService
 
     @ApiOperation(
             value = "Search for approved organisations",
@@ -91,15 +94,10 @@ class SearchController {
          * REFACTOR: Move search logic to a Service?
          */
         log.info("accountsByEmail: called with $email")
-        def orgAccounts = Organisation.withCriteria {
-            'users' {
-                eq('emailId', email)
-            }
-        }.accounts
+        def orgAccounts = accountsService.findOrgAccountsByEmail(email)
         log.debug("Found accounts: $orgAccounts")
 
-        // TODO: What if a user belongs to multiple organisations?
-        if (orgAccounts && orgAccounts.size() == 1) {
+        if (orgAccounts && orgAccounts.size() >= 1) {
             def response = [payment_accounts: orgAccounts.get(0).pbaNumber]
             respond response
         } else {

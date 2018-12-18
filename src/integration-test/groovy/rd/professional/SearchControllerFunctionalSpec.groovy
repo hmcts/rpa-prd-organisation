@@ -17,7 +17,7 @@ class SearchControllerFunctionalSpec extends GebSpec {
 
     @OnceBefore
     void setupOrg() {
-        restBuilder().post("${baseUrl}organisations/register", {
+        restBuilder().post("${baseUrl}organisations", {
             accept("application/json")
             contentType("application/json")
             json {

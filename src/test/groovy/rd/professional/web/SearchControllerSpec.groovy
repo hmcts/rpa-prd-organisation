@@ -1,12 +1,15 @@
 package rd.professional.web
 
 import grails.testing.gorm.DataTest
+import grails.testing.spock.OnceBefore
 import grails.testing.web.controllers.ControllerUnitTest
+import org.junit.Before
 import rd.professional.domain.ContactInformation
 import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.Status
+import rd.professional.service.AccountsService
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -72,6 +75,11 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
                 address: "{}"
         )
         account = new PaymentAccount(pbaNumber: "54321")
+    }
+
+    @Before
+    void injectService() {
+        controller.accountsService = new AccountsService()
     }
 
     void "test get approved when none exist"() {

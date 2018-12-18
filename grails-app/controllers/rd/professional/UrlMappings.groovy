@@ -21,7 +21,7 @@ class UrlMappings {
             "/domains"(resources: "domain")
         }
 
-        '/organisations/register'(controller: 'organisation', action: 'register')
+        //'/organisations/register'(controller: 'organisation', action: 'register')
         // search endpoints
         '/organisations/approved'(controller: 'search', action: 'approvedOrganisations')
         '/organisations/pending'(controller: 'search', action: 'pendingOrganisations')

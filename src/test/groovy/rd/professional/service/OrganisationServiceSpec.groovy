@@ -153,7 +153,9 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
 
         and: "only the organisation and a single user are persisted"
         Organisation.count == 1
-        Organisation.findAll()[0].name == name
+        Organisation organisation = Organisation.findAll()[0]
+        organisation.name == name
+        organisation.users.size() == 1
         ProfessionalUser.count == 1
         ProfessionalUser user = ProfessionalUser.findAll()[0]
         verifyAll {

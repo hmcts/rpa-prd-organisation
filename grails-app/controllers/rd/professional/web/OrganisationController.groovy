@@ -106,7 +106,7 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
                     dataType = "rd.professional.web.OrganisationRegistrationCommand"
             )
     ])
-    def register(OrganisationRegistrationCommand cmd) {
+    def save(OrganisationRegistrationCommand cmd) {
         log.info "Creating organisation"
 
         try {
