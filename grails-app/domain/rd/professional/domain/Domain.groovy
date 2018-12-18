@@ -1,9 +1,7 @@
 package rd.professional.domain
 
-import grails.rest.Resource
 import io.swagger.annotations.ApiModelProperty
 
-@Resource(readOnly = false, formats = ['json'])
 class Domain {
 
     @ApiModelProperty(hidden = true)

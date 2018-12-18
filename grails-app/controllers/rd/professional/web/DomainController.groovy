@@ -1,23 +1,28 @@
 package rd.professional.web
 
+import grails.gorm.transactions.Transactional
 import grails.rest.RestfulController
 import io.swagger.annotations.*
 import rd.professional.domain.Domain
+import rd.professional.service.OrganisationService
+
+import static org.springframework.http.HttpStatus.CREATED
+import static org.springframework.http.HttpStatus.NO_CONTENT
 
 @Api(
         value = "organisations/",
         description = "Domain APIs"
 )
-class DomainsController extends RestfulController<Domain> {
+class DomainController extends RestfulController<Domain> {
     static responseFormats = ['json']
 
-    DomainsController() {
+    DomainController() {
         super(Domain)
     }
-    //DomainService domainService
+    OrganisationService organisationService
 
     @ApiOperation(
-            value="List all domains belonging to an organisation",
+            value = "List all domains belonging to an organisation",
             nickname = "/{orgId}/domains",
             produces = "application/json",
             httpMethod = "GET",
@@ -38,7 +43,7 @@ class DomainsController extends RestfulController<Domain> {
             )
     ])
     def index(Integer max) {
-        // TODO
+        super.index(max)
     }
 
     @ApiOperation(
@@ -66,8 +71,23 @@ class DomainsController extends RestfulController<Domain> {
                     dataType = "string"
             )
     ])
+    @Transactional
     def delete() {
-        // TODO
+        def organisationId = params.organisationId
+        def domain = params.id
+        def instance = Domain.where {
+            organisation.organisationId == organisationId
+            host == domain
+        }.find()
+        if (instance == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        deleteResource instance
+
+        render status: NO_CONTENT
     }
 
     @ApiOperation(
@@ -98,7 +118,38 @@ class DomainsController extends RestfulController<Domain> {
                     dataType = "rd.professional.web.AddDomainCommand"
             )
     ])
-    def register(AddDomainCommand cmd) {
-        // TODO
+    @Transactional
+    def save() {
+        def organisation = organisationService.getForUuid(params.organisationId)
+        if (!organisation)
+            notFound()
+
+        def cmd = new AddDomainCommand(request.getJSON())
+        def domain = new Domain(host: cmd.domain)
+
+        organisation.addToDomains(domain)
+
+        domain.validate()
+        if (domain.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond domain.errors, status: 400
+            return
+        }
+
+        saveResource organisation
+
+        respond domain, [status: CREATED]
+    }
+
+    protected Domain queryForResource(Serializable id) {
+        Domain.where {
+            domainId == id
+        }.find()
+    }
+
+    protected List<Domain> listAllResources(Map params) {
+        Domain.where {
+            organisation.organisationId == params.organisationId
+        }.findAll()
     }
 }
