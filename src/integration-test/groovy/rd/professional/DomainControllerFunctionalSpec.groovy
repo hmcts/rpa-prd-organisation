@@ -27,11 +27,11 @@ class DomainControllerFunctionalSpec extends GebSpec {
             accept("application/json")
             contentType("application/json")
             json {
-                name = "ACME Inc."
+                name = "Domain Inc."
                 superUser = {
                     firstName = "Foo"
                     lastName = "Barton"
-                    email = "foo@bar.com"
+                    email = "foo@bardomain.com"
                 }
                 domains = "www.foo.com"
             }
@@ -41,7 +41,9 @@ class DomainControllerFunctionalSpec extends GebSpec {
 
     @AfterClass
     void deleteData() {
-        Organisation.findAll()*.delete()
+        Organisation.where{
+            organisationId == orgId
+        }.find().delete()
     }
 
     void "Test POST new domain"() {

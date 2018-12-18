@@ -7,6 +7,7 @@ import grails.testing.mixin.integration.Integration
 import grails.testing.spock.OnceBefore
 import org.junit.AfterClass
 import rd.professional.domain.Organisation
+import spock.lang.Shared
 
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.OK
@@ -15,31 +16,37 @@ import static org.springframework.http.HttpStatus.OK
 @Rollback
 class SearchControllerFunctionalSpec extends GebSpec {
 
+    @Shared
+    def orgId
+
     @OnceBefore
     void setupOrg() {
-        restBuilder().post("${baseUrl}organisations", {
+        def resp = restBuilder().post("${baseUrl}organisations", {
             accept("application/json")
             contentType("application/json")
             json {
-                name = "ACME Inc."
+                name = "Search Inc."
                 superUser = {
                     firstName = "Foo"
                     lastName = "Barton"
-                    email = "foo@bar.com"
+                    email = "foo@barsearch.com"
                 }
                 pbaAccounts = "123456,654321"
             }
         })
+        orgId = resp.json.organisationId
     }
 
     @AfterClass
     void deleteData() {
-        Organisation.findAll()*.delete()
+        Organisation.where {
+            organisationId == orgId
+        }.find().delete()
     }
 
     void "Test search for payment accounts by email"() {
         when: "a search request is made using the email address"
-        def resp = restBuilder().get("${baseUrl}search/pba/foo@bar.com", {
+        def resp = restBuilder().get("${baseUrl}search/pba/foo@barsearch.com", {
             accept("application/json")
         })
 
