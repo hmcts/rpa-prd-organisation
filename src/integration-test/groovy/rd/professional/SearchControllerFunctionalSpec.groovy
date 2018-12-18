@@ -39,7 +39,7 @@ class SearchControllerFunctionalSpec extends GebSpec {
 
     void "Test search for payment accounts by email"() {
         when: "a search request is made using the email address"
-        def resp = restBuilder().get("${baseUrl}organisations/pba/foo@bar.com", {
+        def resp = restBuilder().get("${baseUrl}search/pba/foo@bar.com", {
             accept("application/json")
         })
 
@@ -53,7 +53,7 @@ class SearchControllerFunctionalSpec extends GebSpec {
 
     void "Test search for payment accounts by email that's not in the database"() {
         when: "a search request is made using the wrong email address"
-        def resp = restBuilder().get("${baseUrl}organisations/pba/baz@qux.com", {
+        def resp = restBuilder().get("${baseUrl}search/pba/baz@qux.com", {
             accept("application/json")
         })
 
@@ -63,7 +63,7 @@ class SearchControllerFunctionalSpec extends GebSpec {
 
     void "Test search for payment accounts by email with no email given"() {
         when: "a search request is made using no email address"
-        def resp = restBuilder().get("${baseUrl}organisations/pba", {
+        def resp = restBuilder().get("${baseUrl}search/pba", {
             accept("application/json")
         })
 

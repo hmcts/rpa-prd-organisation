@@ -9,13 +9,14 @@ import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
 import rd.professional.web.OrganisationRegistrationCommand
+import rd.professional.web.OrganisationUpdateCommand
 
 @Transactional
 class OrganisationService {
 
     MessageSource messageSource
 
-    void registerOrganisation(OrganisationRegistrationCommand cmd) {
+    def registerOrganisation(OrganisationRegistrationCommand cmd) {
         def organisation = new Organisation(name: cmd.name, url: cmd.url, sraId: cmd.sraId)
 
         log.debug "Creating superuser"
@@ -52,5 +53,30 @@ class OrganisationService {
             log.error "Unable to validate organisation: " + organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }
             throw new RuntimeException(organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }.join('<p>'))
         }
+    }
+
+    def updateOrganisation(String orgId, OrganisationUpdateCommand cmd) {
+        def organisation = getForUuid(orgId)
+
+        if (cmd.name)
+            organisation.name = cmd.name
+        if (cmd.sraId)
+            organisation.sraId = cmd.sraId
+        if (cmd.url)
+            organisation.url = cmd.url
+
+        if (organisation.validate()) {
+            log.debug "Saving organisation"
+            organisation.save(failOnError: true, flush: true)
+        } else {
+            log.error "Unable to validate organisation: " + organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }
+            throw new RuntimeException(organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }.join('<p>'))
+        }
+    }
+
+    def getForUuid(Serializable uuid) {
+        Organisation.where {
+            organisationId == uuid
+        }.find()
     }
 }

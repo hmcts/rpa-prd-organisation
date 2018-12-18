@@ -11,7 +11,6 @@ class OrganisationUpdateCommand implements Validateable {
     String name
     String url
     String sraId
-    Status status
 
     @ApiModelProperty(hidden = true)
     Errors errors
@@ -19,7 +18,6 @@ class OrganisationUpdateCommand implements Validateable {
     static constraints = {
         sraId nullable: true
         url nullable: true
-        name nullable: false
-        status nullable: true
+        name nullable: true
     }
 }

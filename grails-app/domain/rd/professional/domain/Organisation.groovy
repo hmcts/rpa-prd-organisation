@@ -6,7 +6,6 @@ import rd.professional.web.SubclassRestfulController
 
 import java.time.LocalDateTime
 
-@Resource(readOnly = false, formats = ['json'], superClass = SubclassRestfulController)
 class Organisation {
 
     @ApiModelProperty(hidden = true)

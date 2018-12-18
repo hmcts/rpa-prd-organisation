@@ -1,11 +1,14 @@
 package rd.professional.web
 
+import grails.gorm.transactions.Transactional
+import grails.rest.RestfulController
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiImplicitParams
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
+import org.springframework.http.HttpStatus
 import rd.professional.domain.Organisation
 import rd.professional.service.OrganisationService
 
@@ -13,7 +16,7 @@ import rd.professional.service.OrganisationService
         value = "organisations/",
         description = "Organisation related APIs"
 )
-class OrganisationController extends SubclassRestfulController<Organisation> {
+class OrganisationController extends RestfulController<Organisation> {
     static responseFormats = ['json']
 
     OrganisationController() {
@@ -35,7 +38,8 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     def index(Integer max) {
-        super.index(max)
+        params.max = Math.min(max ?: 10, 100)
+        respond Organisation.list(params), model: ["OrganisationCount": Organisation.count()]
     }
 
     @ApiOperation(
@@ -58,8 +62,8 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
                     dataType = "string"
             )
     ])
-    def show() {
-        super.show()
+    Organisation show() {
+        respond organisationService.getForUuid(params.id)
     }
 
     @ApiOperation(
@@ -81,8 +85,15 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
                     dataType = "string"
             )
     ])
+    @Transactional
     def delete() {
-        super.delete()
+        def instance = organisationService.getForUuid(params.id)
+        if (instance) {
+            instance.delete(flush: true)
+            render status: HttpStatus.NO_CONTENT
+        } else {
+            notFound()
+        }
     }
 
     @ApiOperation(
@@ -106,12 +117,12 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
                     dataType = "rd.professional.web.OrganisationRegistrationCommand"
             )
     ])
+    @Transactional
     def save(OrganisationRegistrationCommand cmd) {
         log.info "Creating organisation"
 
         try {
-            organisationService.registerOrganisation(cmd)
-            response.status = 201
+            respond (organisationService.registerOrganisation(cmd), status: 201)
         } catch (Exception e) {
             response.status = 400
             response.outputStream << e.getMessage().bytes
@@ -146,7 +157,13 @@ class OrganisationController extends SubclassRestfulController<Organisation> {
                     dataType = "rd.professional.web.OrganisationUpdateCommand"
             )
     ])
-    def updateOrg(OrganisationUpdateCommand cmd) {
-        // TODO
+    @Transactional
+    def update(OrganisationUpdateCommand cmd) {
+        try {
+            respond(organisationService.updateOrganisation(params.id, cmd), status: 200)
+        } catch (Exception e) {
+            response.status = 400
+            response.outputStream << e.getMessage().bytes
+        }
     }
 }

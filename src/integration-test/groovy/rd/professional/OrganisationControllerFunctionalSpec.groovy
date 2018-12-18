@@ -1,10 +1,10 @@
 package rd.professional
 
 import geb.spock.GebSpec
+import grails.gorm.transactions.Rollback
 import grails.plugins.rest.client.RestBuilder
 import grails.testing.mixin.integration.Integration
-import grails.gorm.transactions.Rollback
-import org.junit.After
+import org.junit.AfterClass
 import rd.professional.domain.Organisation
 
 import static org.springframework.http.HttpStatus.*
@@ -17,9 +17,9 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
         new RestBuilder()
     }
 
-    @After
+    @AfterClass
     void deleteData() {
-         Organisation.findAll()*.delete()
+        Organisation.findAll()*.delete()
     }
 
     void "test exception from service causes 400 response"() {
@@ -34,7 +34,7 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
         resp.status == BAD_REQUEST.value()
     }
 
-    void "test service gives 201 response"() {
+    void "test service gives 201 response on successful organisation registration"() {
         when: "a company sends a registration request"
         def resp = restBuilder().post("${baseUrl}organisations", {
             accept("application/json")
@@ -51,22 +51,11 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
 
         then: "a created response is returned"
         resp.status == CREATED.value()
+        resp.json != null && resp.json.organisationId != null
     }
 
     void "test GET organisations returns a list of all organisations"() {
-        given: "two companies are added to the database"
-        restBuilder().post("${baseUrl}organisations", {
-            accept("application/json")
-            contentType("application/json")
-            json {
-                name = "ACME Inc."
-                superUser = {
-                    firstName = "Foo"
-                    lastName = "Barton"
-                    email = "foo@bar.com"
-                }
-            }
-        })
+        given: "a second company is added to the database"
         restBuilder().post("${baseUrl}/organisations", {
             accept("application/json")
             contentType("application/json")
@@ -94,5 +83,60 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
         json[1].name == "Aperture Science"
         json[1].users.size() == 1
         json[0].users[0].id != json[1].users[0].id
+    }
+
+    void "test GET organisations/uuid returns details of that organisation"() {
+        given: "the UUID of a company"
+        def orgId = Organisation.first().organisationId
+
+        when:
+        def resp = restBuilder().get("${baseUrl}organisations/$orgId", {
+            accept("application/json")
+        })
+
+        then:
+        resp.status == 200
+        resp.json.name == Organisation.first().name
+    }
+
+    void "test update organisation"() {
+        given: "the UUID of a company"
+        def orgId = Organisation.first().organisationId
+        def originalName = Organisation.first().name
+        def newName = "Name Enterprises LLC."
+
+        when: "a company sends an update request"
+        def resp = restBuilder().put("${baseUrl}organisations/$orgId", {
+            accept("application/json")
+            contentType("application/json")
+            json {
+                name = newName
+            }
+        })
+
+        then: "a success response is returned"
+        resp.status == OK.value()
+        resp.json != null
+        resp.json.organisationId == orgId.toString()
+        resp.json.name == newName
+        resp.json.name != originalName
+    }
+
+    void "test delete organisation"() {
+        given: "the UUID of a company"
+        def orgId = Organisation.first().organisationId
+        def originalOrgCount = Organisation.count()
+        restBuilder().get("${baseUrl}organisations/$orgId", {
+            accept("application/json")
+        }).status == 200
+
+        when: "a company sends a delete request"
+        def resp = restBuilder().delete("${baseUrl}organisations/$orgId")
+
+        then: "a success response is returned"
+        resp.status == NO_CONTENT.value()
+        restBuilder().get("${baseUrl}organisations/$orgId", {
+            accept("application/json")
+        }).status == 404
     }
 }

@@ -13,7 +13,7 @@ import rd.professional.domain.Status
 import rd.professional.service.AccountsService
 
 @Api(
-        value = "organisations/",
+        value = "search/",
         description = "Search related APIs"
 )
 class SearchController {
@@ -23,7 +23,7 @@ class SearchController {
 
     @ApiOperation(
             value = "Search for approved organisations",
-            nickname = "approved",
+            nickname = "organisations/approved",
             produces = "application/json",
             httpMethod = "GET",
             response = Organisation,
@@ -39,7 +39,7 @@ class SearchController {
 
     @ApiOperation(
             value = "Search for pending organisations",
-            nickname = "pending",
+            nickname = "organisations/pending",
             produces = "application/json",
             httpMethod = "GET",
             response = Organisation,

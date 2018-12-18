@@ -1,11 +1,14 @@
 package rd.professional.web
 
+import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
+import org.junit.Before
+import rd.professional.domain.Organisation
 import rd.professional.service.OrganisationService
 import spock.lang.Shared
 import spock.lang.Specification
 
-class OrganisationControllerSpec extends Specification implements ControllerUnitTest<OrganisationController> {
+class OrganisationControllerSpec extends Specification implements ControllerUnitTest<OrganisationController>, DataTest {
 
     @Shared
     private cmd = new OrganisationRegistrationCommand(
@@ -17,7 +20,7 @@ class OrganisationControllerSpec extends Specification implements ControllerUnit
             )
     )
 
-    void "test exception from service causes 400 response"() {
+    void "register: test exception from service causes 400 response"() {
         given: "a mocked OrganisationService that will throw an exception"
         def mockOrganisationService = Mock(OrganisationService)
         mockOrganisationService.registerOrganisation(cmd) >> { c ->
@@ -33,7 +36,7 @@ class OrganisationControllerSpec extends Specification implements ControllerUnit
         response.text == "Someone set us up the bomb!"
     }
 
-    void "test service gives 201 response"() {
+    void "register: test service gives 201 response on success"() {
         given: "a mocked OrganisationService"
         def mockOrganisationService = Stub(OrganisationService)
         controller.organisationService = mockOrganisationService

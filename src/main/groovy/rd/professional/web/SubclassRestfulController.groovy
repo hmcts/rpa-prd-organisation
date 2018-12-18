@@ -63,26 +63,15 @@ class SubclassRestfulController<T> extends RestfulController<T> {
         super.listAllResources(params)
     }
 
+    private boolean isResourceOwnedByOrganisation() {
+        return (T instanceof ProfessionalUser || T instanceof ContactInformation || T instanceof PaymentAccount || T instanceof Domain)
+    }
+
     @Override
-    protected Object queryForResource(Serializable id) {
-        if (this.resource == ProfessionalUser) {
+    protected T queryForResource(Serializable id) {
+        if (isResourceOwnedByOrganisation()) {
             def orgId = params.organisationId
-            ProfessionalUser.where {
-                id == id && organisation.id == orgId
-            }.find()
-        } else if (this.resource == ContactInformation) {
-            def orgId = params.organisationId
-            ContactInformation.where {
-                id == id && organisation.id == orgId
-            }.find()
-        } else if (this.resource == PaymentAccount) {
-            def orgId = params.organisationId
-            PaymentAccount.where {
-                id == id && organisation.id == orgId
-            }.find()
-        } else if (this.resource == Domain) {
-            def orgId = params.organisationId
-            Domain.where {
+            T.where {
                 id == id && organisation.id == orgId
             }.find()
         } else {
