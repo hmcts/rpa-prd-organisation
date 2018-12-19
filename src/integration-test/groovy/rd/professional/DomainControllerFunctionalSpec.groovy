@@ -9,10 +9,7 @@ import org.junit.AfterClass
 import rd.professional.domain.Organisation
 import spock.lang.Shared
 
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
+import static org.springframework.http.HttpStatus.*
 
 @Integration
 @Rollback
@@ -33,7 +30,9 @@ class DomainControllerFunctionalSpec extends GebSpec {
                     lastName = "Barton"
                     email = "foo@bardomain.com"
                 }
-                domains = "www.foo.com"
+                domains = [{
+                               domain = "www.foo.com"
+                           }]
             }
         })
         orgId = resp.json.organisationId
@@ -41,7 +40,7 @@ class DomainControllerFunctionalSpec extends GebSpec {
 
     @AfterClass
     void deleteData() {
-        Organisation.where{
+        Organisation.where {
             organisationId == orgId
         }.find().delete()
     }

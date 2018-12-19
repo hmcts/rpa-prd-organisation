@@ -13,8 +13,8 @@ class OrganisationRegistrationCommand implements Validateable {
 
     UserRegistrationCommand superUser
 
-    String pbaAccounts
-    String domains
+    List<AddAccountCommand> pbaAccounts
+    List<AddDomainCommand> domains
 
     ContactInformationCommand address
 

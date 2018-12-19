@@ -107,12 +107,10 @@ class OrganisationController extends RestfulController<Organisation> {
     @Transactional
     def save(OrganisationRegistrationCommand cmd) {
         log.info "Creating organisation"
-
         try {
             respond(organisationService.registerOrganisation(cmd), status: 201)
         } catch (Exception e) {
-            response.status = 400
-            response.outputStream << e.getMessage().bytes
+            render e.getMessage(), status: 400
         }
     }
 

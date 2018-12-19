@@ -11,7 +11,7 @@ class UserRegistrationCommand implements Validateable {
     String lastName
     String email
 
-    String pbaAccounts
+    List<AddAccountCommand> pbaAccounts
 
     ContactInformationCommand address
 

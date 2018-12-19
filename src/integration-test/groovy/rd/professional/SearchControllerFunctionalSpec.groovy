@@ -31,7 +31,12 @@ class SearchControllerFunctionalSpec extends GebSpec {
                     lastName = "Barton"
                     email = "foo@barsearch.com"
                 }
-                pbaAccounts = "123456,654321"
+                pbaAccounts = [{
+                                   pbaNumber = "123456"
+                               },
+                               {
+                                   pbaNumber = "654321"
+                               }]
             }
         })
         orgId = resp.json.organisationId

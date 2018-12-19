@@ -2,8 +2,6 @@ package rd.professional.web
 
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
-import org.junit.Before
-import rd.professional.domain.Organisation
 import rd.professional.service.OrganisationService
 import spock.lang.Shared
 import spock.lang.Specification
@@ -14,9 +12,9 @@ class OrganisationControllerSpec extends Specification implements ControllerUnit
     private cmd = new OrganisationRegistrationCommand(
             name: "ACME Inc.",
             superUser: new UserRegistrationCommand(
-                firstName: "Foo",
-                lastName: "Barton",
-                email: "foo@bar.com"
+                    firstName: "Foo",
+                    lastName: "Barton",
+                    email: "foo@bar.com"
             )
     )
 
@@ -33,7 +31,7 @@ class OrganisationControllerSpec extends Specification implements ControllerUnit
 
         then: "an error response is returned"
         response.status == 400
-        response.text == "Someone set us up the bomb!"
+        response.text.contains("Someone set us up the bomb!")
     }
 
     void "register: test service gives 201 response on success"() {

@@ -3,13 +3,8 @@ package rd.professional.service
 import grails.gorm.transactions.Transactional
 import org.springframework.context.MessageSource
 import org.springframework.validation.FieldError
-import rd.professional.domain.ContactInformation
-import rd.professional.domain.Domain
-import rd.professional.domain.Organisation
-import rd.professional.domain.PaymentAccount
-import rd.professional.domain.ProfessionalUser
+import rd.professional.domain.*
 import rd.professional.web.OrganisationRegistrationCommand
-import rd.professional.web.OrganisationUpdateCommand
 
 @Transactional
 class OrganisationService {
@@ -25,15 +20,15 @@ class OrganisationService {
 
         if (cmd.pbaAccounts) {
             log.debug "Registering PBAs for organisation"
-            cmd.pbaAccounts.split(',').each { account ->
-                organisation.addToAccounts(new PaymentAccount(pbaNumber: account))
+            cmd.pbaAccounts.each { account ->
+                organisation.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
             }
         }
 
         if (cmd.domains) {
             log.debug "Registering domains for organisation"
-            cmd.domains.split(',').each { domain ->
-                organisation.addToDomains(new Domain(host: domain))
+            cmd.domains.each { domain ->
+                organisation.addToDomains(new Domain(host: domain.domain))
             }
         }
 
@@ -50,25 +45,7 @@ class OrganisationService {
             log.debug "Saving organisation"
             organisation.save(failOnError: true, flush: true)
         } else {
-            log.error "Unable to validate organisation: " + organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }
-            throw new RuntimeException(organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }.join('<p>'))
-        }
-    }
-
-    def updateOrganisation(String orgId, OrganisationUpdateCommand cmd) {
-        def organisation = getForUuid(orgId)
-
-        if (cmd.name)
-            organisation.name = cmd.name
-        if (cmd.sraId)
-            organisation.sraId = cmd.sraId
-        if (cmd.url)
-            organisation.url = cmd.url
-
-        if (organisation.validate()) {
-            log.debug "Saving organisation"
-            organisation.save(failOnError: true, flush: true)
-        } else {
+            organisation.delete(flush: true)
             log.error "Unable to validate organisation: " + organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }
             throw new RuntimeException(organisation.errors.allErrors.collect { FieldError e -> messageSource.getMessage(e, Locale.getDefault()) }.join('<p>'))
         }

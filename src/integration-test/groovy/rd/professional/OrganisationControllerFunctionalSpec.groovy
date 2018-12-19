@@ -136,4 +136,50 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
             accept("application/json")
         }).status == 404
     }
+
+    void "test create organisation with more details"() {
+        String requestJson = '{\n' +
+                '  "name": "test",\n' +
+                '  "url": "http://test.com",\n' +
+                '  "superUser": {\n' +
+                '    "firstName": "test",\n' +
+                '    "lastName": "test",\n' +
+                '    "email": "test@test.com",\n' +
+                '    "pbaAccounts": [\n' +
+                '      {\n' +
+                '        "pbaNumber": "PBA123"\n' +
+                '      }\n' +
+                '    ],\n' +
+                '    "address": {\n' +
+                '      "address": "test"\n' +
+                '    }\n' +
+                '  },\n' +
+                '  "pbaAccounts": [\n' +
+                '    {\n' +
+                '      "pbaNumber": "PBA456"\n' +
+                '    }\n' +
+                '  ],\n' +
+                '  "domains": [\n' +
+                '    {\n' +
+                '      "domain": "test.com"\n' +
+                '    }\n' +
+                '  ],\n' +
+                '  "address": {\n' +
+                '    "address": "test"\n' +
+                '  }\n' +
+                '}'
+        when: "a company sends a registration request"
+        def resp = restBuilder().post("${baseUrl}organisations", {
+            accept("application/json")
+            contentType("application/json")
+            body(requestJson)
+        })
+
+        then:
+        println(resp.body)
+        resp.status == 201
+
+        and:
+        restBuilder().delete("${baseUrl}organisations/$resp.json.organisationId")
+    }
 }

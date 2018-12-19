@@ -2,15 +2,8 @@ package rd.professional.service
 
 import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
-import rd.professional.domain.ContactInformation
-import rd.professional.domain.Domain
-import rd.professional.domain.Organisation
-import rd.professional.domain.PaymentAccount
-import rd.professional.domain.ProfessionalUser
-import rd.professional.web.AddAccountCommand
-import rd.professional.web.ContactInformationCommand
-import rd.professional.web.OrganisationRegistrationCommand
-import rd.professional.web.UserRegistrationCommand
+import rd.professional.domain.*
+import rd.professional.web.*
 import spock.lang.Specification
 
 class OrganisationServiceSpec extends Specification implements ServiceUnitTest<OrganisationService>, DataTest {
@@ -174,7 +167,8 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def firstName = "Foo"
         def lastName = "Barton"
         def email = "foo@bar.com"
-        def pbaAccounts = "123,321"
+        def pbaAccount1 = "123"
+        def pbaAccount2 = "321"
 
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
@@ -184,7 +178,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
                         lastName: lastName,
                         email: email
                 ),
-                pbaAccounts: pbaAccounts
+                pbaAccounts: Arrays.asList(new AddAccountCommand(pbaNumber: pbaAccount1), new AddAccountCommand(pbaNumber: pbaAccount2)),
         ))
 
         then: "an exception is not thrown"
@@ -214,7 +208,8 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def firstName = "Foo"
         def lastName = "Barton"
         def email = "foo@bar.com"
-        def domains = "www.foo.com,www.bar.com"
+        def domain1 = "www.foo.com"
+        def domain2 = "www.bar.com"
 
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
@@ -224,7 +219,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
                         lastName: lastName,
                         email: email
                 ),
-                domains: domains
+                domains: Arrays.asList(new AddDomainCommand(domain: domain1), new AddDomainCommand(domain: domain2)),
         ))
 
         then: "an exception is not thrown"
@@ -296,8 +291,10 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def lastName = "Barton"
         def email = "foo@bar.com"
         def address = '{"Flat 7", "Baz Towers", "Foo Street", "Bar upon Thames", "Surrey", "F00 BAR"}'
-        def domains = "www.foo.com,www.bar.com"
-        def pbaAccounts = "123,321"
+        def domain1 = "www.foo.com"
+        def domain2 = "www.bar.com"
+        def pbaAccount1 = "123"
+        def pbaAccount2 = "321"
 
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
@@ -307,8 +304,8 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
                         lastName: lastName,
                         email: email
                 ),
-                domains: domains,
-                pbaAccounts: pbaAccounts,
+                domains: Arrays.asList(new AddDomainCommand(domain: domain1), new AddDomainCommand(domain: domain2)),
+                pbaAccounts: Arrays.asList(new AddAccountCommand(pbaNumber: pbaAccount1), new AddAccountCommand(pbaNumber: pbaAccount2)),
                 address: new ContactInformationCommand(address: address)
         ))
 
