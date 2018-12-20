@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1544720270951-1
+      author: Tabby
+      changes:
+        - addSequence:
+            sequenceName: hibernate_sequence
+            startValue: 1
+            incrementBy: 1
