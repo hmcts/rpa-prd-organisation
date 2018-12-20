@@ -4,6 +4,7 @@ import groovyx.net.http.ChainedHttpConfig
 import groovyx.net.http.FromServer
 import groovyx.net.http.HttpBuilder
 import groovyx.net.http.NativeHandlers
+import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.User
 
 import static groovyx.net.http.ContentTypes.JSON
@@ -34,5 +35,11 @@ class UsersService {
             request.contentType = 'application/json'
             request.accept = 'application/json'
         }
+    }
+
+    def getForUuid(Serializable uuid) {
+        ProfessionalUser.where {
+            userId == uuid
+        }.find()
     }
 }

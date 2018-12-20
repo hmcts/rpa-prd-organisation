@@ -32,10 +32,10 @@ class SearchControllerFunctionalSpec extends GebSpec {
                     email = "foo@barsearch.com"
                 }
                 pbaAccounts = [{
-                                   pbaNumber = "123456"
+                                   pbaNumber = "123456Search"
                                },
                                {
-                                   pbaNumber = "654321"
+                                   pbaNumber = "654321Search"
                                }]
             }
         })
@@ -44,9 +44,11 @@ class SearchControllerFunctionalSpec extends GebSpec {
 
     @AfterClass
     void deleteData() {
-        Organisation.where {
+        def organisation = Organisation.where {
             organisationId == orgId
-        }.find().delete()
+        }.find()
+        if (organisation)
+            organisation.delete()
     }
 
     void "Test search for payment accounts by email"() {
@@ -59,8 +61,8 @@ class SearchControllerFunctionalSpec extends GebSpec {
         resp.status == OK.value()
         def pbas = resp.json.payment_accounts
         pbas && pbas.size() == 2
-        pbas.contains "123456"
-        pbas.contains "654321"
+        pbas.contains "123456Search"
+        pbas.contains "654321Search"
     }
 
     void "Test search for payment accounts by email that's not in the database"() {

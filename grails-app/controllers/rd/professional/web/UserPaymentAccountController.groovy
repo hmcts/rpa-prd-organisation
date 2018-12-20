@@ -1,111 +1,28 @@
 package rd.professional.web
 
+import grails.gorm.transactions.Transactional
 import grails.rest.RestfulController
 import io.swagger.annotations.*
 import rd.professional.domain.PaymentAccount
-import rd.professional.domain.ProfessionalUser
+import rd.professional.service.UsersService
+
+import static org.springframework.http.HttpStatus.CREATED
 
 @Api(
         value = "organisations/",
         description = "Payment Account APIs"
 )
-class AccountsController extends RestfulController<PaymentAccount> {
+class UserPaymentAccountController extends RestfulController<PaymentAccount> {
     static responseFormats = ['json']
 
-    AccountsController() {
+    UsersService usersService
+
+    UserPaymentAccountController() {
         super(PaymentAccount)
     }
-    //PaymentAccountService accountService
 
     @ApiOperation(
-            value="List all accounts belonging to an organisation",
-            nickname = "/{orgId}/pbas",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = String,
-            responseContainer = "Set"
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "No accounts found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            )
-    ])
-    def listOrgAccounts(Integer max) {
-        // TODO
-    }
-
-    @ApiOperation(
-            value = "Delete an account belonging to an organisation",
-            nickname = "/{orgId}/pbas/{pbaNumber}",
-            httpMethod = 'DELETE'
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "Resource not found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "pbaNumber",
-                    paramType = "path",
-                    required = true,
-                    value = "Account number",
-                    dataType = "string"
-            )
-    ])
-    def deleteOrgAccount() {
-        // TODO
-    }
-
-    @ApiOperation(
-            value = "Add a new account to an organisation",
-            nickname = "/{orgId}/pbas",
-            produces = "application/json",
-            consumes = "application/json",
-            httpMethod = 'POST'
-    )
-    @ApiResponses([
-            @ApiResponse(code = 400, message = "Invalid request"),
-            @ApiResponse(code = 404, message = "Resource not found"),
-            @ApiResponse(code = 405, message = "Method not allowed"),
-            @ApiResponse(code = 409, message = "Account already exists")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "body",
-                    paramType = "body",
-                    required = true,
-                    value = "New account details",
-                    dataType = "rd.professional.web.AddAccountCommand"
-            )
-    ])
-    def addOrgAccount(AddAccountCommand cmd) {
-        // TODO
-    }
-
-    @ApiOperation(
-            value="List all accounts belonging to a user",
+            value = "List all accounts belonging to a user",
             nickname = "/{orgId}/users/{userId}/pbas",
             produces = "application/json",
             httpMethod = "GET",
@@ -132,8 +49,8 @@ class AccountsController extends RestfulController<PaymentAccount> {
                     dataType = "string"
             )
     ])
-    def listUserAccounts(Integer max) {
-        // TODO
+    def index(Integer max) {
+        super.index(max)
     }
 
     @ApiOperation(
@@ -168,8 +85,9 @@ class AccountsController extends RestfulController<PaymentAccount> {
                     dataType = "string"
             )
     ])
-    def deleteUserAccount() {
-        // TODO
+    @Transactional
+    def delete() {
+        super.delete()
     }
 
     @ApiOperation(
@@ -208,7 +126,40 @@ class AccountsController extends RestfulController<PaymentAccount> {
                     dataType = "rd.professional.web.AddAccountCommand"
             )
     ])
-    def addUserAccount(AddAccountCommand cmd) {
-        // TODO
+    @Transactional
+    def save() {
+        def user = usersService.getForUuid(params.professionalUserId)
+        if (!user) {
+            notFound()
+            return
+        }
+
+        def cmd = new AddAccountCommand(request.getJSON())
+        def account = new PaymentAccount(pbaNumber: cmd.pbaNumber)
+
+        user.addToAccounts(account)
+
+        account.validate()
+        if (account.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond account.errors, status: 400
+            return
+        }
+
+        saveResource user
+
+        respond account, [status: CREATED]
+    }
+
+    protected PaymentAccount queryForResource(Serializable id) {
+        PaymentAccount.where {
+            pbaNumber == id
+        }.find()
+    }
+
+    protected List<PaymentAccount> listAllResources(Map params) {
+        PaymentAccount.where {
+            user.userId == params.professionalUserId
+        }.findAll()
     }
 }

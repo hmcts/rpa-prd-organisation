@@ -15,9 +15,11 @@ class UrlMappings {
 
         // nested endpoints
         "/organisations" (resources: 'organisation', excludes:['create', 'edit', 'patch']) {
-            "/users"(resources: "professionalUser", excludes: ['create', 'edit', 'patch'])
+            "/users"(resources: "professionalUser", excludes: ['create', 'edit', 'patch']) {
+                "/pbas"(resources: "userPaymentAccount", excludes: ['create', 'edit', 'patch', 'show', 'update'])
+            }
             "/addresses"(resources: "address", excludes: ['create', 'edit', 'patch'])
-            "/paymentAccounts"(resources: "account", excludes: ['create', 'edit', 'patch'])
+            "/pbas"(resources: "organisationPaymentAccount", excludes: ['create', 'edit', 'patch', 'show', 'update'])
             "/domains"(resources: "domain", excludes: ['create', 'edit', 'patch', 'show', 'update'])
         }
 

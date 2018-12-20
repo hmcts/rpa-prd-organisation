@@ -16,6 +16,19 @@ class OrganisationService {
 
         log.debug "Creating superuser"
         def superuser = new ProfessionalUser(emailId: cmd.superUser.email, firstName: cmd.superUser.firstName, lastName: cmd.superUser.lastName)
+        if (cmd.superUser.pbaAccounts) {
+            log.debug "Registering PBAs for superuser"
+            cmd.superUser.pbaAccounts.each { account ->
+                superuser.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
+            }
+        }
+        if (cmd.superUser.address) {
+            log.debug "Registering address for superuser"
+            superuser.addToContacts(
+                    new ContactInformation(
+                            address: cmd.superUser.address.address
+                    ))
+        }
         organisation.addToUsers(superuser)
 
         if (cmd.pbaAccounts) {

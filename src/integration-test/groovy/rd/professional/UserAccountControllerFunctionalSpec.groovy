@@ -13,10 +13,12 @@ import static org.springframework.http.HttpStatus.*
 
 @Integration
 @Rollback
-class DomainControllerFunctionalSpec extends GebSpec {
+class UserAccountControllerFunctionalSpec extends GebSpec {
 
     @Shared
     def orgId
+    @Shared
+    def userId
 
     @OnceBefore
     void setupOrg() {
@@ -24,18 +26,20 @@ class DomainControllerFunctionalSpec extends GebSpec {
             accept("application/json")
             contentType("application/json")
             json {
-                name = "Domain Inc."
+                name = "User Account Inc."
                 superUser = {
                     firstName = "Foo"
                     lastName = "Barton"
-                    email = "foo@bardomain.com"
+                    email = "foo@baruseraccount.com"
+                    pbaAccounts = [{
+                                       pbaNumber = "123456USR"
+                                   }]
                 }
-                domains = [{
-                               domain = "www.foo.com"
-                           }]
             }
         })
         orgId = resp.json.organisationId
+        resp = restBuilder().get("${baseUrl}organisations/$orgId/users", { accept("application/json")})
+        userId = resp.json[0].userId
     }
 
     @AfterClass
@@ -45,34 +49,36 @@ class DomainControllerFunctionalSpec extends GebSpec {
         }.find().delete()
     }
 
-    void "Test POST new domain"() {
-        when: "a request is made to add a domain to an organisation"
-        def resp = restBuilder().post("${baseUrl}organisations/$orgId/domains", {
+    void "Test POST new account"() {
+        when: "a request is made to add an account to a user"
+        def resp = restBuilder().post("${baseUrl}organisations/$orgId/users/$userId/pbas", {
             accept("application/json")
             contentType("application/json")
             json {
-                domain = "www.bar.com"
+                pbaNumber = "234567USR"
             }
         })
 
-        then: "the domain is added"
+        then: "the account is added"
         resp.status == CREATED.value()
     }
 
-    void "Test GET list of domains belonging to an organisation"() {
-        when: "a GET request is made to the org's /domains endpoint"
-        def resp = restBuilder().get("${baseUrl}organisations/$orgId/domains", {
+    void "Test GET list of accounts belonging to a user"() {
+        when: "a GET request is made to the org's /pbas endpoint"
+        def resp = restBuilder().get("${baseUrl}organisations/$orgId/users/$userId/pbas", {
             accept("application/json")
         })
 
-        then: "a list of domains is returned"
+        then: "a list of accounts is returned"
         resp.status == OK.value()
         resp.json && resp.json.size() == 2
+        resp.json.pbaNumber.contains "123456USR"
+        resp.json.pbaNumber.contains "234567USR"
     }
 
-    void "Test DELETE a domain works"() {
+    void "Test DELETE an account works"() {
         when: "a DELETE request is made"
-        def resp = restBuilder().delete("${baseUrl}organisations/$orgId/domains/www%2Ebar%2Ecom")
+        def resp = restBuilder().delete("${baseUrl}organisations/$orgId/users/$userId/pbas/234567USR")
 
         then: "a success response is returned"
         resp.status == NO_CONTENT.value()

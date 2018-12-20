@@ -4,33 +4,36 @@ import grails.gorm.transactions.Transactional
 import grails.rest.RestfulController
 import io.swagger.annotations.*
 import rd.professional.domain.Domain
+import rd.professional.domain.PaymentAccount
+import rd.professional.service.AccountsService
 import rd.professional.service.OrganisationService
 
 import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NO_CONTENT
 
 @Api(
         value = "organisations/",
-        description = "Domain APIs"
+        description = "Payment Account APIs"
 )
-class DomainController extends RestfulController<Domain> {
+class OrganisationPaymentAccountController extends RestfulController<PaymentAccount> {
     static responseFormats = ['json']
 
-    DomainController() {
-        super(Domain)
-    }
+    AccountsService accountsService
     OrganisationService organisationService
 
+    OrganisationPaymentAccountController() {
+        super(PaymentAccount)
+    }
+
     @ApiOperation(
-            value = "List all domains belonging to an organisation",
-            nickname = "/{orgId}/domains",
+            value = "List all accounts belonging to an organisation",
+            nickname = "/{orgId}/pbas",
             produces = "application/json",
             httpMethod = "GET",
             response = String,
             responseContainer = "Set"
     )
     @ApiResponses([
-            @ApiResponse(code = 404, message = "No domains found"),
+            @ApiResponse(code = 404, message = "No accounts found"),
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     @ApiImplicitParams([
@@ -47,12 +50,12 @@ class DomainController extends RestfulController<Domain> {
     }
 
     @ApiOperation(
-            value = "Delete an domain",
-            nickname = "/{orgId}/domains/{domain}",
+            value = "Delete an account belonging to an organisation",
+            nickname = "/{orgId}/pbas/{pbaNumber}",
             httpMethod = 'DELETE'
     )
     @ApiResponses([
-            @ApiResponse(code = 404, message = "Domain not found"),
+            @ApiResponse(code = 404, message = "Resource not found"),
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     @ApiImplicitParams([
@@ -64,43 +67,30 @@ class DomainController extends RestfulController<Domain> {
                     dataType = "string"
             ),
             @ApiImplicitParam(
-                    name = "domain",
+                    name = "pbaNumber",
                     paramType = "path",
                     required = true,
-                    value = "Domain name",
+                    value = "Account number",
                     dataType = "string"
             )
     ])
     @Transactional
     def delete() {
-        def organisationId = params.organisationId
-        def domain = params.id
-        def instance = Domain.where {
-            organisation.organisationId == organisationId
-            host == domain
-        }.find()
-        if (instance == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        deleteResource instance
-
-        render status: NO_CONTENT
+        super.delete()
     }
 
     @ApiOperation(
-            value = "Add a new domain",
-            nickname = "/{orgId}/domains",
+            value = "Add a new account to an organisation",
+            nickname = "/{orgId}/pbas",
             produces = "application/json",
             consumes = "application/json",
             httpMethod = 'POST'
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),
+            @ApiResponse(code = 404, message = "Resource not found"),
             @ApiResponse(code = 405, message = "Method not allowed"),
-            @ApiResponse(code = 409, message = "Domain already exists")
+            @ApiResponse(code = 409, message = "Account already exists")
     ])
     @ApiImplicitParams([
             @ApiImplicitParam(
@@ -114,8 +104,8 @@ class DomainController extends RestfulController<Domain> {
                     name = "body",
                     paramType = "body",
                     required = true,
-                    value = "New domain details",
-                    dataType = "rd.professional.web.AddDomainCommand"
+                    value = "New account details",
+                    dataType = "rd.professional.web.AddAccountCommand"
             )
     ])
     @Transactional
@@ -126,31 +116,32 @@ class DomainController extends RestfulController<Domain> {
             return
         }
 
-        def cmd = new AddDomainCommand(request.getJSON())
-        def domain = new Domain(host: cmd.domain)
+        def cmd = new AddAccountCommand(request.getJSON())
+        def account = new PaymentAccount(pbaNumber: cmd.pbaNumber)
 
-        organisation.addToDomains(domain)
+        organisation.addToAccounts(account)
 
-        domain.validate()
-        if (domain.hasErrors()) {
+        account.validate()
+        if (account.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond domain.errors, status: 400
+            respond account.errors, status: 400
             return
         }
 
         saveResource organisation
 
-        respond domain, [status: CREATED]
+        respond account, [status: CREATED]
     }
 
-    protected Domain queryForResource(Serializable id) {
-        Domain.where {
-            domainId == id
+
+    protected PaymentAccount queryForResource(Serializable id) {
+        PaymentAccount.where {
+            pbaNumber == id
         }.find()
     }
 
-    protected List<Domain> listAllResources(Map params) {
-        Domain.where {
+    protected List<PaymentAccount> listAllResources(Map params) {
+        PaymentAccount.where {
             organisation.organisationId == params.organisationId
         }.findAll()
     }

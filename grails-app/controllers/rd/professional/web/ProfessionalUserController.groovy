@@ -1,13 +1,14 @@
 package rd.professional.web
 
+import grails.gorm.transactions.Transactional
 import grails.rest.RestfulController
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
-import io.swagger.annotations.ApiImplicitParams
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
+import io.swagger.annotations.*
+import rd.professional.domain.ContactInformation
+import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
+import rd.professional.service.OrganisationService
+
+import static org.springframework.http.HttpStatus.CREATED
 
 @Api(
         value = "organisations/",
@@ -19,10 +20,11 @@ class ProfessionalUserController extends RestfulController<ProfessionalUser> {
     ProfessionalUserController() {
         super(ProfessionalUser)
     }
-//ProfessionalUserService userService
+
+    OrganisationService organisationService
 
     @ApiOperation(
-            value="List all users for an organisation",
+            value = "List all users for an organisation",
             nickname = "/{orgId}/users",
             produces = "application/json",
             httpMethod = "GET",
@@ -43,7 +45,7 @@ class ProfessionalUserController extends RestfulController<ProfessionalUser> {
             )
     ])
     def index(Integer max) {
-        // TODO
+        super.index(max)
     }
 
     @ApiOperation(
@@ -74,7 +76,7 @@ class ProfessionalUserController extends RestfulController<ProfessionalUser> {
             )
     ])
     def show() {
-        // TODO
+        super.show()
     }
 
     @ApiOperation(
@@ -102,8 +104,9 @@ class ProfessionalUserController extends RestfulController<ProfessionalUser> {
                     dataType = "string"
             )
     ])
+    @Transactional
     def delete() {
-        // TODO
+        super.delete()
     }
 
     @ApiOperation(
@@ -134,8 +137,41 @@ class ProfessionalUserController extends RestfulController<ProfessionalUser> {
                     dataType = "rd.professional.web.UserRegistrationCommand"
             )
     ])
-    def register(UserRegistrationCommand cmd) {
-        // TODO
+    @Transactional
+    def save() {
+        def organisation = organisationService.getForUuid(params.organisationId)
+        if (!organisation) {
+            notFound()
+            return
+        }
+
+        def cmd = new UserRegistrationCommand(request.getJSON())
+        def user = new ProfessionalUser(
+                firstName: cmd.firstName,
+                lastName: cmd.lastName,
+                emailId: cmd.email
+        )
+        if (cmd.pbaAccounts) {
+            cmd.pbaAccounts.each { account -> user.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber)) }
+        }
+        if (cmd.address) {
+            user.addToContacts(new ContactInformation(
+                    address: cmd.address.address
+            ))
+        }
+
+        organisation.addToUsers(user)
+
+        user.validate()
+        if (user.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond user.errors, status: 400
+            return
+        }
+
+        saveResource organisation
+
+        respond user, [status: CREATED]
     }
 
     @ApiOperation(
@@ -173,7 +209,20 @@ class ProfessionalUserController extends RestfulController<ProfessionalUser> {
                     dataType = "rd.professional.web.UserUpdateCommand"
             )
     ])
-    def updateUser(UserUpdateCommand cmd) {
-        // TODO
+    @Transactional
+    def update() {
+        super.update()
+    }
+
+    protected ProfessionalUser queryForResource(Serializable id) {
+        ProfessionalUser.where {
+            userId == id
+        }.find()
+    }
+
+    protected List<ProfessionalUser> listAllResources(Map params) {
+        ProfessionalUser.where {
+            organisation.organisationId == params.organisationId
+        }.findAll()
     }
 }
