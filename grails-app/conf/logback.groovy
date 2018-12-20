@@ -42,6 +42,6 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 }
 else {
     logger('rd.professional', TRACE)
-    //root(TRACE, ['STDOUT', 'AZURE_APPINSIGHTS'])
-    root(TRACE, ['STDOUT'])
+    root(TRACE, ['STDOUT', 'AZURE_APPINSIGHTS'])
+    //root(TRACE, ['STDOUT'])
 }
