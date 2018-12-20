@@ -21,6 +21,7 @@ class Domain {
     }
 
     static mapping = {
+        id generator: 'identity'
         domainId type: 'uuid-binary', length: 16
     }
 }

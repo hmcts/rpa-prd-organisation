@@ -1,11 +1,9 @@
 package rd.professional.domain
 
-import grails.rest.Resource
 import io.swagger.annotations.ApiModelProperty
 
 import java.time.LocalDateTime
 
-@Resource(readOnly = false, formats = ['json'])
 class ContactInformation {
 
     @ApiModelProperty(hidden = true)
@@ -32,6 +30,7 @@ class ContactInformation {
     }
 
     static mapping = {
+        id generator: 'identity'
         contactId type: 'uuid-binary', length: 16
     }
 }

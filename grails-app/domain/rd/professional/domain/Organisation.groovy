@@ -1,8 +1,6 @@
 package rd.professional.domain
 
-import grails.rest.Resource
 import io.swagger.annotations.ApiModelProperty
-import rd.professional.web.SubclassRestfulController
 
 import java.time.LocalDateTime
 
@@ -22,10 +20,10 @@ class Organisation {
     Status status = Status.PENDING
 
     static hasMany = [
-            users    : ProfessionalUser,
-            accounts : PaymentAccount,
-            domains  : Domain,
-            contacts : ContactInformation
+            users   : ProfessionalUser,
+            accounts: PaymentAccount,
+            domains : Domain,
+            contacts: ContactInformation
     ]
 
     static constraints = {
@@ -38,6 +36,7 @@ class Organisation {
     }
 
     static mapping = {
+        id generator: 'identity'
         organisationId type: 'uuid-binary', length: 16
     }
 }

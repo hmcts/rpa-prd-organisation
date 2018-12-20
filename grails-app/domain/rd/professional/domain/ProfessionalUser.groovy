@@ -1,10 +1,10 @@
 package rd.professional.domain
 
-import grails.rest.Resource
-import io.swagger.annotations.ApiModelProperty
-import rd.professional.web.SubclassRestfulController
 
-@Resource(readOnly = false, formats = ['json'], superClass = SubclassRestfulController)
+import io.swagger.annotations.ApiModelProperty
+
+import javax.persistence.Id
+
 class ProfessionalUser {
 
     @ApiModelProperty(hidden = true)
@@ -34,6 +34,7 @@ class ProfessionalUser {
     }
 
     static mapping = {
+        id generator: 'identity'
         userId type: 'uuid-binary', length: 16
     }
 }

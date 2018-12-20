@@ -1,9 +1,9 @@
 package rd.professional.domain
 
-import grails.rest.Resource
 import io.swagger.annotations.ApiModelProperty
 
-@Resource(readOnly = false, formats = ['json'])
+import javax.persistence.Id
+
 class PaymentAccount {
 
     @ApiModelProperty(hidden = true)
@@ -19,7 +19,7 @@ class PaymentAccount {
 
     static belongsTo = [
             organisation: Organisation,
-            user: ProfessionalUser
+            user        : ProfessionalUser
     ]
 
     static constraints = {
@@ -30,6 +30,7 @@ class PaymentAccount {
     }
 
     static mapping = {
+        id generator: 'identity'
         paymentAccountId type: 'uuid-binary', length: 16
     }
 
