@@ -1,5 +1,434 @@
 databaseChangeLog:
-  - include:
-      - file: 001_initial_structure.yml
-  - include:
-      - file: 002_add_hibernate_sequence.yml
+  - changeSet:
+      id: 1545321337908-1
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: CONTACT_INFORMATIONPK
+                  name: ID
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: VERSION
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ADDRESS
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: DATE_CREATED
+                  type: VARBINARY(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: LAST_UPDATED
+                  type: VARBINARY(255)
+              - column:
+                  name: ORGANISATION_ID
+                  type: BIGINT(19)
+              - column:
+                  name: USER_ID
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: CONTACT_ID
+                  type: VARBINARY(2147483647)
+            tableName: CONTACT_INFORMATION
+  - changeSet:
+      id: 1545321337908-2
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: DOMAINPK
+                  name: ID
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: VERSION
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: HOST
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ORGANISATION_ID
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: DOMAIN_ID
+                  type: VARBINARY(2147483647)
+            tableName: DOMAIN
+  - changeSet:
+      id: 1545321337908-3
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: ORGANISATIONPK
+                  name: ID
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: VERSION
+                  type: BIGINT(19)
+              - column:
+                  name: SRA_ID
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ORGANISATION_ID
+                  type: VARBINARY(2147483647)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: LAST_UPDATED
+                  type: VARBINARY(255)
+              - column:
+                  name: COMPANY_NUMBER
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: SRA_REGULATED
+                  type: BOOLEAN(1)
+              - column:
+                  name: URL
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: NAME
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: STATUS
+                  type: VARCHAR(255)
+            tableName: ORGANISATION
+  - changeSet:
+      id: 1545321337908-4
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: PAYMENT_ACCOUNTPK
+                  name: ID
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: VERSION
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: PAYMENT_ACCOUNT_ID
+                  type: VARBINARY(2147483647)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: PBA_NUMBER
+                  type: VARCHAR(255)
+              - column:
+                  name: ORGANISATION_ID
+                  type: BIGINT(19)
+              - column:
+                  name: USER_ID
+                  type: BIGINT(19)
+            tableName: PAYMENT_ACCOUNT
+  - changeSet:
+      id: 1545321337908-5
+      author: Tabby (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: PROFESSIONAL_USERPK
+                  name: ID
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: VERSION
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: USER_ID
+                  type: VARBINARY(2147483647)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: FIRST_NAME
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: ORGANISATION_ID
+                  type: BIGINT(19)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: STATUS
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: LAST_NAME
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: EMAIL_ID
+                  type: VARCHAR(255)
+            tableName: PROFESSIONAL_USER
+  - changeSet:
+      id: 1545321337908-6
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: CONTACT_ID
+            constraintName: UC_CONTACT_INFORMATIONCONTACT_ID_COL
+            tableName: CONTACT_INFORMATION
+  - changeSet:
+      id: 1545321337908-7
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: DOMAIN_ID
+            constraintName: UC_DOMAINDOMAIN_ID_COL
+            tableName: DOMAIN
+  - changeSet:
+      id: 1545321337908-8
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: NAME
+            constraintName: UC_ORGANISATIONNAME_COL
+            tableName: ORGANISATION
+  - changeSet:
+      id: 1545321337908-9
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: ORGANISATION_ID
+            constraintName: UC_ORGANISATIONORGANISATION_ID_COL
+            tableName: ORGANISATION
+  - changeSet:
+      id: 1545321337908-10
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: PAYMENT_ACCOUNT_ID
+            constraintName: UC_PAYMENT_ACCOUNTPAYMENT_ACCOUNT_ID_COL
+            tableName: PAYMENT_ACCOUNT
+  - changeSet:
+      id: 1545321337908-11
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: PBA_NUMBER
+            constraintName: UC_PAYMENT_ACCOUNTPBA_NUMBER_COL
+            tableName: PAYMENT_ACCOUNT
+  - changeSet:
+      id: 1545321337908-12
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: EMAIL_ID
+            constraintName: UC_PROFESSIONAL_USEREMAIL_ID_COL
+            tableName: PROFESSIONAL_USER
+  - changeSet:
+      id: 1545321337908-13
+      author: Tabby (generated)
+      changes:
+        - addUniqueConstraint:
+            columnNames: USER_ID
+            constraintName: UC_PROFESSIONAL_USERUSER_ID_COL
+            tableName: PROFESSIONAL_USER
+  - changeSet:
+      id: 1545321337908-14
+      author: Tabby (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: ORGANISATION_ID
+            indexName: FK9BL2TISOQQDSNQ2AOT0NOG62Q_INDEX_1
+            tableName: CONTACT_INFORMATION
+  - changeSet:
+      id: 1545321337908-15
+      author: Tabby (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: ORGANISATION_ID
+            indexName: FK9C85OHVQ1LHM2BVS19VHFSNVS_INDEX_7
+            tableName: PROFESSIONAL_USER
+  - changeSet:
+      id: 1545321337908-16
+      author: Tabby (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: ORGANISATION_ID
+            indexName: FKDPLTVOB5NU5LJ92RJIAVT85W1_INDEX_5
+            tableName: PAYMENT_ACCOUNT
+  - changeSet:
+      id: 1545321337908-17
+      author: Tabby (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: ORGANISATION_ID
+            indexName: FKEJ7ITA5SWMD3DXNLVOO24D1P_INDEX_7
+            tableName: DOMAIN
+  - changeSet:
+      id: 1545321337908-18
+      author: Tabby (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: USER_ID
+            indexName: FKIAUC1SACJFVACGX7GAOUKRJLD_INDEX_1
+            tableName: CONTACT_INFORMATION
+  - changeSet:
+      id: 1545321337908-19
+      author: Tabby (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: USER_ID
+            indexName: FKQ7731BGVAT2X2B1G45NCVG97P_INDEX_5
+            tableName: PAYMENT_ACCOUNT
+  - changeSet:
+      id: 1545321337908-20
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: ORGANISATION_ID
+            baseTableName: CONTACT_INFORMATION
+            constraintName: FK9BL2TISOQQDSNQ2AOT0NOG62Q
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: ID
+            referencedTableName: ORGANISATION
+  - changeSet:
+      id: 1545321337908-21
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: ORGANISATION_ID
+            baseTableName: PROFESSIONAL_USER
+            constraintName: FK9C85OHVQ1LHM2BVS19VHFSNVS
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: ID
+            referencedTableName: ORGANISATION
+  - changeSet:
+      id: 1545321337908-22
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: ORGANISATION_ID
+            baseTableName: PAYMENT_ACCOUNT
+            constraintName: FKDPLTVOB5NU5LJ92RJIAVT85W1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: ID
+            referencedTableName: ORGANISATION
+  - changeSet:
+      id: 1545321337908-23
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: ORGANISATION_ID
+            baseTableName: DOMAIN
+            constraintName: FKEJ7ITA5SWMD3DXNLVOO24D1P
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: ID
+            referencedTableName: ORGANISATION
+  - changeSet:
+      id: 1545321337908-24
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: USER_ID
+            baseTableName: CONTACT_INFORMATION
+            constraintName: FKIAUC1SACJFVACGX7GAOUKRJLD
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: ID
+            referencedTableName: PROFESSIONAL_USER
+  - changeSet:
+      id: 1545321337908-25
+      author: Tabby (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: USER_ID
+            baseTableName: PAYMENT_ACCOUNT
+            constraintName: FKQ7731BGVAT2X2B1G45NCVG97P
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: ID
+            referencedTableName: PROFESSIONAL_USER
+  - changeSet:
+      id: 1544720270908-26
+      author: Tabby
+      changes:
+        - addSequence:
+            sequenceName: hibernate_sequence
+            startValue: 1
+            incrementBy: 1
+
