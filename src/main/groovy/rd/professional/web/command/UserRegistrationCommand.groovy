@@ -1,4 +1,4 @@
-package rd.professional.web
+package rd.professional.web.command
 
 import grails.validation.Validateable
 import groovy.transform.ToString

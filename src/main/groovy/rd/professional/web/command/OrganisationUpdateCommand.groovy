@@ -1,4 +1,4 @@
-package rd.professional.web
+package rd.professional.web.command
 
 import grails.validation.Validateable
 import groovy.transform.ToString
@@ -7,19 +7,17 @@ import org.springframework.validation.Errors
 import rd.professional.domain.Status
 
 @ToString(includeNames = true, includeFields = true)
-class UserUpdateCommand implements Validateable {
-    String firstName
-    String lastName
-    String email
-    Status status
+class OrganisationUpdateCommand implements Validateable {
+    String name
+    String url
+    String sraId
 
     @ApiModelProperty(hidden = true)
     Errors errors
 
     static constraints = {
-        firstName nullable: false
-        lastName nullable: false
-        email nullable: false
-        status nullable: true
+        sraId nullable: true
+        url nullable: true
+        name nullable: true
     }
 }

@@ -1,12 +1,10 @@
 package rd.professional.web
 
 import grails.gorm.transactions.Transactional
-import grails.rest.RestfulController
 import io.swagger.annotations.*
-import rd.professional.domain.Domain
 import rd.professional.domain.PaymentAccount
-import rd.professional.service.AccountsService
 import rd.professional.service.OrganisationService
+import rd.professional.web.command.AddAccountCommand
 
 import static org.springframework.http.HttpStatus.CREATED
 
@@ -14,10 +12,9 @@ import static org.springframework.http.HttpStatus.CREATED
         value = "organisations/",
         description = "Payment Account APIs"
 )
-class OrganisationPaymentAccountController extends RestfulController<PaymentAccount> {
+class OrganisationPaymentAccountController extends AbstractExceptionHandlerController<PaymentAccount> {
     static responseFormats = ['json']
 
-    AccountsService accountsService
     OrganisationService organisationService
 
     OrganisationPaymentAccountController() {
@@ -105,7 +102,7 @@ class OrganisationPaymentAccountController extends RestfulController<PaymentAcco
                     paramType = "body",
                     required = true,
                     value = "New account details",
-                    dataType = "rd.professional.web.AddAccountCommand"
+                    dataType = "rd.professional.web.command.AddAccountCommand"
             )
     ])
     @Transactional

@@ -5,7 +5,7 @@ import groovy.transform.Canonical
 @Canonical
 class ApprovableOrganisationDetails {
 
-    Long id
+    UUID id
     String organisationName
     URL organisationUrl
     String organisationSRAId

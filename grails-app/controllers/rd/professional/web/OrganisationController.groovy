@@ -1,16 +1,20 @@
 package rd.professional.web
 
+import grails.converters.JSON
 import grails.gorm.transactions.Transactional
-import grails.rest.RestfulController
 import io.swagger.annotations.*
 import rd.professional.domain.Organisation
 import rd.professional.service.OrganisationService
+import rd.professional.web.command.OrganisationRegistrationCommand
+import rd.professional.web.dto.OrganisationDto
+
+import static org.springframework.http.HttpStatus.OK
 
 @Api(
         value = "organisations/",
         description = "Organisation related APIs"
 )
-class OrganisationController extends RestfulController<Organisation> {
+class OrganisationController extends AbstractExceptionHandlerController<Organisation> {
     static responseFormats = ['json']
 
     OrganisationController() {
@@ -32,7 +36,7 @@ class OrganisationController extends RestfulController<Organisation> {
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     def index(Integer max) {
-        super.index(max)
+        respond listAllResources(params).collect { new OrganisationDto(it) }
     }
 
     @ApiOperation(
@@ -56,7 +60,12 @@ class OrganisationController extends RestfulController<Organisation> {
             )
     ])
     Organisation show() {
-        super.show()
+        Organisation instance = queryForResource(params.id)
+        if (instance == null) {
+            notFound()
+            return
+        }
+        render new OrganisationDto(instance) as JSON
     }
 
     @ApiOperation(
@@ -101,14 +110,14 @@ class OrganisationController extends RestfulController<Organisation> {
                     paramType = "body",
                     required = true,
                     value = "Organisation registration details",
-                    dataType = "rd.professional.web.OrganisationRegistrationCommand"
+                    dataType = "rd.professional.web.command.OrganisationRegistrationCommand"
             )
     ])
     @Transactional
     def save(OrganisationRegistrationCommand cmd) {
         log.info "Creating organisation"
         try {
-            respond(organisationService.registerOrganisation(cmd), status: 201)
+            respond(new OrganisationDto(organisationService.registerOrganisation(cmd)), status: 201)
         } catch (Exception e) {
             render e.getMessage(), status: 400
         }
@@ -139,12 +148,29 @@ class OrganisationController extends RestfulController<Organisation> {
                     paramType = "body",
                     required = true,
                     value = "Organisation update details",
-                    dataType = "rd.professional.web.OrganisationUpdateCommand"
+                    dataType = "rd.professional.web.command.OrganisationUpdateCommand"
             )
     ])
     @Transactional
     def update() {
-        super.update()
+        Organisation instance = queryForResource(params.id)
+        if (instance == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        instance.properties = getObjectToBind()
+
+        instance.validate()
+        if (instance.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond instance.errors, view:'edit' // STATUS CODE 422
+            return
+        }
+
+        instance.save flush: true
+        respond new OrganisationDto(instance), [status: OK]
     }
 
     protected Organisation queryForResource(Serializable id) {

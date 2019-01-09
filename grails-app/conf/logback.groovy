@@ -37,11 +37,11 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
 //    logger("org.hibernate.SQL", DEBUG, ["STDOUT"], false)
 //    logger("org.hibernate.type.descriptor.sql.BasicBinder", TRACE, ["STDOUT"], false)
-    logger('rd.professional', DEBUG)
-    root(TRACE, ['STDOUT'])
+    logger('rd.professional', TRACE, ['STDOUT'])
+    root(WARN, ['STDOUT'])
 }
 else {
-    logger('rd.professional', TRACE)
-    root(TRACE, ['STDOUT', 'AZURE_APPINSIGHTS'])
+    logger('rd.professional', TRACE, ['STDOUT'])
+    root(WARN, ['STDOUT', 'AZURE_APPINSIGHTS'])
     //root(TRACE, ['STDOUT'])
 }

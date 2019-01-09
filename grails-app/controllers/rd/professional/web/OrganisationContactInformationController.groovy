@@ -1,38 +1,35 @@
 package rd.professional.web
 
-import grails.gorm.transactions.Transactional
+
 import io.swagger.annotations.*
 import rd.professional.domain.ContactInformation
-import rd.professional.domain.PaymentAccount
-import rd.professional.domain.ProfessionalUser
-import rd.professional.service.OrganisationService
-import rd.professional.web.command.UserRegistrationCommand
+import rd.professional.service.ContactInformationService
+import rd.professional.web.command.ContactInformationCommand
 
 import static org.springframework.http.HttpStatus.CREATED
 
 @Api(
         value = "organisations/",
-        description = "Professional User APIs"
+        description = "Contact Information APIs"
 )
-class ProfessionalUserController extends AbstractExceptionHandlerController<ProfessionalUser> {
+class OrganisationContactInformationController extends AbstractExceptionHandlerController<ContactInformation> {
     static responseFormats = ['json']
 
-    ProfessionalUserController() {
-        super(ProfessionalUser)
+    OrganisationContactInformationController() {
+        super(ContactInformation)
     }
-
-    OrganisationService organisationService
+    ContactInformationService contactService
 
     @ApiOperation(
-            value = "List all users for an organisation",
-            nickname = "/{orgId}/users",
+            value = "List all contact details for an organisation",
+            nickname = "/{orgId}/contacts",
             produces = "application/json",
             httpMethod = "GET",
-            response = ProfessionalUser,
+            response = ContactInformation,
             responseContainer = "Set"
     )
     @ApiResponses([
-            @ApiResponse(code = 404, message = "No users found"),
+            @ApiResponse(code = 404, message = "No contact information found"),
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     @ApiImplicitParams([
@@ -45,19 +42,18 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
             )
     ])
     def index(Integer max) {
-        def users = listAllResources(params).each { it -> convertToMap(it) }.collect()
-        respond users, model: [("${resourceName}Count".toString()): countResources()]
+        super.index(max)
     }
 
     @ApiOperation(
-            value = "Get the details of a user",
-            nickname = "/{orgId}/users/{id}",
+            value = "Get specific contact information belonging to an organisation",
+            nickname = "/{orgId}/contacts/{id}",
             produces = "application/json",
             httpMethod = 'GET',
-            response = ProfessionalUser
+            response = ContactInformation
     )
     @ApiResponses([
-            @ApiResponse(code = 404, message = "Organisation not found"),
+            @ApiResponse(code = 404, message = "Contact information not found"),
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     @ApiImplicitParams([
@@ -72,7 +68,7 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
                     name = "id",
                     paramType = "path",
                     required = true,
-                    value = "User ID",
+                    value = "Contact information ID",
                     dataType = "string"
             )
     ])
@@ -81,12 +77,12 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
     }
 
     @ApiOperation(
-            value = "Delete a user",
-            nickname = "/{orgId}/users/{id}",
+            value = "Delete a set of contact information belonging to an organisation",
+            nickname = "/{orgId}/contacts/{id}",
             httpMethod = 'DELETE'
     )
     @ApiResponses([
-            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 404, message = "Contact information not found"),
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     @ApiImplicitParams([
@@ -101,18 +97,17 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
                     name = "id",
                     paramType = "path",
                     required = true,
-                    value = "User ID",
+                    value = "Contact Information ID",
                     dataType = "string"
             )
     ])
-    @Transactional
     def delete() {
         super.delete()
     }
 
     @ApiOperation(
-            value = "Register a new user",
-            nickname = "/{orgId}/users",
+            value = "Add contact information to an organisation",
+            nickname = "/{orgId}/contacts",
             produces = "application/json",
             consumes = "application/json",
             httpMethod = 'POST'
@@ -120,7 +115,7 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),
             @ApiResponse(code = 405, message = "Method not allowed"),
-            @ApiResponse(code = 409, message = "User already exists")
+            @ApiResponse(code = 409, message = "Contact information already exists")
     ])
     @ApiImplicitParams([
             @ApiImplicitParam(
@@ -134,11 +129,10 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
                     name = "body",
                     paramType = "body",
                     required = true,
-                    value = "User registration details",
-                    dataType = "rd.professional.web.command.UserRegistrationCommand"
+                    value = "Contact information details",
+                    dataType = "rd.professional.web.command.ContactInformationCommand"
             )
     ])
-    @Transactional
     def save() {
         def organisation = organisationService.getForUuid(params.organisationId)
         if (!organisation) {
@@ -146,45 +140,33 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
             return
         }
 
-        def cmd = new UserRegistrationCommand(request.getJSON())
-        def user = new ProfessionalUser(
-                firstName: cmd.firstName,
-                lastName: cmd.lastName,
-                emailId: cmd.email
-        )
-        if (cmd.pbaAccounts) {
-            cmd.pbaAccounts.each { account -> user.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber)) }
-        }
-        if (cmd.address) {
-            user.addToContacts(new ContactInformation(
-                    address: cmd.address.address
-            ))
-        }
+        def cmd = new ContactInformationCommand(request.getJSON())
+        def contact = new ContactInformation(address: cmd.address)
 
-        organisation.addToUsers(user)
+        organisation.addToContacts(contact)
 
-        user.validate()
-        if (user.hasErrors()) {
+        contact.validate()
+        if (contact.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond user.errors, status: 400
+            respond contact.errors, status: 400
             return
         }
 
         saveResource organisation
 
-        respond user, [status: CREATED]
+        respond contact, [status: CREATED]
     }
 
     @ApiOperation(
-            value = "Update a user",
-            nickname = "/{orgId}/users/{id}",
+            value = "Update contact information for an organisation",
+            nickname = "/{orgId}/contacts/{id}",
             produces = "application/json",
             consumes = "application/json",
             httpMethod = 'PUT'
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),
-            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 404, message = "Contact information not found"),
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     @ApiImplicitParams([
@@ -199,42 +181,26 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
                     name = "id",
                     paramType = "path",
                     required = true,
-                    value = "User ID",
+                    value = "Contact Information ID",
                     dataType = "string"
             ),
             @ApiImplicitParam(
                     name = "body",
                     paramType = "body",
                     required = true,
-                    value = "User update details",
-                    dataType = "rd.professional.web.command.UserUpdateCommand"
+                    value = "Contact information details",
+                    dataType = "rd.professional.web.command.ContactInformationCommand"
             )
     ])
-    @Transactional
     def update() {
         super.update()
     }
 
-    protected ProfessionalUser queryForResource(Serializable id) {
-        ProfessionalUser.where {
-            userId == id
-        }.find()
+    protected ContactInformation queryForResource(Serializable id) {
+        contactService.getContact(id)
     }
 
-    protected List<ProfessionalUser> listAllResources(Map params) {
-        ProfessionalUser.where {
-            organisation.organisationId == params.organisationId
-        }.findAll()
-    }
-
-    private def convertToMap(ProfessionalUser user) {
-        return [
-                firstName      : user.firstName,
-                lastName       : user.lastName,
-                emailId        : user.emailId,
-                userId         : user.userId,
-                addresses      : user.contacts,
-                paymentAccounts: user.accounts
-        ]
+    protected List<ContactInformation> listAllResources(Map params) {
+        contactService.getContactsForOrg(params.organisationId)
     }
 }

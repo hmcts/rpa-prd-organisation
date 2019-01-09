@@ -37,9 +37,8 @@ class UserAccountControllerFunctionalSpec extends GebSpec {
                 }
             }
         })
-        orgId = resp.json.organisationId
-        resp = restBuilder().get("${baseUrl}organisations/$orgId/users", { accept("application/json")})
-        userId = resp.json[0].userId
+        orgId = resp.json.id
+        userId = resp.json.users[0]
     }
 
     @AfterClass

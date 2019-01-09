@@ -3,7 +3,11 @@ package rd.professional.service
 import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
 import rd.professional.domain.*
-import rd.professional.web.*
+import rd.professional.web.command.AddAccountCommand
+import rd.professional.web.command.AddDomainCommand
+import rd.professional.web.command.ContactInformationCommand
+import rd.professional.web.command.OrganisationRegistrationCommand
+import rd.professional.web.command.UserRegistrationCommand
 import spock.lang.Specification
 
 class OrganisationServiceSpec extends Specification implements ServiceUnitTest<OrganisationService>, DataTest {
@@ -124,7 +128,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ContactInformation.count == 0
     }
 
-    void "test reg command with only mandatory fields set stores org and a user"() {
+    void "test reg command with only mandatory fields set stores org, a domain and a user"() {
         given:
         def name = "ACME Inc."
         def firstName = "Foo"
@@ -157,11 +161,11 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
             user.emailId == email
         }
         PaymentAccount.count == 0
-        Domain.count == 0
+        Domain.count == 1
         ContactInformation.count == 0
     }
 
-    void "test reg command with mandatory and accounts fields set stores org, accounts and a user"() {
+    void "test reg command with mandatory and accounts fields set stores org, domain, accounts and a user"() {
         given:
         def name = "ACME Inc."
         def firstName = "Foo"
@@ -198,7 +202,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         }
         PaymentAccount.count == 2
         PaymentAccount.findAll().pbaNumber == ["123", "321"]
-        Domain.count == 0
+        Domain.count == 1
         ContactInformation.count == 0
     }
 
@@ -243,7 +247,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ContactInformation.count == 0
     }
 
-    void "test reg command with mandatory and address fields set stores org, address and a user"() {
+    void "test reg command with mandatory and address fields set stores org, domain, address and a user"() {
         given:
         def name = "ACME Inc."
         def firstName = "Foo"
@@ -265,7 +269,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         then: "an exception is not thrown"
         notThrown Exception
 
-        and: "the organisation, two domains and a single user are persisted"
+        and: "the organisation, a domain, an address and a single user are persisted"
         Organisation.count == 1
         Organisation org = Organisation.findAll()[0]
         org.name == name
@@ -281,7 +285,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ContactInformation contacts = ContactInformation.findAll()[0]
         contacts.address == address
         PaymentAccount.count == 0
-        Domain.count == 0
+        Domain.count == 1
     }
 
     void "test reg command with all fields set stores org, address, accounts, domains and a user"() {

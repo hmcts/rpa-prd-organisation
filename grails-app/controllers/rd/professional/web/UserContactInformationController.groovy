@@ -1,180 +1,29 @@
 package rd.professional.web
 
-import grails.rest.RestfulController
+import grails.gorm.transactions.Transactional
 import io.swagger.annotations.*
 import rd.professional.domain.ContactInformation
-import rd.professional.domain.ProfessionalUser
+import rd.professional.service.ContactInformationService
+import rd.professional.service.UsersService
+import rd.professional.web.command.ContactInformationCommand
+
+import static org.springframework.http.HttpStatus.CREATED
 
 @Api(
         value = "organisations/",
         description = "Contact Information APIs"
 )
-class ContactInformationController extends RestfulController<ContactInformation> {
+class UserContactInformationController extends AbstractExceptionHandlerController<ContactInformation> {
     static responseFormats = ['json']
 
-    ContactInformationController() {
+    UserContactInformationController() {
         super(ContactInformation)
     }
-    //ContactInformationService contactService
+    ContactInformationService contactService
+    UsersService usersService
 
     @ApiOperation(
-            value="List all contact details for an organisation",
-            nickname = "/{orgId}/contacts",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = ContactInformation,
-            responseContainer = "Set"
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "No contact information found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            )
-    ])
-    def listOrgContacts(Integer max) {
-        // TODO
-    }
-
-    @ApiOperation(
-            value = "Get specific contact information belonging to an organisation",
-            nickname = "/{orgId}/contacts/{id}",
-            produces = "application/json",
-            httpMethod = 'GET',
-            response = ContactInformation
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "Contact information not found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "id",
-                    paramType = "path",
-                    required = true,
-                    value = "Contact information ID",
-                    dataType = "string"
-            )
-    ])
-    def showOrgContact() {
-        // TODO
-    }
-
-    @ApiOperation(
-            value = "Delete a set of contact information belonging to an organisation",
-            nickname = "/{orgId}/contacts/{id}",
-            httpMethod = 'DELETE'
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "Contact information not found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "id",
-                    paramType = "path",
-                    required = true,
-                    value = "Contact Information ID",
-                    dataType = "string"
-            )
-    ])
-    def deleteOrgContact() {
-        // TODO
-    }
-
-    @ApiOperation(
-            value = "Add contact information to an organisation",
-            nickname = "/{orgId}/contacts",
-            produces = "application/json",
-            consumes = "application/json",
-            httpMethod = 'POST'
-    )
-    @ApiResponses([
-            @ApiResponse(code = 400, message = "Invalid request"),
-            @ApiResponse(code = 405, message = "Method not allowed"),
-            @ApiResponse(code = 409, message = "Contact information already exists")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "body",
-                    paramType = "body",
-                    required = true,
-                    value = "Contact information details",
-                    dataType = "rd.professional.web.ContactInformationCommand"
-            )
-    ])
-    def addOrgContact(ContactInformationCommand cmd) {
-        // TODO
-    }
-
-    @ApiOperation(
-            value = "Update contact information for an organisation",
-            nickname = "/{orgId}/contacts/{id}",
-            produces = "application/json",
-            consumes = "application/json",
-            httpMethod = 'PUT'
-    )
-    @ApiResponses([
-            @ApiResponse(code = 400, message = "Invalid request"),
-            @ApiResponse(code = 404, message = "Contact information not found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "id",
-                    paramType = "path",
-                    required = true,
-                    value = "Contact Information ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "body",
-                    paramType = "body",
-                    required = true,
-                    value = "Contact information details",
-                    dataType = "rd.professional.web.ContactInformationCommand"
-            )
-    ])
-    def updateOrgContact(ContactInformationCommand cmd) {
-        // TODO
-    }
-
-    @ApiOperation(
-            value="List all contact details for a professional user",
+            value = "List all contact details for a professional user",
             nickname = "/{orgId}/users/{userId}/contacts",
             produces = "application/json",
             httpMethod = "GET",
@@ -201,8 +50,8 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     dataType = "string"
             )
     ])
-    def listUserContacts(Integer max) {
-        // TODO
+    def index(Integer max) {
+        super.index()
     }
 
     @ApiOperation(
@@ -239,8 +88,8 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     dataType = "string"
             )
     ])
-    def showUserContact() {
-        // TODO
+    def show() {
+        super.show()
     }
 
     @ApiOperation(
@@ -275,8 +124,9 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     dataType = "string"
             )
     ])
-    def deleteUserContact() {
-        // TODO
+    @Transactional
+    def delete() {
+        super.delete()
     }
 
     @ApiOperation(
@@ -311,11 +161,32 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     paramType = "body",
                     required = true,
                     value = "Contact information details",
-                    dataType = "rd.professional.web.ContactInformationCommand"
+                    dataType = "rd.professional.web.command.ContactInformationCommand"
             )
     ])
-    def addUserContact(ContactInformationCommand cmd) {
-        // TODO
+    @Transactional
+    def save() {
+        def user = usersService.getForUuid(params.professionalUserId)
+        if (!user) {
+            notFound()
+            return
+        }
+
+        def cmd = new ContactInformationCommand(request.getJSON())
+        def contact = new ContactInformation(address: cmd.address)
+
+        user.addToContacts(contact)
+
+        contact.validate()
+        if (contact.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond contact.errors, status: 400
+            return
+        }
+
+        saveResource user
+
+        respond contact, [status: CREATED]
     }
 
     @ApiOperation(
@@ -357,10 +228,19 @@ class ContactInformationController extends RestfulController<ContactInformation>
                     paramType = "body",
                     required = true,
                     value = "Contact information details",
-                    dataType = "rd.professional.web.ContactInformationCommand"
+                    dataType = "rd.professional.web.command.ContactInformationCommand"
             )
     ])
-    def updateUserContact(ContactInformationCommand cmd) {
-        // TODO
+    @Transactional
+    def update() {
+        super.update()
+    }
+
+    protected ContactInformation queryForResource(Serializable id) {
+        contactService.getContact(id)
+    }
+
+    protected List<ContactInformation> listAllResources(Map params) {
+        contactService.getContactsForUser(params.professionalUserId)
     }
 }

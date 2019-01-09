@@ -35,7 +35,7 @@ class DomainControllerFunctionalSpec extends GebSpec {
                            }]
             }
         })
-        orgId = resp.json.organisationId
+        orgId = resp.json.id
     }
 
     @AfterClass

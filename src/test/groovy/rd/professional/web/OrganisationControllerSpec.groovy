@@ -3,6 +3,8 @@ package rd.professional.web
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
 import rd.professional.service.OrganisationService
+import rd.professional.web.command.OrganisationRegistrationCommand
+import rd.professional.web.command.UserRegistrationCommand
 import spock.lang.Shared
 import spock.lang.Specification
 

@@ -1,4 +1,4 @@
-package rd.professional
+package rd.professional.service
 
 import grails.testing.services.ServiceUnitTest
 import rd.professional.service.AccountsService

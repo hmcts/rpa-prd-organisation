@@ -5,6 +5,7 @@ import grails.gorm.transactions.Rollback
 import grails.plugins.rest.client.RestBuilder
 import grails.testing.mixin.integration.Integration
 import rd.professional.domain.Organisation
+import spock.lang.Shared
 
 import static org.springframework.http.HttpStatus.*
 
@@ -12,8 +13,20 @@ import static org.springframework.http.HttpStatus.*
 @Rollback
 class OrganisationControllerFunctionalSpec extends GebSpec {
 
+    @Shared
+    def organisation
+
     RestBuilder restBuilder() {
         new RestBuilder()
+    }
+
+    Organisation getOrg() {
+        if (!organisation) {
+            organisation = Organisation.where {
+                name == "Organisation Inc."
+            }.find()
+        }
+        return organisation
     }
 
     void "test exception from service causes 400 response"() {
@@ -45,7 +58,7 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
 
         then: "a created response is returned"
         resp.status == CREATED.value()
-        resp.json != null && resp.json.organisationId != null
+        resp.json != null && resp.json.id != null
     }
 
     void "test GET organisations returns a list of all organisations"() {
@@ -62,7 +75,7 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
                 }
             }
         })
-        def orgId2 = resp.json.organisationId
+        def orgId2 = resp.json.id
 
         when: "a GET request is sent"
         resp = restBuilder().get("${baseUrl}organisations", {
@@ -84,7 +97,9 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
 
     void "test GET organisations/uuid returns details of that organisation"() {
         given: "the UUID of a company"
-        def orgId = Organisation.first().organisationId
+        def organisation = getOrg()
+        def orgId = organisation.organisationId
+        def name = organisation.name
 
         when:
         def resp = restBuilder().get("${baseUrl}organisations/$orgId", {
@@ -93,13 +108,14 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
 
         then:
         resp.status == 200
-        resp.json.name == Organisation.first().name
+        resp.json.name == name
     }
 
     void "test update organisation"() {
         given: "the UUID of a company"
-        def orgId = Organisation.first().organisationId
-        def originalName = Organisation.first().name
+        def org = getOrg()
+        def orgId = org.organisationId
+        def originalName = org.name
         def newName = "Name Enterprises LLC."
 
         when: "a company sends an update request"
@@ -114,14 +130,15 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
         then: "a success response is returned"
         resp.status == OK.value()
         resp.json != null
-        resp.json.organisationId == orgId.toString()
+        resp.json.id == orgId.toString()
         resp.json.name == newName
         resp.json.name != originalName
     }
 
     void "test delete organisation"() {
         given: "the UUID of a company"
-        def orgId = Organisation.first().organisationId
+        def org = getOrg()
+        def orgId = org.organisationId
         def originalOrgCount = Organisation.count()
         restBuilder().get("${baseUrl}organisations/$orgId", {
             accept("application/json")
@@ -182,4 +199,63 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
         and:
         restBuilder().delete("${baseUrl}organisations/$resp.json.organisationId")
     }
+
+    void "test create organisation with test data"() {
+        String requestJson = '{\n' +
+                '  "name": "SolicitorOrg2",\n' +
+                '  "url": "www.bbc.co.uk",\n' +
+                '  "sraId": "A0002",\n' +
+                '  "superUser": {\n' +
+                '    "firstName": "Nasim",\n' +
+                '    "lastName": "Lnasim",\n' +
+                '    "email": "nasim_fr_sol@mailinator.com"\n' +
+                '  },\n' +
+                '  "pbaAccounts": [\n' +
+                '    {\n' +
+                '      "pbaNumber": "PBA0000011"\n' +
+                '    },\n' +
+                '    {\n' +
+                '      "pbaNumber": "PBA0000012"\n' +
+                '    },\n' +
+                '    {\n' +
+                '      "pbaNumber": "PBA0000014"\n' +
+                '    }\n' +
+                '  ],\n' +
+                '  "domains": [\n' +
+                '    {\n' +
+                '      "domain": ""\n' +
+                '    }\n' +
+                '  ],\n' +
+                '  "address": [\n' +
+                '    {\n' +
+                '      "address": {\n' +
+                '        "houseNo": "66",\n' +
+                '        "addressLine1": "The Strand",\n' +
+                '        "addressLine2": "asd",\n' +
+                '        "town": "Westminister",\n' +
+                '        "postCode": "W5T4BQ",\n' +
+                '        "county": "London",\n' +
+                '        "country": "uk"\n' +
+                '      }\n' +
+                '    }\n' +
+                '  ]\n' +
+                '}'
+        when: "a company sends a registration request"
+        def resp = restBuilder().post("${baseUrl}organisations", {
+            accept("application/json")
+            contentType("application/json")
+            body(requestJson)
+        })
+
+        then: "the organisation is created"
+        println(resp.body)
+        resp.status == 201
+
+        and: "the domain is taken from the superUser's email"
+        resp.json.domains.contains "mailinator.com"
+
+        and:
+        restBuilder().delete("${baseUrl}organisations/$resp.json.organisationId")
+    }
+
 }

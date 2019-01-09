@@ -63,7 +63,7 @@ class SearchController {
             ProfessionalUser initialSuperUser = org.users[0]
             String address = org.contacts ? org.contacts[0] : null
             new ApprovableOrganisationDetails(
-                    org.id, org.name, org.url, org.sraId, org.status,
+                    org.organisationId, org.name, org.url, org.sraId, org.status,
                     initialSuperUser.firstName, initialSuperUser.lastName, initialSuperUser.emailId,
                     address
             )

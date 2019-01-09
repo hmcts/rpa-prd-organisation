@@ -1,10 +1,10 @@
 package rd.professional.web
 
 import grails.gorm.transactions.Transactional
-import grails.rest.RestfulController
 import io.swagger.annotations.*
 import rd.professional.domain.Domain
 import rd.professional.service.OrganisationService
+import rd.professional.web.command.AddDomainCommand
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NO_CONTENT
@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT
         value = "organisations/",
         description = "Domain APIs"
 )
-class DomainController extends RestfulController<Domain> {
+class DomainController extends AbstractExceptionHandlerController<Domain> {
     static responseFormats = ['json']
 
     DomainController() {
@@ -115,7 +115,7 @@ class DomainController extends RestfulController<Domain> {
                     paramType = "body",
                     required = true,
                     value = "New domain details",
-                    dataType = "rd.professional.web.AddDomainCommand"
+                    dataType = "rd.professional.web.command.AddDomainCommand"
             )
     ])
     @Transactional

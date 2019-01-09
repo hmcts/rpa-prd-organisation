@@ -4,25 +4,28 @@ import grails.gorm.transactions.Transactional
 import org.springframework.context.MessageSource
 import org.springframework.validation.FieldError
 import rd.professional.domain.*
-import rd.professional.web.OrganisationRegistrationCommand
+import rd.professional.web.command.OrganisationRegistrationCommand
 
 @Transactional
 class OrganisationService {
 
     MessageSource messageSource
 
-    def registerOrganisation(OrganisationRegistrationCommand cmd) {
-        def organisation = new Organisation(name: cmd.name, url: cmd.url, sraId: cmd.sraId)
+    Organisation registerOrganisation(OrganisationRegistrationCommand cmd) {
+        def url = cmd.url
+        if (url && !url.startsWith("http"))
+            url = "https://$url"
+        def organisation = new Organisation(name: cmd.name, url: url, sraId: cmd.sraId)
 
         log.debug "Creating superuser"
-        def superuser = new ProfessionalUser(emailId: cmd.superUser.email, firstName: cmd.superUser.firstName, lastName: cmd.superUser.lastName)
+        ProfessionalUser superuser = new ProfessionalUser(emailId: cmd.superUser.email, firstName: cmd.superUser.firstName, lastName: cmd.superUser.lastName)
         if (cmd.superUser.pbaAccounts) {
             log.debug "Registering PBAs for superuser"
             cmd.superUser.pbaAccounts.each { account ->
                 superuser.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
             }
         }
-        if (cmd.superUser.address) {
+        if (cmd.superUser.address && cmd.superUser.address.address) {
             log.debug "Registering address for superuser"
             superuser.addToContacts(
                     new ContactInformation(
@@ -34,19 +37,24 @@ class OrganisationService {
         if (cmd.pbaAccounts) {
             log.debug "Registering PBAs for organisation"
             cmd.pbaAccounts.each { account ->
-                organisation.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
+                if (account.pbaNumber) organisation.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
             }
         }
 
         if (cmd.domains) {
             log.debug "Registering domains for organisation"
             cmd.domains.each { domain ->
-                organisation.addToDomains(new Domain(host: domain.domain))
+                if (domain.domain) organisation.addToDomains(new Domain(host: domain.domain))
             }
+        }
+        if (!organisation.domains || organisation.domains.size() == 0) {
+            log.debug "No domain in request. Using super user's email domain"
+            String host = superuser.emailId.substring(superuser.emailId.indexOf('@') + 1)
+            organisation.addToDomains(new Domain(host: host))
         }
 
         // address
-        if (cmd.address) {
+        if (cmd.address && cmd.address.address) {
             log.debug "Registering address for organisation"
             organisation.addToContacts(
                     new ContactInformation(
