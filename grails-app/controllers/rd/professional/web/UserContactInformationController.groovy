@@ -1,11 +1,13 @@
 package rd.professional.web
 
+
 import grails.gorm.transactions.Transactional
 import io.swagger.annotations.*
 import rd.professional.domain.ContactInformation
 import rd.professional.service.ContactInformationService
 import rd.professional.service.UsersService
 import rd.professional.web.command.ContactInformationCommand
+import rd.professional.web.dto.UserAddressDto
 
 import static org.springframework.http.HttpStatus.CREATED
 
@@ -13,13 +15,14 @@ import static org.springframework.http.HttpStatus.CREATED
         value = "organisations/",
         description = "Contact Information APIs"
 )
-class UserContactInformationController extends AbstractExceptionHandlerController<ContactInformation> {
+class UserContactInformationController extends AbstractDtoRenderingController<ContactInformation, UserAddressDto> {
     static responseFormats = ['json']
 
     UserContactInformationController() {
-        super(ContactInformation)
+        super(ContactInformation, UserAddressDto)
     }
-    ContactInformationService contactService
+
+    ContactInformationService contactInformationService
     UsersService usersService
 
     @ApiOperation(
@@ -51,7 +54,7 @@ class UserContactInformationController extends AbstractExceptionHandlerControlle
             )
     ])
     def index(Integer max) {
-        super.index()
+        super.index(max)
     }
 
     @ApiOperation(
@@ -186,7 +189,7 @@ class UserContactInformationController extends AbstractExceptionHandlerControlle
 
         saveResource user
 
-        respond contact, [status: CREATED]
+        respond new UserAddressDto(contact), [status: CREATED]
     }
 
     @ApiOperation(
@@ -237,10 +240,10 @@ class UserContactInformationController extends AbstractExceptionHandlerControlle
     }
 
     protected ContactInformation queryForResource(Serializable id) {
-        contactService.getContact(id)
+        contactInformationService.getContact(id)
     }
 
     protected List<ContactInformation> listAllResources(Map params) {
-        contactService.getContactsForUser(params.professionalUserId)
+        contactInformationService.getContactsForUser(params.professionalUserId)
     }
 }

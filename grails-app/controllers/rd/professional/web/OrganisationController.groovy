@@ -14,11 +14,11 @@ import static org.springframework.http.HttpStatus.OK
         value = "organisations/",
         description = "Organisation related APIs"
 )
-class OrganisationController extends AbstractExceptionHandlerController<Organisation> {
+class OrganisationController extends AbstractDtoRenderingController<Organisation, OrganisationDto> {
     static responseFormats = ['json']
 
     OrganisationController() {
-        super(Organisation)
+        super(Organisation, OrganisationDto)
     }
 
     OrganisationService organisationService
@@ -36,7 +36,7 @@ class OrganisationController extends AbstractExceptionHandlerController<Organisa
             @ApiResponse(code = 405, message = "Method not allowed")
     ])
     def index(Integer max) {
-        respond listAllResources(params).collect { new OrganisationDto(it) }
+        super.index(max)
     }
 
     @ApiOperation(
@@ -60,12 +60,7 @@ class OrganisationController extends AbstractExceptionHandlerController<Organisa
             )
     ])
     Organisation show() {
-        Organisation instance = queryForResource(params.id)
-        if (instance == null) {
-            notFound()
-            return
-        }
-        render new OrganisationDto(instance) as JSON
+        super.show()
     }
 
     @ApiOperation(
@@ -153,24 +148,7 @@ class OrganisationController extends AbstractExceptionHandlerController<Organisa
     ])
     @Transactional
     def update() {
-        Organisation instance = queryForResource(params.id)
-        if (instance == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        instance.properties = getObjectToBind()
-
-        instance.validate()
-        if (instance.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond instance.errors, view:'edit' // STATUS CODE 422
-            return
-        }
-
-        instance.save flush: true
-        respond new OrganisationDto(instance), [status: OK]
+        super.update()
     }
 
     protected Organisation queryForResource(Serializable id) {

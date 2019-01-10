@@ -1,9 +1,6 @@
 package rd.professional.domain
 
-
 import io.swagger.annotations.ApiModelProperty
-
-import javax.persistence.Id
 
 class ProfessionalUser {
 

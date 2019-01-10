@@ -24,6 +24,8 @@ class ContactInformationService {
     }
 
     def getContact(def uuid) {
+        if (!uuid || uuid == "null")
+            return null
         ContactInformation.where {
             contactId == uuid
         }.find()

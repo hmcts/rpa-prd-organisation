@@ -7,6 +7,7 @@ import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
 import rd.professional.service.OrganisationService
 import rd.professional.web.command.UserRegistrationCommand
+import rd.professional.web.dto.ProfessionalUserDto
 
 import static org.springframework.http.HttpStatus.CREATED
 
@@ -14,11 +15,11 @@ import static org.springframework.http.HttpStatus.CREATED
         value = "organisations/",
         description = "Professional User APIs"
 )
-class ProfessionalUserController extends AbstractExceptionHandlerController<ProfessionalUser> {
+class ProfessionalUserController extends AbstractDtoRenderingController<ProfessionalUser, ProfessionalUserDto> {
     static responseFormats = ['json']
 
     ProfessionalUserController() {
-        super(ProfessionalUser)
+        super(ProfessionalUser, ProfessionalUserDto)
     }
 
     OrganisationService organisationService
@@ -45,8 +46,7 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
             )
     ])
     def index(Integer max) {
-        def users = listAllResources(params).each { it -> convertToMap(it) }.collect()
-        respond users, model: [("${resourceName}Count".toString()): countResources()]
+        super.index(max)
     }
 
     @ApiOperation(
@@ -172,7 +172,7 @@ class ProfessionalUserController extends AbstractExceptionHandlerController<Prof
 
         saveResource organisation
 
-        respond user, [status: CREATED]
+        respond new ProfessionalUserDto(user), [status: CREATED]
     }
 
     @ApiOperation(

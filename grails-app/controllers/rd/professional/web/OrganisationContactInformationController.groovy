@@ -4,7 +4,9 @@ package rd.professional.web
 import io.swagger.annotations.*
 import rd.professional.domain.ContactInformation
 import rd.professional.service.ContactInformationService
+import rd.professional.service.OrganisationService
 import rd.professional.web.command.ContactInformationCommand
+import rd.professional.web.dto.OrganisationAddressDto
 
 import static org.springframework.http.HttpStatus.CREATED
 
@@ -12,13 +14,14 @@ import static org.springframework.http.HttpStatus.CREATED
         value = "organisations/",
         description = "Contact Information APIs"
 )
-class OrganisationContactInformationController extends AbstractExceptionHandlerController<ContactInformation> {
+class OrganisationContactInformationController extends AbstractDtoRenderingController<ContactInformation, OrganisationAddressDto> {
     static responseFormats = ['json']
 
     OrganisationContactInformationController() {
-        super(ContactInformation)
+        super(ContactInformation, OrganisationAddressDto)
     }
-    ContactInformationService contactService
+    OrganisationService organisationService
+    ContactInformationService contactInformationService
 
     @ApiOperation(
             value = "List all contact details for an organisation",
@@ -154,7 +157,7 @@ class OrganisationContactInformationController extends AbstractExceptionHandlerC
 
         saveResource organisation
 
-        respond contact, [status: CREATED]
+        respond new OrganisationAddressDto(contact), [status: CREATED]
     }
 
     @ApiOperation(
@@ -197,10 +200,10 @@ class OrganisationContactInformationController extends AbstractExceptionHandlerC
     }
 
     protected ContactInformation queryForResource(Serializable id) {
-        contactService.getContact(id)
+        contactInformationService.getContact(id)
     }
 
     protected List<ContactInformation> listAllResources(Map params) {
-        contactService.getContactsForOrg(params.organisationId)
+        contactInformationService.getContactsForOrg(params.organisationId)
     }
 }

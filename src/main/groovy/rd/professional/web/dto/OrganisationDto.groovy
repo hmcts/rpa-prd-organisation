@@ -12,7 +12,7 @@ class OrganisationDto {
         users = org.users.collect { it.userId }
         pbaAccounts = org.accounts.collect { it.pbaNumber }
         domains = org.domains.collect { it.host }
-        addresses = org.contacts.collect { it.userId }
+        contactInformationIds = org.contacts.collect { it.contactId }
     }
 
     UUID id
@@ -22,5 +22,5 @@ class OrganisationDto {
     List<UUID> users
     List<String> pbaAccounts
     List<String> domains
-    List<UUID> addresses
+    List<UUID> contactInformationIds
 }

@@ -73,6 +73,8 @@ class OrganisationService {
     }
 
     def getForUuid(Serializable uuid) {
+        if (!uuid || uuid == "null")
+            return null
         Organisation.where {
             organisationId == uuid
         }.find()
