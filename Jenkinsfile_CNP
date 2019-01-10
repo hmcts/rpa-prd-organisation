@@ -4,7 +4,7 @@ properties([
     [
         $class: 'GithubProjectProperty',
         displayName: 'RPA Reference Data Professional microservice',
-        projectUrlStr: 'https://github.com/hmcts/rd-professional/'
+        projectUrlStr: 'https://github.com/hmcts/rpa-prd-organisation/'
     ],
 //    parameters(),
     pipelineTriggers([
