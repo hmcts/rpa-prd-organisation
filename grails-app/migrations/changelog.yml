@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
     - file: 001_initial_structure.yml
+  - include:
+    - file: 002_add_dx_address.yml

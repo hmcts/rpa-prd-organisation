@@ -6,6 +6,7 @@ import rd.professional.domain.*
 import rd.professional.web.command.AddAccountCommand
 import rd.professional.web.command.AddDomainCommand
 import rd.professional.web.command.ContactInformationCommand
+import rd.professional.web.command.DxAddressCommand
 import rd.professional.web.command.OrganisationRegistrationCommand
 import rd.professional.web.command.UserRegistrationCommand
 import spock.lang.Specification
@@ -299,6 +300,8 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def domain2 = "www.bar.com"
         def pbaAccount1 = "123"
         def pbaAccount2 = "321"
+        def dxNum = "dxnumber"
+        def dxExch = "dxexchange"
 
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
@@ -308,6 +311,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
                         lastName: lastName,
                         email: email
                 ),
+                dxAddress: new DxAddressCommand(dxNumber: dxNum, dxExchange: dxExch),
                 domains: Arrays.asList(new AddDomainCommand(domain: domain1), new AddDomainCommand(domain: domain2)),
                 pbaAccounts: Arrays.asList(new AddAccountCommand(pbaNumber: pbaAccount1), new AddAccountCommand(pbaNumber: pbaAccount2)),
                 address: new ContactInformationCommand(address: address)
@@ -337,5 +341,9 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         PaymentAccount.findAll().pbaNumber == ["123", "321"]
         Domain.count == 2
         Domain.findAll().host == ["www.foo.com", "www.bar.com"]
+        DxAddress.count == 1
+        DxAddress dxAddress = DxAddress.findAll()[0]
+        dxAddress.dxExchange == dxExch
+        dxAddress.dxNumber == dxNum
     }
 }

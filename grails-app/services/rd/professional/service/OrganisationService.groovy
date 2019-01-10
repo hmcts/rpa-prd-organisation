@@ -2,8 +2,10 @@ package rd.professional.service
 
 import grails.gorm.transactions.Transactional
 import org.springframework.context.MessageSource
+import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
 import rd.professional.domain.*
+import rd.professional.exception.HttpException
 import rd.professional.web.command.OrganisationRegistrationCommand
 
 @Transactional
@@ -18,6 +20,8 @@ class OrganisationService {
         def organisation = new Organisation(name: cmd.name, url: url, sraId: cmd.sraId)
 
         log.debug "Creating superuser"
+        if (!cmd.superUser)
+            throw new HttpException(HttpStatus.BAD_REQUEST.value(), "Super user must be set")
         ProfessionalUser superuser = new ProfessionalUser(emailId: cmd.superUser.email, firstName: cmd.superUser.firstName, lastName: cmd.superUser.lastName)
         if (cmd.superUser.pbaAccounts) {
             log.debug "Registering PBAs for superuser"
@@ -60,6 +64,11 @@ class OrganisationService {
                     new ContactInformation(
                             address: cmd.address.address
                     ))
+        }
+
+        if (cmd.dxAddress) {
+            log.debug "Adding DX address to organisation"
+            organisation.setDxAddress(new DxAddress(dxNumber: cmd.dxAddress.dxNumber, dxExchange: cmd.dxAddress.dxExchange))
         }
 
         if (organisation.validate()) {

@@ -6,19 +6,15 @@ import io.swagger.annotations.ApiModelProperty
 import org.springframework.validation.Errors
 
 @ToString(includeNames = true, includeFields = true)
-class OrganisationUpdateCommand implements Validateable {
-    String name
-    String url
-    String sraId
-    DxAddressCommand dxAddress
+class DxAddressCommand implements Validateable {
+
+    String dxNumber
+    String dxExchange
 
     @ApiModelProperty(hidden = true)
     Errors errors
-
     static constraints = {
-        sraId nullable: true
-        url nullable: true
-        name nullable: true
-        dxAddress nullable: true
+        dxExchange nullable: false
+        dxNumber nullable: false
     }
 }

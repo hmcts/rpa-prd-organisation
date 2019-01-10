@@ -12,6 +12,7 @@ class Organisation {
     URL url
     String sraId
     UUID organisationId = UUID.randomUUID()
+    DxAddress dxAddress
 
     boolean sraRegulated
     String companyNumber
@@ -33,6 +34,7 @@ class Organisation {
         companyNumber nullable: true
         organisationId nullable: false, unique: true
         status nullable: false
+        dxAddress nullable: true
     }
 
     static mapping = {

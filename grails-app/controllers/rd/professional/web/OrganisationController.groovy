@@ -1,6 +1,6 @@
 package rd.professional.web
 
-import grails.converters.JSON
+
 import grails.gorm.transactions.Transactional
 import io.swagger.annotations.*
 import rd.professional.domain.Organisation
@@ -8,7 +8,7 @@ import rd.professional.service.OrganisationService
 import rd.professional.web.command.OrganisationRegistrationCommand
 import rd.professional.web.dto.OrganisationDto
 
-import static org.springframework.http.HttpStatus.OK
+import static org.springframework.http.HttpStatus.CREATED
 
 @Api(
         value = "organisations/",
@@ -109,13 +109,11 @@ class OrganisationController extends AbstractDtoRenderingController<Organisation
             )
     ])
     @Transactional
-    def save(OrganisationRegistrationCommand cmd) {
+    def save() {
         log.info "Creating organisation"
-        try {
-            respond(new OrganisationDto(organisationService.registerOrganisation(cmd)), status: 201)
-        } catch (Exception e) {
-            render e.getMessage(), status: 400
-        }
+        def cmd = new OrganisationRegistrationCommand(request.getJSON())
+        Organisation organisation = organisationService.registerOrganisation(cmd)
+        respond new OrganisationDto(organisation), [status: CREATED]
     }
 
     @ApiOperation(

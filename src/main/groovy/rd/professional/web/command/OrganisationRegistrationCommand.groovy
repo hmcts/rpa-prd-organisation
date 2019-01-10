@@ -10,6 +10,7 @@ class OrganisationRegistrationCommand implements Validateable {
     String name
     String url
     String sraId
+    DxAddressCommand dxAddress
 
     UserRegistrationCommand superUser
 
@@ -25,6 +26,7 @@ class OrganisationRegistrationCommand implements Validateable {
         sraId nullable: true
         url nullable: true
         name nullable: false
+        dxAddress nullable: true
 
         superUser nullable: false
 

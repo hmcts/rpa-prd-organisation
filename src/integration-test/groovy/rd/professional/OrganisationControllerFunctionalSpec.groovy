@@ -1,9 +1,11 @@
 package rd.professional
 
 import geb.spock.GebSpec
+import grails.converters.JSON
 import grails.gorm.transactions.Rollback
 import grails.plugins.rest.client.RestBuilder
 import grails.testing.mixin.integration.Integration
+import groovy.json.JsonBuilder
 import rd.professional.domain.Organisation
 import spock.lang.Shared
 
@@ -59,6 +61,43 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
         then: "a created response is returned"
         resp.status == CREATED.value()
         resp.json != null && resp.json.id != null
+    }
+
+    void "test DX number and exchange can be set and retrieved"() {
+        given: "a company sends a registration request with DX number and exchange set"
+        def requestJson = [
+            name: "DX Details Ltd.",
+            dxAddress: [
+                dxNumber: "0123456789abc",
+                dxExchange: "0123456789abcdef0123"
+            ],
+            superUser: [
+                firstName: "Foo",
+                lastName: "Barton",
+                email: "foo@bardxdetails.com"
+            ]
+        ] as JSON
+        def resp = restBuilder().post("${baseUrl}organisations", {
+            accept("application/json")
+            contentType("application/json")
+            json(requestJson)
+        })
+
+        expect: "the DX number and exchange are returned"
+        resp.status == CREATED.value()
+        def orgId = resp.json.id
+        def dxAddress = resp.json.dxAddress
+        dxAddress.dxNumber == "0123456789abc"
+        dxAddress.dxExchange == "0123456789abcdef0123"
+
+        and: "a GET request for the organisation also returns the DX details"
+        def resp2 = restBuilder().get("${baseUrl}organisations/$orgId", { accept("application/json") })
+        def dxAddress2 = resp2.json.dxAddress
+        dxAddress2.dxNumber == "0123456789abc"
+        dxAddress2.dxExchange == "0123456789abcdef0123"
+
+        cleanup:
+        restBuilder().delete("${baseUrl}organisations/$orgId")
     }
 
     void "test GET organisations returns a list of all organisations"() {
