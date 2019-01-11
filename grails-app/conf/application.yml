@@ -10,7 +10,7 @@ grails:
       events: false
   plugin:
     databasemigration:
-      updateOnStart: true
+      updateOnStart: false
       updateOnStartFileName: changelog.yml
 info:
   app:
