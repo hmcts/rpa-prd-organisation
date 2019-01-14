@@ -47,6 +47,8 @@ repositories {
 }
 
 dependencies {
+    compile 'com.microsoft.azure:applicationinsights-logging-logback:2.3.0'
+    compile 'com.microsoft.azure:applicationinsights-web:2.3.0'
     compile "org.grails:grails-core"
     compile "org.grails:grails-plugin-codecs"
     compile "org.grails:grails-plugin-databinding"
