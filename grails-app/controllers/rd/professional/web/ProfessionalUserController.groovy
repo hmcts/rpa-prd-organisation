@@ -226,15 +226,4 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
             organisation.organisationId == params.organisationId
         }.findAll()
     }
-
-    private def convertToMap(ProfessionalUser user) {
-        return [
-                firstName      : user.firstName,
-                lastName       : user.lastName,
-                emailId        : user.emailId,
-                userId         : user.userId,
-                addresses      : user.contacts,
-                paymentAccounts: user.accounts
-        ]
-    }
 }
