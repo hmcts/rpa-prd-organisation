@@ -5,14 +5,14 @@ import rd.professional.domain.Status
 
 class ProfessionalUserDto {
 
-    def ProfessionalUserDto(ProfessionalUser user) {
+    ProfessionalUserDto(ProfessionalUser user) {
         id = user.userId
         emailId = user.emailId
         firstName = user.firstName
         lastName = user.lastName
         status = user.status
         organisationId = user.organisation.organisationId
-        pbaAccounts = user.accounts.collect { it.pbaNumber }
+        pbaAccount = user.accounts ? user.accounts[0] : null
         contactInformationIds = user.contacts.collect { it.contactId }
     }
 
@@ -22,6 +22,6 @@ class ProfessionalUserDto {
     String lastName
     Status status
     UUID organisationId
-    List<String> pbaAccounts
+    String pbaAccount
     List<UUID> contactInformationIds
 }

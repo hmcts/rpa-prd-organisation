@@ -4,7 +4,7 @@ import rd.professional.domain.ContactInformation
 
 class UserAddressDto {
 
-    def UserAddressDto(ContactInformation data) {
+    UserAddressDto(ContactInformation data) {
         id = data.contactId
         address = data.address
         userId = data.user.userId

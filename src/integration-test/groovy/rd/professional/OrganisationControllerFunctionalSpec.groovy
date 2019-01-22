@@ -5,7 +5,6 @@ import grails.converters.JSON
 import grails.gorm.transactions.Rollback
 import grails.plugins.rest.client.RestBuilder
 import grails.testing.mixin.integration.Integration
-import groovy.json.JsonBuilder
 import rd.professional.domain.Organisation
 import spock.lang.Shared
 
@@ -66,16 +65,16 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
     void "test DX number and exchange can be set and retrieved"() {
         given: "a company sends a registration request with DX number and exchange set"
         def requestJson = [
-            name: "DX Details Ltd.",
-            dxAddress: [
-                dxNumber: "0123456789abc",
-                dxExchange: "0123456789abcdef0123"
-            ],
-            superUser: [
-                firstName: "Foo",
-                lastName: "Barton",
-                email: "foo@bardxdetails.com"
-            ]
+                name     : "DX Details Ltd.",
+                dxAddress: [
+                        dxNumber  : "0123456789abc",
+                        dxExchange: "0123456789abcdef0123"
+                ],
+                superUser: [
+                        firstName: "Foo",
+                        lastName : "Barton",
+                        email    : "foo@bardxdetails.com"
+                ]
         ] as JSON
         def resp = restBuilder().post("${baseUrl}organisations", {
             accept("application/json")
@@ -201,7 +200,7 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
                 '    "firstName": "test",\n' +
                 '    "lastName": "test",\n' +
                 '    "email": "test@test.com",\n' +
-                '    "pbaAccounts": [\n' +
+                '    "pbaAccount": [\n' +
                 '      {\n' +
                 '        "pbaNumber": "PBA123"\n' +
                 '      }\n' +
@@ -211,6 +210,9 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
                 '    }\n' +
                 '  },\n' +
                 '  "pbaAccounts": [\n' +
+                '    {\n' +
+                '      "pbaNumber": "PBA123"\n' +
+                '    },\n' +
                 '    {\n' +
                 '      "pbaNumber": "PBA456"\n' +
                 '    }\n' +

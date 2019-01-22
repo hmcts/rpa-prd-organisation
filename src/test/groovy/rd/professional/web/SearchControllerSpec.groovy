@@ -104,7 +104,7 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         given:
         def org = addOrganisation()
         org.setStatus(Status.APPROVED)
-        org.save()
+        org.save(flush: true)
 
         when:
         controller.approvedOrganisations()

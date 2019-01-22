@@ -11,7 +11,7 @@ class UserRegistrationCommand implements Validateable {
     String lastName
     String email
 
-    List<AddAccountCommand> pbaAccounts
+    AddAccountCommand pbaAccount
 
     ContactInformationCommand address
 
@@ -23,7 +23,7 @@ class UserRegistrationCommand implements Validateable {
         lastName nullable: false
         email nullable: false
 
-        pbaAccounts nullable: true
+        pbaAccount nullable: true
 
         address nullable: true
     }

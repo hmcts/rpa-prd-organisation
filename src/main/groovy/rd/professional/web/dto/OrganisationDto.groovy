@@ -4,7 +4,7 @@ import rd.professional.domain.Organisation
 
 class OrganisationDto {
 
-    def OrganisationDto(Organisation org) {
+    OrganisationDto(Organisation org) {
         id = org.organisationId
         name = org.name
         url = org.url

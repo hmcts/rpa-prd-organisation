@@ -7,7 +7,7 @@ class DxAddressDto {
     String dxNumber
     String dxExchange
 
-    def DxAddressDto(DxAddress dxAddress) {
+    DxAddressDto(DxAddress dxAddress) {
         dxNumber = dxAddress.dxNumber
         dxExchange = dxAddress.dxExchange
     }

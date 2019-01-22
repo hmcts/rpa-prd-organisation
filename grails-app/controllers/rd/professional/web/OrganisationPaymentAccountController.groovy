@@ -5,6 +5,7 @@ import io.swagger.annotations.*
 import rd.professional.domain.PaymentAccount
 import rd.professional.service.OrganisationService
 import rd.professional.web.command.AddAccountCommand
+import rd.professional.web.dto.PaymentAccountDto
 
 import static org.springframework.http.HttpStatus.CREATED
 
@@ -12,13 +13,13 @@ import static org.springframework.http.HttpStatus.CREATED
         value = "organisations/",
         description = "Payment Account APIs"
 )
-class OrganisationPaymentAccountController extends AbstractExceptionHandlerController<PaymentAccount> {
+class OrganisationPaymentAccountController extends AbstractDtoRenderingController<PaymentAccount, PaymentAccountDto> {
     static responseFormats = ['json']
 
     OrganisationService organisationService
 
     OrganisationPaymentAccountController() {
-        super(PaymentAccount)
+        super(PaymentAccount, PaymentAccountDto)
     }
 
     @ApiOperation(
@@ -26,7 +27,7 @@ class OrganisationPaymentAccountController extends AbstractExceptionHandlerContr
             nickname = "/{orgId}/pbas",
             produces = "application/json",
             httpMethod = "GET",
-            response = String,
+            response = PaymentAccountDto,
             responseContainer = "Set"
     )
     @ApiResponses([

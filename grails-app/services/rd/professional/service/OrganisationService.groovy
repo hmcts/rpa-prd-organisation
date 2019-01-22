@@ -19,15 +19,20 @@ class OrganisationService {
             url = "https://$url"
         def organisation = new Organisation(name: cmd.name, url: url, sraId: cmd.sraId)
 
+        if (cmd.pbaAccounts) {
+            log.debug "Registering PBAs for organisation"
+            cmd.pbaAccounts.each { account ->
+                if (account.pbaNumber) organisation.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
+            }
+        }
+
         log.debug "Creating superuser"
         if (!cmd.superUser)
             throw new HttpException(HttpStatus.BAD_REQUEST.value(), "Super user must be set")
         ProfessionalUser superuser = new ProfessionalUser(emailId: cmd.superUser.email, firstName: cmd.superUser.firstName, lastName: cmd.superUser.lastName)
-        if (cmd.superUser.pbaAccounts) {
-            log.debug "Registering PBAs for superuser"
-            cmd.superUser.pbaAccounts.each { account ->
-                superuser.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
-            }
+        if (cmd.superUser.pbaAccount) {
+            log.debug "Registering PBA for superuser"
+            superuser.addToAccounts(organisation.accounts.find { it.pbaNumber == cmd.superUser.pbaAccount.pbaNumber })
         }
         if (cmd.superUser.address && cmd.superUser.address.address) {
             log.debug "Registering address for superuser"
@@ -38,13 +43,7 @@ class OrganisationService {
         }
         organisation.addToUsers(superuser)
 
-        if (cmd.pbaAccounts) {
-            log.debug "Registering PBAs for organisation"
-            cmd.pbaAccounts.each { account ->
-                if (account.pbaNumber) organisation.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
-            }
-        }
-
+        //TODO: Ensure user emails match the organisations domains
         if (cmd.domains) {
             log.debug "Registering domains for organisation"
             cmd.domains.each { domain ->

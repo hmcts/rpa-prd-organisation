@@ -5,20 +5,23 @@ import io.swagger.annotations.*
 import rd.professional.domain.PaymentAccount
 import rd.professional.service.UsersService
 import rd.professional.web.command.AddAccountCommand
+import rd.professional.web.dto.PaymentAccountDto
 
 import static org.springframework.http.HttpStatus.CREATED
+import static org.springframework.http.HttpStatus.NOT_FOUND
+import static org.springframework.http.HttpStatus.NO_CONTENT
 
 @Api(
         value = "organisations/",
         description = "Payment Account APIs"
 )
-class UserPaymentAccountController extends AbstractExceptionHandlerController<PaymentAccount> {
+class UserPaymentAccountController extends AbstractDtoRenderingController<PaymentAccount, PaymentAccountDto> {
     static responseFormats = ['json']
 
     UsersService usersService
 
     UserPaymentAccountController() {
-        super(PaymentAccount)
+        super(PaymentAccount, PaymentAccountDto)
     }
 
     @ApiOperation(
@@ -26,7 +29,7 @@ class UserPaymentAccountController extends AbstractExceptionHandlerController<Pa
             nickname = "/{orgId}/users/{userId}/pbas",
             produces = "application/json",
             httpMethod = "GET",
-            response = String,
+            response = PaymentAccountDto,
             responseContainer = "Set"
     )
     @ApiResponses([
@@ -87,11 +90,29 @@ class UserPaymentAccountController extends AbstractExceptionHandlerController<Pa
     ])
     @Transactional
     def delete() {
-        super.delete()
+        def user = usersService.getForUuid(params.professionalUserId)
+        if (user == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        def account = queryForResource(params.id)
+        if (account == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        user.removeFromAccounts(account)
+        user.save()
+        account.save()
+
+        render status: NO_CONTENT
     }
 
     @ApiOperation(
-            value = "Add a new account to a user",
+            value = "Set a different account for a user",
             nickname = "/{orgId}/users/{userId}/pbas",
             produces = "application/json",
             consumes = "application/json",
@@ -133,28 +154,24 @@ class UserPaymentAccountController extends AbstractExceptionHandlerController<Pa
             notFound()
             return
         }
-
         def cmd = new AddAccountCommand(request.getJSON())
-        def account = new PaymentAccount(pbaNumber: cmd.pbaNumber)
 
-        user.addToAccounts(account)
+        usersService.setPbaAccount(user, cmd.pbaNumber)
 
-        account.validate()
-        if (account.hasErrors()) {
+        user.validate()
+        if (user.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond account.errors, status: 400
+            respond user.errors, status: 400
             return
         }
 
         saveResource user
 
-        respond account, [status: CREATED]
+        respond user.accounts[0], [status: CREATED]
     }
 
     protected PaymentAccount queryForResource(Serializable id) {
-        PaymentAccount.where {
-            pbaNumber == id
-        }.find()
+        PaymentAccount.findByPbaNumber(id)
     }
 
     protected List<PaymentAccount> listAllResources(Map params) {

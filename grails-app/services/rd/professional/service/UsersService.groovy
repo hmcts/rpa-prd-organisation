@@ -4,12 +4,16 @@ import groovyx.net.http.ChainedHttpConfig
 import groovyx.net.http.FromServer
 import groovyx.net.http.HttpBuilder
 import groovyx.net.http.NativeHandlers
+import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.User
+import rd.professional.exception.HttpException
+import rd.professional.web.command.AddAccountCommand
 
 import static groovyx.net.http.ContentTypes.JSON
 import static groovyx.net.http.HttpBuilder.configure
 import static groovyx.net.http.NativeHandlers.Parsers.json
+import static org.springframework.http.HttpStatus.NOT_FOUND
 
 class UsersService {
 
@@ -41,5 +45,24 @@ class UsersService {
         ProfessionalUser.where {
             userId == uuid
         }.find()
+    }
+
+    /**
+     * Sets a user's PBA account number
+     *
+     * @param user
+     * @param pbaNumber
+     * @return true if successful, false if the account was not found or does not belong to the user's organisation
+     */
+    def setPbaAccount(ProfessionalUser user, String pbaNumber) {
+        def orgAccounts = user.organisation.accounts
+
+        def account = PaymentAccount.findByPbaNumber(pbaNumber)
+
+        if (account && orgAccounts.contains(account)) {
+            user.addToAccounts(account)
+        } else {
+            throw new HttpException(NOT_FOUND, "PBA account ${pbaNumber} not found")
+        }
     }
 }

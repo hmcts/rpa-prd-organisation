@@ -6,10 +6,12 @@ import rd.professional.domain.ContactInformation
 import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
 import rd.professional.service.OrganisationService
+import rd.professional.service.UsersService
 import rd.professional.web.command.UserRegistrationCommand
 import rd.professional.web.dto.ProfessionalUserDto
 
 import static org.springframework.http.HttpStatus.CREATED
+import static org.springframework.http.HttpStatus.NOT_FOUND
 
 @Api(
         value = "organisations/",
@@ -23,6 +25,7 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
     }
 
     OrganisationService organisationService
+    UsersService usersService
 
     @ApiOperation(
             value = "List all users for an organisation",
@@ -152,8 +155,8 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
                 lastName: cmd.lastName,
                 emailId: cmd.email
         )
-        if (cmd.pbaAccounts) {
-            cmd.pbaAccounts.each { account -> user.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber)) }
+        if (cmd.pbaAccount) {
+            usersService.setPbaAccount(user, cmd.pbaAccount)
         }
         if (cmd.address) {
             user.addToContacts(new ContactInformation(
