@@ -17,6 +17,6 @@ class HealthController {
             nickname = "/"
     )
     def index() {
-        render '{"status": "UP"}'
+        render '{"status": "UP"}', contentType: "application/json"
     }
 }
