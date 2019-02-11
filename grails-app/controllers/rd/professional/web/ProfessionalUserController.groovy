@@ -3,7 +3,6 @@ package rd.professional.web
 import grails.gorm.transactions.Transactional
 import io.swagger.annotations.*
 import rd.professional.domain.ContactInformation
-import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
 import rd.professional.service.OrganisationService
 import rd.professional.service.UsersService
@@ -11,7 +10,6 @@ import rd.professional.web.command.UserRegistrationCommand
 import rd.professional.web.dto.ProfessionalUserDto
 
 import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
 
 @Api(
         value = "organisations/",

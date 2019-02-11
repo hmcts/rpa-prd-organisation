@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus
 import rd.professional.exception.HttpException
 
 abstract class AbstractExceptionHandlerController<T> extends RestfulController<T> {
-    static responseFormats = ['json', 'xml']
+    static responseFormats = ['json']
 
     AbstractExceptionHandlerController(Class<T> resource) {
         super(resource)

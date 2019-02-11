@@ -25,23 +25,7 @@ appender('STDOUT', ConsoleAppender) {
 
 appender('AZURE_APPINSIGHTS', ApplicationInsightsAppender)
 
-def targetDir = BuildSettings.TARGET_DIR
-if (Environment.isDevelopmentMode() && targetDir != null) {
-    appender("FULL_STACKTRACE", FileAppender) {
-        file = "${targetDir}/stacktrace.log"
-        append = true
-        encoder(PatternLayoutEncoder) {
-            pattern = "%level %logger - %msg%n"
-        }
-    }
-    logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
-//    logger("org.hibernate.SQL", DEBUG, ["STDOUT"], false)
-//    logger("org.hibernate.type.descriptor.sql.BasicBinder", TRACE, ["STDOUT"], false)
-    logger('rd.professional', TRACE, ['STDOUT'])
-    root(WARN, ['STDOUT'])
-}
-else {
-    logger('rd.professional', TRACE, ['STDOUT'])
-    root(WARN, ['STDOUT', 'AZURE_APPINSIGHTS'])
+logger('rd.professional', TRACE, ['STDOUT'])
+root(WARN, ['STDOUT', 'AZURE_APPINSIGHTS'])
     //root(TRACE, ['STDOUT'])
-}
+
