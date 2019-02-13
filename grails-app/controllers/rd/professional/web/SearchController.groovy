@@ -65,7 +65,7 @@ class SearchController {
             new ApprovableOrganisationDetails(
                     org.organisationId, org.name, org.url, org.sraId, org.status,
                     initialSuperUser.firstName, initialSuperUser.lastName, initialSuperUser.emailId,
-                    address, org.accounts.join(", ")
+                    address, org.accounts.pbaNumber.join(", ")
             )
         }
     }

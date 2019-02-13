@@ -94,6 +94,10 @@ environments:
     server:
       port: 9000
     prd_users_endpointurl: http://localhost:9002
+    grails:
+      plugin:
+        databasemigration:
+          updateOnStart: true
   test:
     dataSource:
       dbCreate: create

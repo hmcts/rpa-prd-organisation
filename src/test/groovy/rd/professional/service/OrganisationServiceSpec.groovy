@@ -172,8 +172,8 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def firstName = "Foo"
         def lastName = "Barton"
         def email = "foo@bar.com"
-        def pbaAccount1 = "123"
-        def pbaAccount2 = "321"
+        def pbaAccount1 = "1234"
+        def pbaAccount2 = "4321"
 
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
@@ -202,7 +202,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
             user.emailId == email
         }
         PaymentAccount.count == 2
-        PaymentAccount.findAll().pbaNumber == ["123", "321"]
+        PaymentAccount.findAll().pbaNumber == ["1234", "4321"]
         Domain.count == 1
         ContactInformation.count == 0
     }
@@ -298,8 +298,8 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def address = '{"Flat 7", "Baz Towers", "Foo Street", "Bar upon Thames", "Surrey", "F00 BAR"}'
         def domain1 = "www.foo.com"
         def domain2 = "www.bar.com"
-        def pbaAccount1 = "123"
-        def pbaAccount2 = "321"
+        def pbaAccount1 = "1234"
+        def pbaAccount2 = "4321"
         def dxNum = "dxnumber"
         def dxExch = "dxexchange"
 
@@ -338,7 +338,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         ContactInformation contacts = ContactInformation.findAll()[0]
         contacts.address == address
         PaymentAccount.count == 2
-        PaymentAccount.findAll().pbaNumber == ["123", "321"]
+        PaymentAccount.findAll().pbaNumber == ["1234", "4321"]
         Domain.count == 2
         Domain.findAll().host == ["www.foo.com", "www.bar.com"]
         DxAddress.count == 1

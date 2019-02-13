@@ -22,7 +22,8 @@ class OrganisationService {
         if (cmd.pbaAccounts) {
             log.debug "Registering PBAs for organisation"
             cmd.pbaAccounts.each { account ->
-                if (account.pbaNumber) organisation.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
+                // TODO: Find actual PBA format and verify with regex
+                if (account.pbaNumber && account.pbaNumber.length() > 3) organisation.addToAccounts(new PaymentAccount(pbaNumber: account.pbaNumber))
             }
         }
 
@@ -30,7 +31,7 @@ class OrganisationService {
         if (!cmd.superUser)
             throw new HttpException(HttpStatus.BAD_REQUEST.value(), "Super user must be set")
         ProfessionalUser superuser = new ProfessionalUser(emailId: cmd.superUser.email, firstName: cmd.superUser.firstName, lastName: cmd.superUser.lastName)
-        if (cmd.superUser.pbaAccount) {
+        if (cmd.superUser.pbaAccount  && cmd.superUser.pbaAccount.pbaNumber.length() > 4) {
             log.debug "Registering PBA for superuser"
             superuser.addToAccounts(organisation.accounts.find { it.pbaNumber == cmd.superUser.pbaAccount.pbaNumber })
         }
