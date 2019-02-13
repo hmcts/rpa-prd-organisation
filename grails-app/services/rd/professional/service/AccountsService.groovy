@@ -18,6 +18,6 @@ class AccountsService {
     def findUserAccountsByEmail(String email) {
         return ProfessionalUser.withCriteria {
             eq('emailId', email)
-        }.accounts
+        }.organisation.accounts
     }
 }
