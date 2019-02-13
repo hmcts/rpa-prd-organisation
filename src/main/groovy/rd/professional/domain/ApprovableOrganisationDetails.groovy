@@ -14,5 +14,6 @@ class ApprovableOrganisationDetails {
     String initialSuperuserLastName
     String initialSuperuserEmail
     String address
+    String pbas
 
 }
