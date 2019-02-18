@@ -149,8 +149,11 @@ jacocoTestReport {
 sonarqube {
     properties {
         property "sonar.projectName", "${rootProject.name}"
+        property "sonar.projectKey", "rd.professional.sonar"
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
         property "sonar.exclusions", coverageExclusionList.join(", ")
+        property "sonar.sources", "grails-app"
+        //property "sonar.language", "grvy"
     }
 }
 
