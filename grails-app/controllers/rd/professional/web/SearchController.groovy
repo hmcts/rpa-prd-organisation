@@ -11,6 +11,8 @@ import rd.professional.domain.Organisation
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.Status
 import rd.professional.service.AccountsService
+import rd.professional.web.dto.OrganisationDto
+import rd.professional.web.dto.ProfessionalUserDto
 
 @Api(
         value = "search/",
@@ -106,4 +108,65 @@ class SearchController {
         }
     }
 
+    @ApiOperation(
+            value = "Search for user belonging to an email address",
+            nickname = "users/{email}",
+            produces = "application/json",
+            httpMethod = "GET",
+            response = ProfessionalUserDto
+    )
+    @ApiResponses([
+            @ApiResponse(code = 404, message = "User not found"),
+            @ApiResponse(code = 405, message = "Only GET method is allowed")
+    ])
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "email",
+                    paramType = "path",
+                    required = true,
+                    value = "Email address of the user you wish to search for",
+                    dataType = "string")
+    ])
+    def userByEmail(String email) {
+        log.info("userByEmail: called with $email")
+        def user = ProfessionalUser.findByEmailId(email)
+        log.debug("Found user: $user")
+
+        if (user) {
+            respond new ProfessionalUserDto(user)
+        } else {
+            response.status = 404
+            render '[]'
+        }
+    }
+
+    @ApiOperation(
+            value = "Search for organisation by user's email address",
+            nickname = "organisations/{email}",
+            produces = "application/json",
+            httpMethod = "GET",
+            response = OrganisationDto
+    )
+    @ApiResponses([
+            @ApiResponse(code = 404, message = "Organisation not found"),
+            @ApiResponse(code = 405, message = "Only GET method is allowed")
+    ])
+    @ApiImplicitParams([
+            @ApiImplicitParam(name = "email",
+                    paramType = "path",
+                    required = true,
+                    value = "Email address of the user whose organisation you wish to search for",
+                    dataType = "string")
+    ])
+    def organisationByEmail(String email) {
+        log.info("organisationByEmail: called with $email")
+        def user = ProfessionalUser.findByEmailId(email)
+
+        if (user) {
+            log.debug("Found org: $user.organisation")
+            respond new OrganisationDto(user.organisation)
+        } else {
+            response.status = 404
+            render '[]'
+        }
+    }
 }

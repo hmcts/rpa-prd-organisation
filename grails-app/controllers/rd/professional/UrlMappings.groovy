@@ -10,6 +10,8 @@ class UrlMappings {
 
         // search endpoints
         get "/search/pba/$email"(controller: 'search', action: 'accountsByEmail')
+        get "/search/users/$email"(controller: 'search', action: 'userByEmail')
+        get "/search/organisations/$email"(controller: 'search', action: 'organisationByEmail')
         get '/search/organisations/approved'(controller: 'search', action: 'approvedOrganisations')
         get '/search/organisations/pending'(controller: 'search', action: 'pendingOrganisations')
 

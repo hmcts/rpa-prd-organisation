@@ -21,9 +21,11 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
     private address
     @Shared
     private account
+    @Shared
+    private org
 
     private Organisation addOrganisation() {
-        def org = new Organisation(
+        org = new Organisation(
                 name: "ACME Inc.",
                 url: "http://bar.com",
                 sraId: "sra",
@@ -188,5 +190,45 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         then:
         response.status == 200
         response.json.payment_accounts == [account.pbaNumber, account2.pbaNumber]
+    }
+
+    void "test get user by email not found"() {
+        when:
+        controller.userByEmail("unknown@wrong.com")
+
+        then:
+        response.status == 404
+    }
+
+    void "test get user by email"() {
+        given:
+        addOrganisation()
+
+        when:
+        controller.userByEmail(user.emailId)
+
+        then:
+        response.status == 200
+        response.json.firstName == user.firstName
+    }
+
+    void "test get org by email not found"() {
+        when:
+        controller.organisationByEmail("unknown@wrong.com")
+
+        then:
+        response.status == 404
+    }
+
+    void "test get org by email"() {
+        given:
+        addOrganisation()
+
+        when:
+        controller.organisationByEmail(user.emailId)
+
+        then:
+        response.status == 200
+        response.json.name == org.name
     }
 }
