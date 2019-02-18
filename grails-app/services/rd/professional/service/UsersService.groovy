@@ -59,7 +59,7 @@ class UsersService {
 
         def account = PaymentAccount.findByPbaNumber(pbaNumber)
 
-        if (account && orgAccounts.contains(account)) {
+        if (account && account.organisation == user.organisation) {
             user.addToAccounts(account)
         } else {
             throw new HttpException(NOT_FOUND, "PBA account ${pbaNumber} not found")

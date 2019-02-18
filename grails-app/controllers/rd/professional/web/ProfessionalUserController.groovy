@@ -153,9 +153,6 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
                 lastName: cmd.lastName,
                 emailId: cmd.email
         )
-        if (cmd.pbaAccount) {
-            usersService.setPbaAccount(user, cmd.pbaAccount)
-        }
         if (cmd.address) {
             user.addToContacts(new ContactInformation(
                     address: cmd.address.address
@@ -163,6 +160,10 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
         }
 
         organisation.addToUsers(user)
+
+        if (cmd.pbaAccount) {
+            usersService.setPbaAccount(user, cmd.pbaAccount.pbaNumber)
+        }
 
         user.validate()
         if (user.hasErrors()) {

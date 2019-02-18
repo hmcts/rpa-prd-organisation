@@ -32,6 +32,9 @@ class ProfessionalUserControllerFunctionalSpec extends GebSpec {
                     lastName = "Barton"
                     email = "foo@barprofessionaluser.com"
                 }
+                pbaAccounts = [{
+                    pbaNumber = "PBAUSR1247"
+                }]
             }
         })
         orgId = resp.json.id
@@ -54,6 +57,9 @@ class ProfessionalUserControllerFunctionalSpec extends GebSpec {
                 firstName = "Phil"
                 lastName = "Martens"
                 email = "bar@barprofessionaluser.com"
+                pbaAccount = {
+                    pbaNumber = "PBAUSR1247"
+                }
             }
         })
 
