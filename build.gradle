@@ -27,6 +27,7 @@ group "rd.professional"
 
 apply plugin: "eclipse"
 apply plugin: "idea"
+apply plugin: 'jacoco'
 apply plugin: "war"
 apply plugin: "org.grails.grails-web"
 apply plugin: "org.grails.plugins.views-json"
@@ -128,7 +129,6 @@ jacoco {
 }
 
 def coverageExclusionList = [
-        '**rd/professional/**'
 ]
 
 jacocoTestReport {
