@@ -38,7 +38,7 @@ class OrganisationContactInformationControllerFunctionalSpec extends GebSpec {
             }
         })
         orgId = resp.json.id
-        contactId = resp.json.contactInformationIds[0]
+        contactId = resp.json.addresses[0].id
     }
 
     @AfterClass
