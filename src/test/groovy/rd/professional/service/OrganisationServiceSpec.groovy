@@ -264,7 +264,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
                         lastName: lastName,
                         email: email
                 ),
-                address: new ContactInformationCommand(address: address)
+                address: address
         ))
 
         then: "an exception is not thrown"
@@ -314,7 +314,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
                 dxAddress: new DxAddressCommand(dxNumber: dxNum, dxExchange: dxExch),
                 domains: Arrays.asList(new AddDomainCommand(domain: domain1), new AddDomainCommand(domain: domain2)),
                 pbaAccounts: Arrays.asList(new AddAccountCommand(pbaNumber: pbaAccount1), new AddAccountCommand(pbaNumber: pbaAccount2)),
-                address: new ContactInformationCommand(address: address)
+                address: address
         ))
 
         then: "an exception is not thrown"

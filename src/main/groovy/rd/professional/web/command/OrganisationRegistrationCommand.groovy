@@ -17,7 +17,7 @@ class OrganisationRegistrationCommand implements Validateable {
     List<AddAccountCommand> pbaAccounts
     List<AddDomainCommand> domains
 
-    ContactInformationCommand address
+    String address
 
     @ApiModelProperty(hidden = true)
     Errors errors

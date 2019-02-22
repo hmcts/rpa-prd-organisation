@@ -35,11 +35,11 @@ class OrganisationService {
             log.debug "Registering PBA for superuser"
             superuser.addToAccounts(organisation.accounts.find { it.pbaNumber == cmd.superUser.pbaAccount.pbaNumber })
         }
-        if (cmd.superUser.address && cmd.superUser.address.address) {
+        if (cmd.superUser.address) {
             log.debug "Registering address for superuser"
             superuser.addToContacts(
                     new ContactInformation(
-                            address: cmd.superUser.address.address
+                            address: cmd.superUser.address
                     ))
         }
         organisation.addToUsers(superuser)
@@ -58,11 +58,11 @@ class OrganisationService {
         }
 
         // address
-        if (cmd.address && cmd.address.address) {
+        if (cmd.address && cmd.address) {
             log.debug "Registering address for organisation"
             organisation.addToContacts(
                     new ContactInformation(
-                            address: cmd.address.address
+                            address: cmd.address
                     ))
         }
 
