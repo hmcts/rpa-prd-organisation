@@ -13,7 +13,7 @@ class ProfessionalUserDto {
         status = user.status
         organisationId = user.organisation.organisationId
         pbaAccount = user.accounts ? user.accounts[0] : null
-        contactInformationIds = user.contacts.collect { it.contactId }
+        addresses = user.contacts.collect { new UserAddressDto(it) }
     }
 
     UUID id
@@ -23,5 +23,5 @@ class ProfessionalUserDto {
     Status status
     UUID organisationId
     String pbaAccount
-    List<UUID> contactInformationIds
+    List<UserAddressDto> addresses
 }

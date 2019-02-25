@@ -44,7 +44,7 @@ class OrganisationController extends AbstractDtoRenderingController<Organisation
             nickname = "/{id}",
             produces = "application/json",
             httpMethod = 'GET',
-            response = Organisation
+            response = OrganisationDto
     )
     @ApiResponses([
             @ApiResponse(code = 404, message = "Organisation not found"),
@@ -92,7 +92,8 @@ class OrganisationController extends AbstractDtoRenderingController<Organisation
             nickname = "/",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'POST'
+            httpMethod = 'POST',
+            response = OrganisationDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),
@@ -121,7 +122,8 @@ class OrganisationController extends AbstractDtoRenderingController<Organisation
             nickname = "/{id}",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'PUT'
+            httpMethod = 'PUT',
+            response = OrganisationDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),

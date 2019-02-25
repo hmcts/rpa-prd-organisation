@@ -30,7 +30,7 @@ class UserContactInformationController extends AbstractDtoRenderingController<Co
             nickname = "/{orgId}/users/{userId}/contacts",
             produces = "application/json",
             httpMethod = "GET",
-            response = ContactInformation,
+            response = UserAddressDto,
             responseContainer = "Set"
     )
     @ApiResponses([
@@ -62,7 +62,7 @@ class UserContactInformationController extends AbstractDtoRenderingController<Co
             nickname = "/{orgId}/users/{userId}/contacts/{id}",
             produces = "application/json",
             httpMethod = 'GET',
-            response = ContactInformation
+            response = UserAddressDto
     )
     @ApiResponses([
             @ApiResponse(code = 404, message = "Contact information not found"),
@@ -137,7 +137,8 @@ class UserContactInformationController extends AbstractDtoRenderingController<Co
             nickname = "/{orgId}/users/{userId}/contacts",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'POST'
+            httpMethod = 'POST',
+            response = UserAddressDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),
@@ -205,7 +206,8 @@ class UserContactInformationController extends AbstractDtoRenderingController<Co
             nickname = "/{orgId}/users/{userId}/contacts/{id}",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'PUT'
+            httpMethod = 'PUT',
+            response = UserAddressDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),

@@ -28,7 +28,7 @@ class OrganisationContactInformationController extends AbstractDtoRenderingContr
             nickname = "/{orgId}/contacts",
             produces = "application/json",
             httpMethod = "GET",
-            response = ContactInformation,
+            response = OrganisationAddressDto,
             responseContainer = "Set"
     )
     @ApiResponses([
@@ -53,7 +53,7 @@ class OrganisationContactInformationController extends AbstractDtoRenderingContr
             nickname = "/{orgId}/contacts/{id}",
             produces = "application/json",
             httpMethod = 'GET',
-            response = ContactInformation
+            response = OrganisationAddressDto
     )
     @ApiResponses([
             @ApiResponse(code = 404, message = "Contact information not found"),
@@ -113,7 +113,8 @@ class OrganisationContactInformationController extends AbstractDtoRenderingContr
             nickname = "/{orgId}/contacts",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'POST'
+            httpMethod = 'POST',
+            response = OrganisationAddressDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),
@@ -173,7 +174,8 @@ class OrganisationContactInformationController extends AbstractDtoRenderingContr
             nickname = "/{orgId}/contacts/{id}",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'PUT'
+            httpMethod = 'PUT',
+            response = OrganisationAddressDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),

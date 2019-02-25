@@ -30,7 +30,7 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
             nickname = "/{orgId}/users",
             produces = "application/json",
             httpMethod = "GET",
-            response = ProfessionalUser,
+            response = ProfessionalUserDto,
             responseContainer = "Set"
     )
     @ApiResponses([
@@ -55,7 +55,7 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
             nickname = "/{orgId}/users/{id}",
             produces = "application/json",
             httpMethod = 'GET',
-            response = ProfessionalUser
+            response = ProfessionalUserDto
     )
     @ApiResponses([
             @ApiResponse(code = 404, message = "Organisation not found"),
@@ -116,7 +116,8 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
             nickname = "/{orgId}/users",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'POST'
+            httpMethod = 'POST',
+            response = ProfessionalUserDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),
@@ -182,7 +183,8 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
             nickname = "/{orgId}/users/{id}",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'PUT'
+            httpMethod = 'PUT',
+            response = ProfessionalUserDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),

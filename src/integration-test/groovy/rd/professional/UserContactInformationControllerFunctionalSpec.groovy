@@ -46,7 +46,7 @@ class UserContactInformationControllerFunctionalSpec extends GebSpec {
         resp = restBuilder().get("${baseUrl}organisations/$orgId/users/$userId", {
             accept("application/json")
         })
-        contactId = resp.json.contactInformationIds[0]
+        contactId = resp.json.addresses[0].id
     }
 
     @AfterClass

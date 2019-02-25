@@ -116,7 +116,8 @@ class UserPaymentAccountController extends AbstractDtoRenderingController<Paymen
             nickname = "/{orgId}/users/{userId}/pbas",
             produces = "application/json",
             consumes = "application/json",
-            httpMethod = 'POST'
+            httpMethod = 'POST',
+            response = PaymentAccountDto
     )
     @ApiResponses([
             @ApiResponse(code = 400, message = "Invalid request"),
