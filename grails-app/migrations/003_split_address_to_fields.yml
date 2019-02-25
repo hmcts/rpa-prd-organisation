@@ -1,0 +1,91 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1551096450100-0
+      author: Tabby
+      changes:
+        - delete:
+            tableName: contact_information
+  - changeSet:
+      id: 1551096450101-1
+      author: Tabby (generated)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: address_line1
+                  type: varchar(255)
+            tableName: contact_information
+  - changeSet:
+      id: 1551096450101-2
+      author: Tabby (generated)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: address_line2
+                  type: varchar(255)
+            tableName: contact_information
+  - changeSet:
+      id: 1551096450101-3
+      author: Tabby (generated)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: country
+                  type: varchar(255)
+            tableName: contact_information
+  - changeSet:
+      id: 1551096450101-4
+      author: Tabby (generated)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: county
+                  type: varchar(255)
+            tableName: contact_information
+  - changeSet:
+      id: 1551096450101-5
+      author: Tabby (generated)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: house_no_building_name
+                  type: varchar(255)
+            tableName: contact_information
+  - changeSet:
+      id: 1551096450101-6
+      author: Tabby (generated)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: postcode
+                  type: varchar(255)
+            tableName: contact_information
+  - changeSet:
+      id: 1551096450101-7
+      author: Tabby (generated)
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: town_city
+                  type: varchar(255)
+            tableName: contact_information
+  - changeSet:
+      id: 1551096450101-8
+      author: Tabby (generated)
+      changes:
+        - dropColumn:
+            columnName: ADDRESS
+            tableName: CONTACT_INFORMATION
+

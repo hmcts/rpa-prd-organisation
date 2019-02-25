@@ -3,3 +3,5 @@ databaseChangeLog:
     - file: 001_initial_structure.yml
   - include:
     - file: 002_add_dx_address.yml
+  - include:
+    - file: 003_split_address_to_fields.yml
