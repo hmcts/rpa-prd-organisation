@@ -1,10 +1,23 @@
 package rd.professional.domain
 
 import io.swagger.annotations.ApiModelProperty
+import rd.professional.web.command.ContactInformationCommand
 
 import java.time.LocalDateTime
 
 class ContactInformation {
+
+    ContactInformation(ContactInformationCommand cmd) {
+        this(
+                houseNoBuildingName: cmd.houseNoBuildingName,
+                addressLine1: cmd.addressLine1,
+                addressLine2: cmd.addressLine2,
+                townCity: cmd.townCity,
+                county: cmd.county,
+                country: cmd.country,
+                postcode: cmd.postcode
+        )
+    }
 
     @ApiModelProperty(hidden = true)
     Long id
