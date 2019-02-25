@@ -254,7 +254,15 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def firstName = "Foo"
         def lastName = "Barton"
         def email = "foo@bar.com"
-        String address = '{"Flat 7", "Baz Towers", "Foo Street", "Bar upon Thames", "Surrey", "F00 BAR"}'
+        def address = new ContactInformationCommand(
+                houseNoBuildingName: "Flat 7",
+                addressLine1: "Baz Towers",
+                addressLine2: "Foo Street",
+                townCity: "Bar upon Thames",
+                county: "Surrey",
+                country: "UK",
+                postcode: "F00 BAR"
+        )
 
         when:
         service.registerOrganisation(new OrganisationRegistrationCommand(
@@ -284,7 +292,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         }
         ContactInformation.count == 1
         ContactInformation contacts = ContactInformation.findAll()[0]
-        contacts.address == address
+        contacts.houseNoBuildingName == "Flat 7"
         PaymentAccount.count == 0
         Domain.count == 1
     }
@@ -295,7 +303,15 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         def firstName = "Foo"
         def lastName = "Barton"
         def email = "foo@bar.com"
-        def address = '{"Flat 7", "Baz Towers", "Foo Street", "Bar upon Thames", "Surrey", "F00 BAR"}'
+        def address = new ContactInformationCommand(
+                houseNoBuildingName: "Flat 7",
+                addressLine1: "Baz Towers",
+                addressLine2: "Foo Street",
+                townCity: "Bar upon Thames",
+                county: "Surrey",
+                country: "UK",
+                postcode: "F00 BAR"
+        )
         def domain1 = "www.foo.com"
         def domain2 = "www.bar.com"
         def pbaAccount1 = "1234"
@@ -336,7 +352,7 @@ class OrganisationServiceSpec extends Specification implements ServiceUnitTest<O
         }
         ContactInformation.count == 1
         ContactInformation contacts = ContactInformation.findAll()[0]
-        contacts.address == address
+        contacts.houseNoBuildingName == "Flat 7"
         PaymentAccount.count == 2
         PaymentAccount.findAll().pbaNumber == ["1234", "4321"]
         Domain.count == 2

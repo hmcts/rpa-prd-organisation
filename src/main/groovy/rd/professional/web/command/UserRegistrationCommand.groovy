@@ -13,7 +13,7 @@ class UserRegistrationCommand implements Validateable {
 
     AddAccountCommand pbaAccount
 
-    String address
+    ContactInformationCommand address
 
     @ApiModelProperty(hidden = true)
     Errors errors

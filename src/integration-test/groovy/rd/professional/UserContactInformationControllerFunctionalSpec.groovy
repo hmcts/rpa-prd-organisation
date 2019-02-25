@@ -34,7 +34,9 @@ class UserContactInformationControllerFunctionalSpec extends GebSpec {
                     lastName = "Barton"
                     email = "foo@barusercontact.com"
                     address = {
-                        address = "{\"address\" = \"wibble\"}"
+                        houseNoBuildingName = "wibble"
+                        townCity = "London"
+                        postcode = "20958"
                     }
                 }
             }
@@ -60,7 +62,9 @@ class UserContactInformationControllerFunctionalSpec extends GebSpec {
             accept("application/json")
             contentType("application/json")
             json {
-                address = "{\"address\" = \"wobble\"}"
+                houseNoBuildingName = "wobble"
+                townCity = "London"
+                postcode = "20958"
             }
         })
 

@@ -33,7 +33,9 @@ class OrganisationContactInformationControllerFunctionalSpec extends GebSpec {
                     email = "foo@barorgcontact.com"
                 }
                 address = {
-                    address = "{\"address\" = \"wibble\"}"
+                    houseNoBuildingName = "wibble"
+                    townCity = "London"
+                    postcode = "20957"
                 }
             }
         })
@@ -54,7 +56,9 @@ class OrganisationContactInformationControllerFunctionalSpec extends GebSpec {
             accept("application/json")
             contentType("application/json")
             json {
-                address = "{\"address\" = \"wobble\"}"
+                houseNoBuildingName = "wobble"
+                townCity = "London"
+                postcode = "20957"
             }
         })
 

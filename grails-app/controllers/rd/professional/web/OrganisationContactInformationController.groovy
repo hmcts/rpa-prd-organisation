@@ -143,8 +143,16 @@ class OrganisationContactInformationController extends AbstractDtoRenderingContr
             return
         }
 
-        def cmd = new ContactInformationCommand(request.getJSON())
-        def contact = new ContactInformation(address: cmd.address)
+        def address = new ContactInformationCommand(request.getJSON())
+        def contact = new ContactInformation(
+                houseNoBuildingName: address.houseNoBuildingName,
+                addressLine1: address.addressLine1,
+                addressLine2: address.addressLine2,
+                townCity: address.townCity,
+                county: address.county,
+                country: address.country,
+                postcode: address.postcode
+        )
 
         organisation.addToContacts(contact)
 

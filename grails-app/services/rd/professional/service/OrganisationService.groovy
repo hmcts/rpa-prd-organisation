@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
 import rd.professional.domain.*
 import rd.professional.exception.HttpException
+import rd.professional.web.command.ContactInformationCommand
 import rd.professional.web.command.OrganisationRegistrationCommand
 
 @Transactional
@@ -37,10 +38,16 @@ class OrganisationService {
         }
         if (cmd.superUser.address) {
             log.debug "Registering address for superuser"
-            superuser.addToContacts(
-                    new ContactInformation(
-                            address: cmd.superUser.address
-                    ))
+            ContactInformationCommand address = cmd.superUser.address
+            superuser.addToContacts(new ContactInformation(
+                    houseNoBuildingName: address.houseNoBuildingName,
+                    addressLine1: address.addressLine1,
+                    addressLine2: address.addressLine2,
+                    townCity: address.townCity,
+                    county: address.county,
+                    country: address.country,
+                    postcode: address.postcode
+            ))
         }
         organisation.addToUsers(superuser)
 
@@ -58,12 +65,18 @@ class OrganisationService {
         }
 
         // address
-        if (cmd.address && cmd.address) {
+        if (cmd.address) {
             log.debug "Registering address for organisation"
-            organisation.addToContacts(
-                    new ContactInformation(
-                            address: cmd.address
-                    ))
+            ContactInformationCommand address = cmd.address
+            organisation.addToContacts(new ContactInformation(
+                    houseNoBuildingName: address.houseNoBuildingName,
+                    addressLine1: address.addressLine1,
+                    addressLine2: address.addressLine2,
+                    townCity: address.townCity,
+                    county: address.county,
+                    country: address.country,
+                    postcode: address.postcode
+            ))
         }
 
         if (cmd.dxAddress) {

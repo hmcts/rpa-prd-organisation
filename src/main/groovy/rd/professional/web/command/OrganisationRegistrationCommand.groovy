@@ -4,6 +4,7 @@ import grails.validation.Validateable
 import groovy.transform.ToString
 import io.swagger.annotations.ApiModelProperty
 import org.springframework.validation.Errors
+import rd.professional.domain.ContactInformation
 
 @ToString(includeNames = true, includeFields = true)
 class OrganisationRegistrationCommand implements Validateable {
@@ -17,7 +18,7 @@ class OrganisationRegistrationCommand implements Validateable {
     List<AddAccountCommand> pbaAccounts
     List<AddDomainCommand> domains
 
-    String address
+    ContactInformationCommand address
 
     @ApiModelProperty(hidden = true)
     Errors errors

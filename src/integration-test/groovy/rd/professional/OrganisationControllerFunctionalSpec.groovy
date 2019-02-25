@@ -206,7 +206,9 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
                 '      }\n' +
                 '    ],\n' +
                 '    "address": {\n' +
-                '      "address": "test"\n' +
+                '      "houseNoBuildingName": "test",\n' +
+                '      "townCity": "London",\n' +
+                '      "postcode": "SW1 123"\n' +
                 '    }\n' +
                 '  },\n' +
                 '  "pbaAccounts": [\n' +
@@ -223,7 +225,9 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
                 '    }\n' +
                 '  ],\n' +
                 '  "address": {\n' +
-                '    "address": "test"\n' +
+                '    "houseNoBuildingName": "test2",\n' +
+                '    "townCity": "London",\n' +
+                '    "postcode": "SW1 123"\n' +
                 '  }\n' +
                 '}'
         when: "a company sends a registration request"
@@ -269,15 +273,13 @@ class OrganisationControllerFunctionalSpec extends GebSpec {
                 '  ],\n' +
                 '  "address": [\n' +
                 '    {\n' +
-                '      "address": {\n' +
-                '        "houseNo": "66",\n' +
-                '        "addressLine1": "The Strand",\n' +
-                '        "addressLine2": "asd",\n' +
-                '        "town": "Westminister",\n' +
-                '        "postCode": "W5T4BQ",\n' +
-                '        "county": "London",\n' +
-                '        "country": "uk"\n' +
-                '      }\n' +
+                '      "houseNoBuildingName": "66",\n' +
+                '      "addressLine1": "The Strand",\n' +
+                '      "addressLine2": "asd",\n' +
+                '      "townCity": "Westminister",\n' +
+                '      "postcode": "W5T4BQ",\n' +
+                '      "county": "London",\n' +
+                '      "country": "uk"\n' +
                 '    }\n' +
                 '  ]\n' +
                 '}'

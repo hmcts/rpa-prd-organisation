@@ -52,7 +52,9 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
                 companyNumber: "12346",
         )
         org.addToContacts(new ContactInformation(
-                address: "{}"
+                houseNoBuildingName: "15",
+                townCity: "Croydon",
+                postcode: "CR0 1AB"
         ))
         org.addToUsers(new ProfessionalUser(
                 emailId: "foo@baz.com",
@@ -74,7 +76,9 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
                 status: Status.APPROVED
         )
         address = new ContactInformation(
-                address: "{}"
+                houseNoBuildingName: "14",
+                townCity: "Croydon",
+                postcode: "CR0 1AB"
         )
         account = new PaymentAccount(pbaNumber: "54321")
     }
