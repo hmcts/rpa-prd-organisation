@@ -47,6 +47,12 @@ class UsersService {
         }.find()
     }
 
+    def findUserAccountsByEmail(String email) {
+        return ProfessionalUser.where {
+            eq('emailId', email)
+        }.find()
+    }
+
     /**
      * Sets a user's PBA account number
      *

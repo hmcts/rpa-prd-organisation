@@ -112,6 +112,7 @@ tasks.withType(Test) {
     systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
     systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
     systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
+    jacoco.excludes = ['**/*$*_closure*']
 }
 
 sourceSets {
@@ -132,6 +133,10 @@ def coverageExclusionList = [
 ]
 
 jacocoTestReport {
+    doFirst {
+        classDirectories = classDirectories.collect { fileTree(it) { exclude '**/*$*_closure*' } }.sum()
+    }
+
     executionData(test)
 
     reports {

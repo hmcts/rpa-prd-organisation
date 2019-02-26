@@ -10,6 +10,7 @@ import rd.professional.domain.PaymentAccount
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.Status
 import rd.professional.service.AccountsService
+import rd.professional.service.UsersService
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -86,6 +87,7 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
     @Before
     void injectService() {
         controller.accountsService = new AccountsService()
+        controller.usersService = new UsersService()
     }
 
     void "test get approved when none exist"() {

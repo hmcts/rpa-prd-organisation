@@ -14,10 +14,4 @@ class AccountsService {
             }
         }.accounts
     }
-
-    def findUserAccountsByEmail(String email) {
-        return ProfessionalUser.withCriteria {
-            eq('emailId', email)
-        }.accounts
-    }
 }

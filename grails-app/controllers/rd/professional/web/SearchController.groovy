@@ -11,6 +11,7 @@ import rd.professional.domain.Organisation
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.Status
 import rd.professional.service.AccountsService
+import rd.professional.service.UsersService
 import rd.professional.web.dto.OrganisationDto
 import rd.professional.web.dto.ProfessionalUserDto
 
@@ -22,6 +23,7 @@ class SearchController {
     static responseFormats = ['json']
 
     AccountsService accountsService
+    UsersService usersService
 
     @ApiOperation(
             value = "Search for approved organisations",
@@ -128,7 +130,7 @@ class SearchController {
     ])
     def userByEmail(String email) {
         log.info("userByEmail: called with $email")
-        def user = ProfessionalUser.findByEmailId(email)
+        def user = usersService.findUserAccountsByEmail(email)
         log.debug("Found user: $user")
 
         if (user) {
