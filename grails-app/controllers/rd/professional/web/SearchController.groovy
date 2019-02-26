@@ -101,8 +101,8 @@ class SearchController {
         def orgAccounts = accountsService.findOrgAccountsByEmail(email)
         log.debug("Found accounts: $orgAccounts")
 
-        if (orgAccounts && orgAccounts.size() >= 1) {
-            def response = [payment_accounts: orgAccounts.get(0).pbaNumber]
+        if (orgAccounts) {
+            def response = [payment_accounts: orgAccounts.pbaNumber]
             respond response
         } else {
             response.status = 404

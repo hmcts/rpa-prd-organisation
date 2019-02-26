@@ -134,7 +134,10 @@ def coverageExclusionList = [
 
 jacocoTestReport {
     doFirst {
-        classDirectories = classDirectories.collect { fileTree(it) { exclude '**/*$*_closure*' } }.sum()
+        classDirectories = classDirectories.collect { fileTree(it) {
+            exclude '**/*$*_closure*'
+            exclude '**/*$*'
+        } }.sum()
     }
 
     executionData(test)

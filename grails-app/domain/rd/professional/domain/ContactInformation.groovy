@@ -42,13 +42,13 @@ class ContactInformation {
             user        : ProfessionalUser
     ]
     static constraints = {
-        houseNoBuildingName nullable: false
+        houseNoBuildingName nullable: true
         addressLine1 nullable: true
         addressLine2 nullable: true
-        townCity nullable: false
+        townCity nullable: true
         county nullable: true
         country nullable: true
-        postcode nullable: false
+        postcode nullable: true
         contactId nullable: false, unique: true
         organisation nullable: true
         user nullable: true

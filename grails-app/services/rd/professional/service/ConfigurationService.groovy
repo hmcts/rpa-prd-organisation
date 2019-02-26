@@ -2,9 +2,7 @@ package rd.professional.service
 
 import grails.config.Config
 import grails.core.support.GrailsConfigurationAware
-import grails.gorm.transactions.Transactional
 
-@Transactional
 class ConfigurationService implements GrailsConfigurationAware {
 
     String prdUsersEndpointUrl
