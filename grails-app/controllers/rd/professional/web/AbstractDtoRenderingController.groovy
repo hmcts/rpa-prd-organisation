@@ -1,9 +1,7 @@
 package rd.professional.web
 
-import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 
-import static org.springframework.http.HttpStatus.NO_CONTENT
 import static org.springframework.http.HttpStatus.OK
 
 abstract class AbstractDtoRenderingController<T, U> extends AbstractExceptionHandlerController<T> {

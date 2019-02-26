@@ -9,6 +9,7 @@ import rd.professional.domain.DxAddress
 import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
 import rd.professional.domain.Status
+import rd.professional.service.ContactInformationService
 import rd.professional.service.OrganisationService
 import rd.professional.web.command.AddAccountCommand
 import rd.professional.web.command.AddDomainCommand
@@ -31,6 +32,7 @@ class OrganisationController extends AbstractDtoRenderingController<Organisation
         super(Organisation, OrganisationDto)
     }
 
+    ContactInformationService contactInformationService
     OrganisationService organisationService
 
     @ApiOperation(
@@ -157,8 +159,7 @@ class OrganisationController extends AbstractDtoRenderingController<Organisation
             )
     ])
     @Transactional
-    def update() {
-        def cmd = new OrganisationUpdateCommand(request.getJSON())
+    def update(OrganisationUpdateCommand cmd) {
         Organisation organisation = queryForResource(params.id)
         if (organisation == null) {
             transactionStatus.setRollbackOnly()
@@ -167,7 +168,9 @@ class OrganisationController extends AbstractDtoRenderingController<Organisation
         }
 
         if (cmd.address) {
-            organisation.addToContacts(new ContactInformation(cmd.address))
+            if (!contactInformationService.doesAddressExist(cmd.address)) {
+                organisation.addToContacts(new ContactInformation(cmd.address))
+            }
         }
         if (cmd.dxAddress) {
             if (!DxAddress.find {

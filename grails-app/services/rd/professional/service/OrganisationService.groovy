@@ -94,6 +94,20 @@ class OrganisationService {
         }
     }
 
+    def approvableOrganisationsInStatus(Status status) {
+        Organisation.where {
+            status == status
+        }.list().collect { Organisation org ->
+            ProfessionalUser initialSuperUser = org.users[0]
+            String address = org.contacts ? org.contacts[0] : null
+            new ApprovableOrganisationDetails(
+                    org.organisationId, org.name, org.url, org.sraId, org.status,
+                    initialSuperUser.firstName, initialSuperUser.lastName, initialSuperUser.emailId,
+                    address, org.accounts.pbaNumber.join(", ")
+            )
+        }
+    }
+
     def getForUuid(Serializable uuid) {
         if (!uuid || uuid == "null")
             return null

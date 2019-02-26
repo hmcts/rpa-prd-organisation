@@ -3,6 +3,7 @@ package rd.professional.web
 import grails.converters.JSON
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
+import org.springframework.http.HttpStatus
 import rd.professional.domain.ContactInformation
 import rd.professional.domain.Organisation
 import rd.professional.domain.PaymentAccount
@@ -58,5 +59,21 @@ class ProfessionalUserControllerSpec extends Specification implements Controller
 
         then:
         ProfessionalUser.findByEmailId("barbarton@baz.com") != null
+    }
+
+    void "test save with PBA account not in org"() {
+        when:
+        request.json = [
+                firstName: "Bar",
+                lastName: "Barton",
+                email: "barbarton@baz.com",
+                pbaAccount: [
+                        pbaNumber: "PBA3297593"
+                ]
+        ] as JSON
+        controller.save()
+
+        then:
+        response.status == HttpStatus.NOT_FOUND.value()
     }
 }

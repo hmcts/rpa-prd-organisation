@@ -5,6 +5,7 @@ import grails.testing.services.ServiceUnitTest
 import rd.professional.domain.ContactInformation
 import rd.professional.domain.Organisation
 import rd.professional.domain.ProfessionalUser
+import rd.professional.web.command.ContactInformationCommand
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -86,5 +87,28 @@ class ContactInformationServiceSpec extends Specification implements ServiceUnit
 
         then:
         contact == null
+    }
+
+    void "test doesAddressExist true"() {
+        when:
+        boolean resp = service.doesAddressExist(
+                new ContactInformationCommand(
+                        houseNoBuildingName: address1.houseNoBuildingName,
+                        postcode: address1.postcode))
+
+        then:
+        resp == true
+    }
+
+    void "test doesAddressExist false"() {
+        when:
+        boolean resp = service.doesAddressExist(
+                new ContactInformationCommand(
+                        houseNoBuildingName: address1.houseNoBuildingName,
+                        country: "wibble",
+                        postcode: address1.postcode))
+
+        then:
+        resp == false
     }
 }

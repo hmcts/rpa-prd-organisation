@@ -1,16 +1,11 @@
 package rd.professional.web
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
-import io.swagger.annotations.ApiImplicitParams
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
-import rd.professional.domain.ApprovableOrganisationDetails
+import io.swagger.annotations.*
 import rd.professional.domain.Organisation
 import rd.professional.domain.ProfessionalUser
 import rd.professional.domain.Status
 import rd.professional.service.AccountsService
+import rd.professional.service.OrganisationService
 import rd.professional.service.UsersService
 import rd.professional.web.dto.OrganisationDto
 import rd.professional.web.dto.ProfessionalUserDto
@@ -23,6 +18,7 @@ class SearchController {
     static responseFormats = ['json']
 
     AccountsService accountsService
+    OrganisationService organisationService
     UsersService usersService
 
     @ApiOperation(
@@ -38,7 +34,7 @@ class SearchController {
             @ApiResponse(code = 405, message = "Only GET method is allowed")
     ])
     def approvedOrganisations() {
-        respond approvableOrganisationsInStatus(Status.APPROVED)
+        respond organisationService.approvableOrganisationsInStatus(Status.APPROVED)
     }
 
     @ApiOperation(
@@ -54,24 +50,7 @@ class SearchController {
             @ApiResponse(code = 405, message = "Only GET method is allowed")
     ])
     def pendingOrganisations() {
-        respond approvableOrganisationsInStatus(Status.PENDING)
-    }
-
-    def approvableOrganisationsInStatus(Status status) {
-        /*
-         * REFACTOR: Move search logic to a Service?
-         */
-        Organisation.where {
-            status == status
-        }.list().collect { Organisation org ->
-            ProfessionalUser initialSuperUser = org.users[0]
-            String address = org.contacts ? org.contacts[0] : null
-            new ApprovableOrganisationDetails(
-                    org.organisationId, org.name, org.url, org.sraId, org.status,
-                    initialSuperUser.firstName, initialSuperUser.lastName, initialSuperUser.emailId,
-                    address, org.accounts.pbaNumber.join(", ")
-            )
-        }
+        respond organisationService.approvableOrganisationsInStatus(Status.PENDING)
     }
 
     @ApiOperation(

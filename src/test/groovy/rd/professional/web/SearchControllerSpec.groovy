@@ -1,15 +1,11 @@
 package rd.professional.web
 
 import grails.testing.gorm.DataTest
-import grails.testing.spock.OnceBefore
 import grails.testing.web.controllers.ControllerUnitTest
 import org.junit.Before
-import rd.professional.domain.ContactInformation
-import rd.professional.domain.Organisation
-import rd.professional.domain.PaymentAccount
-import rd.professional.domain.ProfessionalUser
-import rd.professional.domain.Status
+import rd.professional.domain.*
 import rd.professional.service.AccountsService
+import rd.professional.service.OrganisationService
 import rd.professional.service.UsersService
 import spock.lang.Shared
 import spock.lang.Specification
@@ -87,6 +83,7 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
     @Before
     void injectService() {
         controller.accountsService = new AccountsService()
+        controller.organisationService = new OrganisationService()
         controller.usersService = new UsersService()
     }
 
@@ -172,6 +169,14 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         response.status == 404
     }
 
+    void "test get accounts by email null argument"() {
+        when:
+        controller.accountsByEmail()
+
+        then:
+        response.status == 404
+    }
+
     void "test get accounts by email"() {
         given:
         addOrganisation()
@@ -206,6 +211,14 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         response.status == 404
     }
 
+    void "test get user by email null argument"() {
+        when:
+        controller.userByEmail()
+
+        then:
+        response.status == 404
+    }
+
     void "test get user by email"() {
         given:
         addOrganisation()
@@ -221,6 +234,14 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
     void "test get org by email not found"() {
         when:
         controller.organisationByEmail("unknown@wrong.com")
+
+        then:
+        response.status == 404
+    }
+
+    void "test get org by email null argument"() {
+        when:
+        controller.organisationByEmail()
 
         then:
         response.status == 404
