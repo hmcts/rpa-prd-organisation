@@ -189,4 +189,9 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         response.status == 200
         response.json.payment_accounts == [account.pbaNumber, account2.pbaNumber]
     }
+
+    void "test something"() {
+        expect:"fix me"
+            true == false
+    }
 }
