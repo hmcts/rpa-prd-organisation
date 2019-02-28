@@ -258,8 +258,4 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         response.status == 200
         response.json.name == org.name
     }
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }

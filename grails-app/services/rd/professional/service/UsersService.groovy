@@ -30,16 +30,16 @@ class UsersService {
         }
     }
 
-    def createUser(String firstName, String lastName, String email, String[] roles) {
-        // TODO: Enforce presence of mandatory parameters and test
-        return http.post(User) {
-            request.uri = configurationService.getPrdUsersRestEndpointURL()
-            request.uri.path = '/user'
-            request.body = new User(firstName, lastName, email, roles)
-            request.contentType = 'application/json'
-            request.accept = 'application/json'
-        }
-    }
+//    def createUser(String firstName, String lastName, String email, String[] roles) {
+//        // TODO: Enforce presence of mandatory parameters and test
+//        return http.post(User) {
+//            request.uri = configurationService.getPrdUsersRestEndpointURL()
+//            request.uri.path = '/user'
+//            request.body = new User(firstName, lastName, email, roles)
+//            request.contentType = 'application/json'
+//            request.accept = 'application/json'
+//        }
+//    }
 
     def getForUuid(Serializable uuid) {
         ProfessionalUser.where {
