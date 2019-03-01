@@ -10,21 +10,6 @@ class UrlMappings {
 
         // search endpoints
         get "/search/pba/$email"(controller: 'search', action: 'accountsByEmail')
-        get "/search/users/$email"(controller: 'search', action: 'userByEmail')
-        get "/search/organisations/$email"(controller: 'search', action: 'organisationByEmail')
-        get '/search/organisations/approved'(controller: 'search', action: 'approvedOrganisations')
-        get '/search/organisations/pending'(controller: 'search', action: 'pendingOrganisations')
-
-        // nested endpoints
-        "/organisations" (resources: 'organisation', excludes: ['create', 'edit', 'patch']) {
-            "/users"(resources: "professionalUser", excludes: ['create', 'edit', 'patch']) {
-                "/pbas"(resources: "userPaymentAccount", excludes: ['create', 'edit', 'patch', 'show', 'update'])
-            }
-            "/pbas"(resources: "organisationPaymentAccount", excludes: ['create', 'edit', 'patch', 'show', 'update'])
-        }
-
-        // Swagger UI
-        get "/apidoc/$action?/$id?"(controller: "apiDoc", action: "getDocuments")
     }
 }
 
