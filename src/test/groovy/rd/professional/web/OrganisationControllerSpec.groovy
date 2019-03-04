@@ -88,36 +88,36 @@ class OrganisationControllerSpec extends Specification implements ControllerUnit
         response.json[0].id == organisation.organisationId.toString()
     }
 
-    void "test delete"() {
-        given:
-        Organisation org2 = new Organisation(name: "RivalOrg")
-        org2.save(flush: true)
-
-        when:
-        params['id'] = org2.organisationId.toString()
-        controller.delete()
-
-        then:
-        response.status == HttpStatus.NO_CONTENT.value()
-        Organisation.get(org2.organisationId) == null
-    }
-
-    void "test delete not found"() {
-        when:
-        params['id'] = UUID.randomUUID().toString()
-        controller.delete()
-
-        then:
-        response.status == HttpStatus.NOT_FOUND.value()
-    }
-
-    void "test delete no id"() {
-        when:
-        controller.delete()
-
-        then:
-        response.status == HttpStatus.NOT_FOUND.value()
-    }
+//    void "test delete"() {
+//        given:
+//        Organisation org2 = new Organisation(name: "RivalOrg")
+//        org2.save(flush: true)
+//
+//        when:
+//        params['id'] = org2.organisationId.toString()
+//        controller.delete()
+//
+//        then:
+//        response.status == HttpStatus.NO_CONTENT.value()
+//        Organisation.get(org2.organisationId) == null
+//    }
+//
+//    void "test delete not found"() {
+//        when:
+//        params['id'] = UUID.randomUUID().toString()
+//        controller.delete()
+//
+//        then:
+//        response.status == HttpStatus.NOT_FOUND.value()
+//    }
+//
+//    void "test delete no id"() {
+//        when:
+//        controller.delete()
+//
+//        then:
+//        response.status == HttpStatus.NOT_FOUND.value()
+//    }
 
     void "test update no body"() {
         when:
