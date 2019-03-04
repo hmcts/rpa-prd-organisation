@@ -21,34 +21,10 @@ class SearchController {
     OrganisationService organisationService
     UsersService usersService
 
-    @ApiOperation(
-            value = "Search for approved organisations",
-            nickname = "organisations/approved",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = Organisation,
-            responseContainer = "Set"
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "No approved organisations found"),
-            @ApiResponse(code = 405, message = "Only GET method is allowed")
-    ])
     def approvedOrganisations() {
         respond organisationService.approvableOrganisationsInStatus(Status.APPROVED)
     }
 
-    @ApiOperation(
-            value = "Search for pending organisations",
-            nickname = "organisations/pending",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = Organisation,
-            responseContainer = "Set"
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "No pending organisations found"),
-            @ApiResponse(code = 405, message = "Only GET method is allowed")
-    ])
     def pendingOrganisations() {
         respond organisationService.approvableOrganisationsInStatus(Status.PENDING)
     }
@@ -67,10 +43,10 @@ class SearchController {
     ])
     @ApiImplicitParams([
             @ApiImplicitParam(name = "email",
-            paramType = "path",
-            required = true,
-            value = "Email address of the user whose accounts you wish to search for",
-            dataType = "string")
+                    paramType = "path",
+                    required = true,
+                    value = "Email address of the user whose accounts you wish to search for",
+                    dataType = "string")
     ])
     def accountsByEmail(String email) {
         /*
@@ -89,24 +65,6 @@ class SearchController {
         }
     }
 
-    @ApiOperation(
-            value = "Search for user belonging to an email address",
-            nickname = "users/{email}",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = ProfessionalUserDto
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "User not found"),
-            @ApiResponse(code = 405, message = "Only GET method is allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "email",
-                    paramType = "path",
-                    required = true,
-                    value = "Email address of the user you wish to search for",
-                    dataType = "string")
-    ])
     def userByEmail(String email) {
         log.info("userByEmail: called with $email")
         def user = usersService.findUserAccountsByEmail(email)
@@ -120,24 +78,6 @@ class SearchController {
         }
     }
 
-    @ApiOperation(
-            value = "Search for organisation by user's email address",
-            nickname = "organisations/{email}",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = OrganisationDto
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "Organisation not found"),
-            @ApiResponse(code = 405, message = "Only GET method is allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "email",
-                    paramType = "path",
-                    required = true,
-                    value = "Email address of the user whose organisation you wish to search for",
-                    dataType = "string")
-    ])
     def organisationByEmail(String email) {
         log.info("organisationByEmail: called with $email")
         def user = ProfessionalUser.findByEmailId(email)
@@ -149,5 +89,11 @@ class SearchController {
             response.status = 404
             render '[]'
         }
+    }
+
+    def organisationIdByName(String name) {
+        def org = Organisation.findByName(name)
+        if (org)
+            org.organisationId
     }
 }

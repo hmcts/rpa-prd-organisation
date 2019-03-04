@@ -1,7 +1,6 @@
 package rd.professional.web
 
 import grails.gorm.transactions.Transactional
-import io.swagger.annotations.*
 import rd.professional.domain.ContactInformation
 import rd.professional.domain.ProfessionalUser
 import rd.professional.service.OrganisationService
@@ -11,10 +10,6 @@ import rd.professional.web.dto.ProfessionalUserDto
 
 import static org.springframework.http.HttpStatus.CREATED
 
-@Api(
-        value = "organisations/",
-        description = "Professional User APIs"
-)
 class ProfessionalUserController extends AbstractDtoRenderingController<ProfessionalUser, ProfessionalUserDto> {
     static responseFormats = ['json']
 
@@ -25,121 +20,6 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
     OrganisationService organisationService
     UsersService usersService
 
-    @ApiOperation(
-            value = "List all users for an organisation",
-            nickname = "/{orgId}/users",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = ProfessionalUserDto,
-            responseContainer = "Set"
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "No users found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            )
-    ])
-    def index(Integer max) {
-        super.index(max)
-    }
-
-    @ApiOperation(
-            value = "Get the details of a user",
-            nickname = "/{orgId}/users/{id}",
-            produces = "application/json",
-            httpMethod = 'GET',
-            response = ProfessionalUserDto
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "Organisation not found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "id",
-                    paramType = "path",
-                    required = true,
-                    value = "User ID",
-                    dataType = "string"
-            )
-    ])
-    def show() {
-        super.show()
-    }
-
-    @ApiOperation(
-            value = "Delete a user",
-            nickname = "/{orgId}/users/{id}",
-            httpMethod = 'DELETE'
-    )
-    @ApiResponses([
-            @ApiResponse(code = 404, message = "User not found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "id",
-                    paramType = "path",
-                    required = true,
-                    value = "User ID",
-                    dataType = "string"
-            )
-    ])
-    @Transactional
-    def delete() {
-        super.delete()
-    }
-
-    @ApiOperation(
-            value = "Register a new user",
-            nickname = "/{orgId}/users",
-            produces = "application/json",
-            consumes = "application/json",
-            httpMethod = 'POST',
-            response = ProfessionalUserDto
-    )
-    @ApiResponses([
-            @ApiResponse(code = 400, message = "Invalid request"),
-            @ApiResponse(code = 405, message = "Method not allowed"),
-            @ApiResponse(code = 409, message = "User already exists")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "body",
-                    paramType = "body",
-                    required = true,
-                    value = "User registration details",
-                    dataType = "rd.professional.web.command.UserRegistrationCommand"
-            )
-    ])
     @Transactional
     def save() {
         def organisation = organisationService.getForUuid(params.organisationId)
@@ -176,47 +56,6 @@ class ProfessionalUserController extends AbstractDtoRenderingController<Professi
         saveResource organisation
 
         respond new ProfessionalUserDto(user), [status: CREATED]
-    }
-
-    @ApiOperation(
-            value = "Update a user",
-            nickname = "/{orgId}/users/{id}",
-            produces = "application/json",
-            consumes = "application/json",
-            httpMethod = 'PUT',
-            response = ProfessionalUserDto
-    )
-    @ApiResponses([
-            @ApiResponse(code = 400, message = "Invalid request"),
-            @ApiResponse(code = 404, message = "User not found"),
-            @ApiResponse(code = 405, message = "Method not allowed")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(
-                    name = "orgId",
-                    paramType = "path",
-                    required = true,
-                    value = "Organisation ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "id",
-                    paramType = "path",
-                    required = true,
-                    value = "User ID",
-                    dataType = "string"
-            ),
-            @ApiImplicitParam(
-                    name = "body",
-                    paramType = "body",
-                    required = true,
-                    value = "User update details",
-                    dataType = "rd.professional.web.command.UserUpdateCommand"
-            )
-    ])
-    @Transactional
-    def update() {
-        super.update()
     }
 
     protected ProfessionalUser queryForResource(Serializable id) {
