@@ -10,9 +10,6 @@ class UrlMappings {
 
         // search endpoints
         get "/search/pba/$email"(controller: 'search', action: 'accountsByEmail')
-        get "/search/organisation/$name"(controller: 'search', action: 'organisationIdByName')
-        post "/organisations"(controller: 'organisation', action: 'save')
-        post "/organisations/${organisationId}/users"(controller: 'professionalUser', action: 'save')
     }
 }
 
