@@ -1,6 +1,6 @@
 # Temporary fix for template API version error on deployment
 provider "azurerm" {
-  version = "1.19.0"
+  version = "1.22.1"
 }
 
 locals {
@@ -108,6 +108,7 @@ module "local_key_vault" {
   object_id = "${var.jenkins_AAD_objectId}"
   resource_group_name = "${module.app.resource_group_name}"
   product_group_object_id = "5d9cd025-a293-4b97-a0e5-6f43efce02c0"
+  common_tags = "${var.common_tags}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
